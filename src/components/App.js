@@ -5,14 +5,16 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom';
-import { HOME_PATH } from '../config/paths';
-import Home from './main/Home';
+import { MAIN_PATH } from '../config/paths';
+import MainScreen from './main/MainScreen';
 
 export const App = () => (
   <Router>
     <Switch>
-      <Route path={HOME_PATH} exact component={Home} />
-      <Redirect to={HOME_PATH} />
+      <Route path="/" exact component={MainScreen} />
+      <Route path="/:rootId/:id" exact component={MainScreen} />
+      <Route path="/:rootId" exact component={MainScreen} />
+      <Redirect to={MAIN_PATH} />
     </Switch>
   </Router>
 );
