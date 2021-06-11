@@ -46,7 +46,8 @@
     "prettier:check": "prettier --check src/**/*.js",
     "prettier:write": "prettier --write src/**/*.js",
     "hooks:uninstall": "husky uninstall",
-    "hooks:install": "husky install"
+    "hooks:install": "husky install",
+    "cypress:open": "env-cmd -f ./.env.test cypress open"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -66,10 +67,12 @@
   "devDependencies": {
     "@commitlint/cli": "12.1.1",
     "@commitlint/config-conventional": "12.1.1",
+    "@cypress/code-coverage": "3.9.6",
     "@testing-library/jest-dom": "5.11.6",
     "@testing-library/react": "11.2.2",
     "@testing-library/user-event": "13.1.8",
     "concurrently": "6.1.0",
+    "cypress": "7.5.0",
     "env-cmd": "10.1.0",
     "enzyme": "3.11.0",
     "enzyme-adapter-react-16": "1.15.6",

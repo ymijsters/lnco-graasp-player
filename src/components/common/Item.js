@@ -12,8 +12,15 @@ import Alert from '@material-ui/lab/Alert';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { hooks } from '../../config/queryClient';
-import ITEM_TYPES from '../../enums/itemTypes';
+import { ITEM_TYPES } from '../../enums';
 import FolderButton from './FolderButton';
+import {
+  buildAppId,
+  buildDocumentId,
+  buildFileId,
+  buildFolderButtonId,
+  FOLDER_NAME_TITLE_CLASS,
+} from '../../config/selectors';
 
 const { useItem, useChildren, useFileContent, useS3FileContent } = hooks;
 
@@ -31,17 +38,17 @@ const Item = ({ id, isChildren }) => {
 
   // fetch children if item is folder
   const { data: children, isLoading: isChildrenLoading } = useChildren(id, {
-    enabled: item?.get('type') === ITEM_TYPES.FOLDER,
+    enabled: Boolean(item?.get('type') === ITEM_TYPES.FOLDER),
   });
 
   // fetch file content if type is file
   const { data: content } = useFileContent(id, {
-    enabled: item && item.get('type') === ITEM_TYPES.FILE,
+    enabled: Boolean(item && item.get('type') === ITEM_TYPES.FILE),
   });
 
   // fetch file content if type is s3File
   const { data: s3Content } = useS3FileContent(item?.get('id'), {
-    enabled: item?.get('type') === ITEM_TYPES.S3_FILE,
+    enabled: Boolean(item?.get('type') === ITEM_TYPES.S3_FILE),
   });
 
   // define a max height depending on the screen height
@@ -60,15 +67,17 @@ const Item = ({ id, isChildren }) => {
     case ITEM_TYPES.FOLDER:
       // display only one level of a folder
       if (isChildren) {
-        return <FolderButton item={item} />;
+        return <FolderButton id={buildFolderButtonId(id)} item={item} />;
       }
 
       // render each children recursively
       return (
         <Container>
-          <Typography variant="h2">{item.get('name')}</Typography>
+          <Typography className={FOLDER_NAME_TITLE_CLASS} variant="h2">
+            {item.get('name')}
+          </Typography>
           {children.map((thisItem) => (
-            <Container className={classes.container}>
+            <Container key={thisItem.id} className={classes.container}>
               <Item isChildren id={thisItem.id} />
             </Container>
           ))}
@@ -77,7 +86,14 @@ const Item = ({ id, isChildren }) => {
     case ITEM_TYPES.LINK:
       return <LinkItem item={item} height={maxHeight} />;
     case ITEM_TYPES.FILE: {
-      return <FileItem item={item} content={content} maxHeight={maxHeight} />;
+      return (
+        <FileItem
+          id={buildFileId(id)}
+          item={item}
+          content={content}
+          maxHeight={maxHeight}
+        />
+      );
     }
     case ITEM_TYPES.S3_FILE: {
       return (
@@ -85,10 +101,10 @@ const Item = ({ id, isChildren }) => {
       );
     }
     case ITEM_TYPES.DOCUMENT: {
-      return <DocumentItem item={item} readOnly />;
+      return <DocumentItem id={buildDocumentId(id)} item={item} readOnly />;
     }
     case ITEM_TYPES.APP: {
-      return <AppItem item={item} readOnly />;
+      return <AppItem id={buildAppId(id)} item={item} readOnly />;
     }
     default:
       console.error(`The type ${item?.get('type')} is not defined`);

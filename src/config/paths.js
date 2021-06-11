@@ -1,2 +1,4 @@
-// eslint-disable-next-line import/prefer-default-export
-export const MAIN_PATH = '/:rootId/:id';
+export const HOME_PATH = '/';
+export const buildMainPath = (
+  { rootId, id } = { rootId: ':rootId', id: ':id' },
+) => `/${rootId}/${id || ''}`;

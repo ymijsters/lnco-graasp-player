@@ -7,7 +7,9 @@ import {
   DynamicTreeView,
   Loader,
 } from '@graasp/ui';
+import { buildTreeItemClass, MAIN_MENU_ID } from '../../config/selectors';
 import { hooks } from '../../config/queryClient';
+import { ITEM_TYPES } from '../../enums';
 
 const { useItem, useChildren } = hooks;
 
@@ -25,7 +27,9 @@ const MainMenu = () => {
     data: children,
     isLoading,
     isError: childrenIsError,
-  } = useChildren(rootId);
+  } = useChildren(rootId, {
+    enabled: Boolean(rootItem && rootItem.get('type') === ITEM_TYPES.FOLDER),
+  });
 
   // display nothing when no item is defined
   if (!rootId) {
@@ -41,12 +45,13 @@ const MainMenu = () => {
   }
 
   return (
-    <GraaspMainMenu>
+    <GraaspMainMenu id={MAIN_MENU_ID}>
       <DynamicTreeView
         rootLabel={rootItem.get('name')}
         rootId={rootId}
         useItem={useItem}
         useChildren={useChildren}
+        buildTreeItemClass={(nodeId) => buildTreeItemClass(nodeId)}
         initialExpendedItems={[rootId]}
         showCheckbox={false}
         showItemFilter={() => true}
@@ -54,7 +59,9 @@ const MainMenu = () => {
         onTreeItemSelect={(payload) => {
           push(`/${rootId}/${payload}`);
         }}
-        shouldFetchChildrenForItem={() => true}
+        shouldFetchChildrenForItem={(item) =>
+          item.get('type') === ITEM_TYPES.FOLDER
+        }
         isTreeItemDisabled={() => false}
         items={!children.isEmpty() ? children : []}
       />

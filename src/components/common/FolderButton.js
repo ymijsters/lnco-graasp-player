@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import FolderIcon from '@material-ui/icons/Folder';
 import { useHistory, useParams } from 'react-router';
 
-const FolderButton = ({ item }) => {
+const FolderButton = ({ id, item }) => {
   const { rootId } = useParams();
   const { push } = useHistory();
 
@@ -15,6 +15,7 @@ const FolderButton = ({ item }) => {
 
   return (
     <Button
+      id={id}
       variant="outlined"
       size="large"
       color="primary"
@@ -27,7 +28,12 @@ const FolderButton = ({ item }) => {
 };
 
 FolderButton.propTypes = {
+  id: PropTypes.string,
   item: PropTypes.instanceOf(Map).isRequired,
+};
+
+FolderButton.defaultProps = {
+  id: null,
 };
 
 export default FolderButton;

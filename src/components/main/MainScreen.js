@@ -20,7 +20,7 @@ const MainScreen = () => {
   );
 
   return (
-    <Main open sidebar={rootId && <MainMenu />}>
+    <Main open={Boolean(rootId)} sidebar={rootId && <MainMenu />}>
       {content}
     </Main>
   );

@@ -5,7 +5,7 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom';
-import { MAIN_PATH } from '../config/paths';
+import { buildMainPath } from '../config/paths';
 import MainScreen from './main/MainScreen';
 
 export const App = () => (
@@ -14,7 +14,7 @@ export const App = () => (
       <Route path="/" exact component={MainScreen} />
       <Route path="/:rootId/:id" exact component={MainScreen} />
       <Route path="/:rootId" exact component={MainScreen} />
-      <Redirect to={MAIN_PATH} />
+      <Redirect to={buildMainPath()} />
     </Switch>
   </Router>
 );
