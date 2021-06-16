@@ -20,7 +20,7 @@ export const NODE_ENV =
   ENV.DEVELOPMENT;
 
 export const API_HOST =
-  ENV_API_HOST || process.env.REACT_APP_API_HOST || 'http://localhost:3111';
+  ENV_API_HOST || process.env.REACT_APP_API_HOST || 'http://localhost:3112';
 
 export const SHOW_NOTIFICATIONS =
   ENV_SHOW_NOTIFICATIONS ||
@@ -30,4 +30,8 @@ export const SHOW_NOTIFICATIONS =
 export const AUTHENTICATION_HOST =
   ENV_AUTHENTICATION_HOST ||
   process.env.REACT_APP_AUTHENTICATION_HOST ||
-  'http://localhost:3111';
+  'http://localhost:3112';
+
+// define a max height depending on the screen height
+// use a bit less of the height because of the header and some margin
+export const SCREEN_MAX_HEIGHT = window.innerHeight * 0.8;

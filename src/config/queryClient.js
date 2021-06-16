@@ -1,9 +1,21 @@
-import { QueryClient } from 'react-query';
-import configureMutations from '../mutations';
+import configureQueryClient from '@graasp/query-client';
+import notifier from '../middlewares/notifier';
+import { API_HOST } from './constants';
 
-// Create a client
-const queryClient = new QueryClient();
-
-configureMutations(queryClient);
-
-export default queryClient;
+const {
+  queryClient,
+  QueryClientProvider,
+  hooks,
+  useMutation,
+  ReactQueryDevtools,
+} = configureQueryClient({
+  API_HOST,
+  notifier,
+});
+export {
+  queryClient,
+  QueryClientProvider,
+  hooks,
+  useMutation,
+  ReactQueryDevtools,
+};
