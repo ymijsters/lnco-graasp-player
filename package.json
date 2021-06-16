@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@graasp/query-client": "git://github.com/graasp/graasp-query-client.git#3/fileContent",
-    "@graasp/ui": "git://github.com/graasp/graasp-ui.git#12/itemComponents",
+    "@graasp/query-client": "git://github.com/graasp/graasp-query-client.git",
+    "@graasp/ui": "git://github.com/graasp/graasp-ui.git",
     "@material-ui/core": "4.11.4",
     "@material-ui/icons": "4.11.2",
     "@material-ui/lab": "4.0.0-alpha.58",
@@ -47,7 +47,9 @@
     "prettier:write": "prettier --write src/**/*.js",
     "hooks:uninstall": "husky uninstall",
     "hooks:install": "husky install",
-    "cypress:open": "env-cmd -f ./.env.test cypress open"
+    "cypress:open": "env-cmd -f ./.env.test cypress open",
+    "cypress": "concurrently \"yarn start:test\" \"wait-on http://localhost:3112 && yarn cypress:run\"",
+    "cypress:run": "env-cmd -f ./.env.test cypress run --headless --browser chrome --spec \"cypress/**/*.spec.js\""
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -31,3 +31,7 @@ export const AUTHENTICATION_HOST =
   ENV_AUTHENTICATION_HOST ||
   process.env.REACT_APP_AUTHENTICATION_HOST ||
   'http://localhost:3112';
+
+// define a max height depending on the screen height
+// use a bit less of the height because of the header and some margin
+export const SCREEN_MAX_HEIGHT = window.innerHeight * 0.8;

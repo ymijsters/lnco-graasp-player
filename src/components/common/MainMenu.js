@@ -63,7 +63,7 @@ const MainMenu = () => {
           item.get('type') === ITEM_TYPES.FOLDER
         }
         isTreeItemDisabled={() => false}
-        items={!children.isEmpty() ? children : []}
+        items={children && !children.isEmpty() ? children : []}
       />
     </GraaspMainMenu>
   );

@@ -39,13 +39,13 @@ describe('Main Screen', () => {
     describe('Links', () => {
       it('Website link', () => {
         const { id } = GRAASP_LINK_ITEM;
-        cy.visit(buildMainPath({ rootId: id }));
+        cy.visit(buildMainPath({ rootId: id, id: null }));
 
         expectLinkViewScreenLayout(GRAASP_LINK_ITEM);
       });
       it('Youtube link', () => {
         const { id } = YOUTUBE_LINK_ITEM;
-        cy.visit(buildMainPath({ rootId: id }));
+        cy.visit(buildMainPath({ rootId: id, id: null }));
 
         expectLinkViewScreenLayout(YOUTUBE_LINK_ITEM);
       });
@@ -54,19 +54,19 @@ describe('Main Screen', () => {
     describe('Files', () => {
       it('Image', () => {
         const { id } = IMAGE_ITEM_DEFAULT;
-        cy.visit(buildMainPath({ rootId: id }));
+        cy.visit(buildMainPath({ rootId: id, id: null }));
 
         expectFileViewScreenLayout(IMAGE_ITEM_DEFAULT);
       });
       it('Video', () => {
         const { id } = VIDEO_ITEM_DEFAULT;
-        cy.visit(buildMainPath({ rootId: id }));
+        cy.visit(buildMainPath({ rootId: id, id: null }));
 
         expectFileViewScreenLayout(VIDEO_ITEM_DEFAULT);
       });
       it('Pdf', () => {
         const { id } = PDF_ITEM_DEFAULT;
-        cy.visit(buildMainPath({ rootId: id }));
+        cy.visit(buildMainPath({ rootId: id, id: null }));
 
         expectFileViewScreenLayout(PDF_ITEM_DEFAULT);
       });
@@ -74,7 +74,7 @@ describe('Main Screen', () => {
 
     describe('Documents', () => {
       it('Graasp Document', () => {
-        cy.visit(buildMainPath({ rootId: GRAASP_DOCUMENT_ITEM.id }));
+        cy.visit(buildMainPath({ rootId: GRAASP_DOCUMENT_ITEM.id, id: null }));
 
         expectDocumentViewScreenLayout(GRAASP_DOCUMENT_ITEM);
       });
@@ -82,7 +82,7 @@ describe('Main Screen', () => {
 
     describe('Apps', () => {
       it('App', () => {
-        cy.visit(buildMainPath({ rootId: GRAASP_APP_ITEM.id }));
+        cy.visit(buildMainPath({ rootId: GRAASP_APP_ITEM.id, id: null }));
 
         expectAppViewScreenLayout(GRAASP_APP_ITEM);
       });
@@ -91,7 +91,7 @@ describe('Main Screen', () => {
     describe('Folders', () => {
       it('Display sub Folder', () => {
         const parent = FOLDER_WITH_SUBFOLDER_ITEM.items[0];
-        cy.visit(buildMainPath({ rootId: parent.id }));
+        cy.visit(buildMainPath({ rootId: parent.id, id: null }));
 
         cy.get(`.${FOLDER_NAME_TITLE_CLASS}`).should('contain', parent.name);
 
@@ -105,10 +105,10 @@ describe('Main Screen', () => {
       cy.setUpApi({ items: [...STATIC_ELECTRICITY.items] });
     });
 
-    it.only(`Display ${STATIC_ELECTRICITY.items[0].name}`, () => {
+    it(`Display ${STATIC_ELECTRICITY.items[0].name}`, () => {
       const parentFolder = STATIC_ELECTRICITY.items[0];
       const rootId = parentFolder.id;
-      cy.visit(buildMainPath({ rootId }));
+      cy.visit(buildMainPath({ rootId, id: null }));
 
       expectFolderLayout({ rootId, items: STATIC_ELECTRICITY.items });
     });

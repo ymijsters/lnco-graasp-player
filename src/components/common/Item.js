@@ -21,6 +21,7 @@ import {
   buildFolderButtonId,
   FOLDER_NAME_TITLE_CLASS,
 } from '../../config/selectors';
+import { SCREEN_MAX_HEIGHT } from '../../config/constants';
 
 const { useItem, useChildren, useFileContent, useS3FileContent } = hooks;
 
@@ -42,24 +43,23 @@ const Item = ({ id, isChildren }) => {
   });
 
   // fetch file content if type is file
-  const { data: content } = useFileContent(id, {
+  const { data: content, isError: isFileError } = useFileContent(id, {
     enabled: Boolean(item && item.get('type') === ITEM_TYPES.FILE),
   });
 
   // fetch file content if type is s3File
-  const { data: s3Content } = useS3FileContent(item?.get('id'), {
-    enabled: Boolean(item?.get('type') === ITEM_TYPES.S3_FILE),
-  });
-
-  // define a max height depending on the screen height
-  // use a bit less of the height because of the header and some margin
-  const maxHeight = window.innerHeight * 0.8;
+  const { data: s3Content, isError: isS3FileError } = useS3FileContent(
+    item?.get('id'),
+    {
+      enabled: Boolean(item?.get('type') === ITEM_TYPES.S3_FILE),
+    },
+  );
 
   if (isLoading || isChildrenLoading) {
     return <Loader />;
   }
 
-  if (isError || !item) {
+  if (isError || !item || isFileError || isS3FileError) {
     return <Alert severity="error">{t('An unexpected error occured.')}</Alert>;
   }
 
@@ -84,20 +84,24 @@ const Item = ({ id, isChildren }) => {
         </Container>
       );
     case ITEM_TYPES.LINK:
-      return <LinkItem item={item} height={maxHeight} />;
+      return <LinkItem item={item} height={SCREEN_MAX_HEIGHT} />;
     case ITEM_TYPES.FILE: {
       return (
         <FileItem
           id={buildFileId(id)}
           item={item}
           content={content}
-          maxHeight={maxHeight}
+          maxHeight={SCREEN_MAX_HEIGHT}
         />
       );
     }
     case ITEM_TYPES.S3_FILE: {
       return (
-        <S3FileItem item={item} content={s3Content} maxHeight={maxHeight} />
+        <S3FileItem
+          item={item}
+          content={s3Content}
+          maxHeight={SCREEN_MAX_HEIGHT}
+        />
       );
     }
     case ITEM_TYPES.DOCUMENT: {
