@@ -15,7 +15,6 @@ import {
   mockGetCurrentMember,
   mockGetItem,
   mockGetMemberBy,
-  mockGetS3FileContent,
   mockGetS3Metadata,
 } from './server';
 
@@ -46,7 +45,5 @@ Cypress.Commands.add(
     mockDefaultDownloadFile(cachedItems);
 
     mockGetS3Metadata(cachedItems);
-
-    mockGetS3FileContent(cachedItems);
   },
 );

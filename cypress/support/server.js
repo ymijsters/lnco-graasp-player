@@ -16,7 +16,6 @@ const {
 } = API_ROUTES;
 
 const API_HOST = Cypress.env('API_HOST');
-const S3_FILES_HOST = Cypress.env('S3_FILES_HOST');
 
 export const mockGetCurrentMember = (
   currentMember = MEMBERS.ANNA,
@@ -148,25 +147,4 @@ export const mockGetS3Metadata = (items, shouldThrowError) => {
   ).as('getS3Metadata');
 };
 
-// intercept s3 file link and serve corresponding cypress fixture
-export const mockGetS3FileContent = (items, shouldThrowError) => {
-  cy.intercept(
-    {
-      method: DEFAULT_GET.method,
-      url: new RegExp(
-        `${parseStringToRegExp(S3_FILES_HOST, {
-          characters: ['.', '-'],
-        })}/[a-zA-Z0-1\\/]+\\.[a-z0-1]+$`,
-      ),
-    },
-    ({ reply, url }) => {
-      if (shouldThrowError) {
-        reply({ statusCode: StatusCodes.BAD_REQUEST });
-        return;
-      }
-
-      const filepath = url.slice(S3_FILES_HOST.length);
-      reply({ fixture: filepath });
-    },
-  ).as('getS3FileContent');
-};
+// bug: mockGetS3FileContent intercept static/js/bundle.js which fails tests
