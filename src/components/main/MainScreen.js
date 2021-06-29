@@ -1,56 +1,41 @@
 import React from 'react';
-import { Loader, Main, PermissionedComponent } from '@graasp/ui';
-import { IconButton, Typography, Tooltip } from '@material-ui/core';
+import { Loader, Main } from '@graasp/ui';
+import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import Alert from '@material-ui/lab/Alert';
-import EditIcon from '@material-ui/icons/Edit';
 import { useParams, withRouter } from 'react-router';
 import MainMenu from '../common/MainMenu';
 import Item from '../common/Item';
 import { hooks } from '../../config/queryClient';
-import { isRegularUser } from '../../utils/user';
-import { buildGraaspComposeItemRoute } from '../../config/constants';
+import HeaderRightContent from './HeaderRightContent';
+import ItemHeader from '../common/ItemHeader';
 
 const MainScreen = () => {
   const { id, rootId } = useParams();
   const mainId = id || rootId;
-  const { data: item, isLoading } = hooks.useItem(mainId);
-  const { data: user, isLoadingMember } = hooks.useCurrentMember();
+  const { data: item, isLoading, isError } = hooks.useItem(mainId);
   const { t } = useTranslation();
 
-  if (isLoading || isLoadingMember) {
+  if (isLoading) {
     return Loader;
   }
 
-  if (!item) {
+  if (!item || isError) {
     return <Alert severity="error">{t('This item does not exist')}</Alert>;
   }
 
-  const onClickComposeView = () => {
-    window.location.href = buildGraaspComposeItemRoute(mainId);
-  };
-
   const leftContent = item.get('name');
-  const rightContent = (
-    <PermissionedComponent
-      component={
-        <Tooltip title={t('Compose View')}>
-          <IconButton color="secondary" onClick={onClickComposeView}>
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
-      }
-      checkPermissions={() => isRegularUser(user)}
-    />
-  );
 
   const content = !rootId ? (
     <Typography align="center" variant="h4">
       {t('No item defined.')}
     </Typography>
   ) : (
-    <Item id={mainId} />
+    <>
+      <ItemHeader id={mainId} />
+      <Item id={mainId} />
+    </>
   );
 
   return (
@@ -58,7 +43,7 @@ const MainScreen = () => {
       open={Boolean(rootId)}
       sidebar={rootId && <MainMenu />}
       headerLeftContent={leftContent}
-      headerRightContent={rightContent}
+      headerRightContent={<HeaderRightContent id={mainId} />}
     >
       {content}
     </Main>
