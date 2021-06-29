@@ -1,9 +1,12 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import EditIcon from '@material-ui/icons/Edit';
 import { PermissionedComponent, Loader } from '@graasp/ui';
 import PropTypes from 'prop-types';
-import { IconButton, Tooltip, Grid, makeStyles } from '@material-ui/core';
+import { Tooltip, Grid, makeStyles } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Button from '@material-ui/core/Button';
 import { hooks } from '../../config/queryClient';
 import { buildGraaspComposeItemRoute } from '../../config/constants';
 import { isRegularUser } from '../../utils/user';
@@ -27,19 +30,25 @@ const ItemHeader = ({ id }) => {
     <Loader />;
   }
 
-  const ComposeViewButton = (
-    <Tooltip title={t('Compose View')}>
-      <IconButton color="primary" onClick={onClickComposeView}>
-        <EditIcon />
-      </IconButton>
-    </Tooltip>
+  const ActionButtons = (
+    <ButtonGroup
+      variant="contained"
+      color="primary"
+      aria-label="contained primary button group"
+    >
+      <Button onClick={onClickComposeView}>
+        <Tooltip title={t('Compose View')}>
+          <EditIcon />
+        </Tooltip>
+      </Button>
+    </ButtonGroup>
   );
 
   return (
     <Grid container justify="flex-end" className={classes.wrapper}>
       <Grid item>
         <PermissionedComponent
-          component={ComposeViewButton}
+          component={ActionButtons}
           checkPermissions={() => isRegularUser(user)}
         />
       </Grid>
