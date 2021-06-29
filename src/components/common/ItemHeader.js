@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React from 'react';
 import EditIcon from '@material-ui/icons/Edit';
 import { PermissionedComponent, Loader } from '@graasp/ui';
