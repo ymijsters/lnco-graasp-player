@@ -6,16 +6,19 @@ const {
   queryClient,
   QueryClientProvider,
   hooks,
+  ws,
   useMutation,
   ReactQueryDevtools,
 } = configureQueryClient({
   API_HOST,
   notifier,
+  enableWebsocket: true,
 });
 export {
   queryClient,
   QueryClientProvider,
   hooks,
+  ws,
   useMutation,
   ReactQueryDevtools,
 };

@@ -8,7 +8,7 @@ import {
   Loader,
 } from '@graasp/ui';
 import { buildTreeItemClass, MAIN_MENU_ID } from '../../config/selectors';
-import { hooks } from '../../config/queryClient';
+import { hooks, ws } from '../../config/queryClient';
 import { ITEM_TYPES } from '../../enums';
 
 const { useItem, useChildren } = hooks;
@@ -23,13 +23,18 @@ const MainMenu = () => {
     isLoading: rootItemIsLoading,
     isError: rootItemIsError,
   } = useItem(rootId);
+
+  const isFolder = Boolean(
+    rootItem && rootItem.get('type') === ITEM_TYPES.FOLDER,
+  );
   const {
     data: children,
     isLoading,
     isError: childrenIsError,
   } = useChildren(rootId, {
-    enabled: Boolean(rootItem && rootItem.get('type') === ITEM_TYPES.FOLDER),
+    enabled: isFolder,
   });
+  ws.hooks.useChildrenUpdates(isFolder ? rootId : null);
 
   // display nothing when no item is defined
   if (!rootId) {
@@ -44,13 +49,19 @@ const MainMenu = () => {
     return <Alert severity="error">{t('An unexpected error occured.')}</Alert>;
   }
 
+  const useChildrenWithUpdates = (childId, ...args) => {
+    const ret = useChildren(childId, ...args);
+    ws.hooks.useChildrenUpdates(childId);
+    return ret;
+  };
+
   return (
     <GraaspMainMenu id={MAIN_MENU_ID}>
       <DynamicTreeView
         rootLabel={rootItem.get('name')}
         rootId={rootId}
         useItem={useItem}
-        useChildren={useChildren}
+        useChildren={useChildrenWithUpdates}
         buildTreeItemClass={(nodeId) => buildTreeItemClass(nodeId)}
         initialExpendedItems={[rootId]}
         showCheckbox={false}
