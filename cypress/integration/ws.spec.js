@@ -1,0 +1,90 @@
+import { WebSocket } from '@graasp/websockets/test/mock-client';
+import { buildMainPath } from '../../src/config/paths';
+import {
+  buildFolderButtonId,
+  FOLDER_NAME_TITLE_CLASS,
+} from '../../src/config/selectors';
+import { FOLDER_WITH_SUBFOLDER_ITEM } from '../fixtures/items';
+import { CURRENT_USER } from '../fixtures/members';
+import { expectFolderButtonLayout } from '../support/integrationUtils';
+import { mockGetChildren, mockGetItem } from '../support/server';
+
+describe('Websocket interactions', () => {
+  let client;
+  const { items } = FOLDER_WITH_SUBFOLDER_ITEM;
+  const newChild = {
+    ...FOLDER_WITH_SUBFOLDER_ITEM.items[1],
+    id: 'deadbeef-aaaa-bbbb-cccc-0242ac130002',
+    name: 'newChild',
+  };
+
+  beforeEach(() => {
+    client = new WebSocket();
+    mockGetItem({ items, currentMember: CURRENT_USER }, false);
+    mockGetChildren(items);
+  });
+
+  const beforeWs = (visitRoute) => {
+    cy.visit(visitRoute, {
+      onBeforeLoad: (win) => {
+        cy.stub(win, 'WebSocket', () => client);
+      },
+    });
+  };
+
+  it('Displays create child update', () => {
+    const parent = FOLDER_WITH_SUBFOLDER_ITEM.items[0];
+    beforeWs(buildMainPath({ rootId: parent.id, id: null }));
+
+    cy.get(`.${FOLDER_NAME_TITLE_CLASS}`)
+      .should('contain', parent.name)
+      .then(() => {
+        expectFolderButtonLayout(FOLDER_WITH_SUBFOLDER_ITEM.items[1]);
+
+        // also add to mock data to avoid error while refetching
+        items.push(newChild);
+        // receive create update for subfolder
+        client.receive({
+          realm: 'notif',
+          type: 'update',
+          channel: parent.id,
+          body: {
+            entity: 'item',
+            kind: 'childItem',
+            op: 'create',
+            value: newChild,
+          },
+        });
+
+        expectFolderButtonLayout(newChild);
+      });
+  });
+
+  it('Displays remove child update', () => {
+    const parent = FOLDER_WITH_SUBFOLDER_ITEM.items[0];
+    beforeWs(buildMainPath({ rootId: parent.id, id: null }));
+
+    // button should exist
+    cy.get(`#${buildFolderButtonId(newChild.id)}`)
+      .should('exist')
+      .then(() => {
+        expectFolderButtonLayout(FOLDER_WITH_SUBFOLDER_ITEM.items[1]);
+
+        // receive remove update for subfolder
+        client.receive({
+          realm: 'notif',
+          type: 'update',
+          channel: parent.id,
+          body: {
+            entity: 'item',
+            kind: 'childItem',
+            op: 'delete',
+            value: newChild,
+          },
+        });
+
+        // button should be removed
+        cy.get(`#${buildFolderButtonId(newChild.id)}`).should('not.exist');
+      });
+  });
+});
