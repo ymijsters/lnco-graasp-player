@@ -67,6 +67,7 @@
     ]
   },
   "devDependencies": {
+    "@graasp/websockets": "git://github.com/graasp/graasp-websockets.git",
     "@commitlint/cli": "12.1.1",
     "@commitlint/config-conventional": "12.1.1",
     "@cypress/code-coverage": "3.9.6",

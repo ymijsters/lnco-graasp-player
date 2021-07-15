@@ -8,12 +8,12 @@
 
 ```
 REACT_APP_API_HOST=http://localhost:3000
-PORT=3111
+PORT=3112
 REACT_APP_SHOW_NOTIFICATIONS=true
 REACT_APP_AUTHENTICATION_HOST=http://localhost:3001
 ```
 
-4. Run `yarn start`. The client should be accessible at `localhost:3111`
+4. Run `yarn start`. The client should be accessible at `localhost:3112`
 
 ## Testing
 
@@ -21,7 +21,7 @@ Set the following environnement variables in `.env.test`
 
 ```
 REACT_APP_API_HOST=http://localhost:3000
-PORT=3111
+PORT=3112
 REACT_APP_SHOW_NOTIFICATIONS=false
 REACT_APP_NODE_ENV=test
 ```
