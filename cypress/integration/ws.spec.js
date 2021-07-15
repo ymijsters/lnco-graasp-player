@@ -9,6 +9,14 @@ import { CURRENT_USER } from '../fixtures/members';
 import { expectFolderButtonLayout } from '../support/integrationUtils';
 import { mockGetChildren, mockGetItem } from '../support/server';
 
+function beforeWs(visitRoute, wsClientStub) {
+  cy.visit(visitRoute, {
+    onBeforeLoad: (win) => {
+      cy.stub(win, 'WebSocket', () => wsClientStub);
+    },
+  });
+}
+
 describe('Websocket interactions', () => {
   let client;
   const { items } = FOLDER_WITH_SUBFOLDER_ITEM;
@@ -24,17 +32,9 @@ describe('Websocket interactions', () => {
     mockGetChildren(items);
   });
 
-  const beforeWs = (visitRoute) => {
-    cy.visit(visitRoute, {
-      onBeforeLoad: (win) => {
-        cy.stub(win, 'WebSocket', () => client);
-      },
-    });
-  };
-
   it('Displays create child update', () => {
     const parent = FOLDER_WITH_SUBFOLDER_ITEM.items[0];
-    beforeWs(buildMainPath({ rootId: parent.id, id: null }));
+    beforeWs(buildMainPath({ rootId: parent.id, id: null }), client);
 
     cy.get(`.${FOLDER_NAME_TITLE_CLASS}`)
       .should('contain', parent.name)
@@ -62,7 +62,7 @@ describe('Websocket interactions', () => {
 
   it('Displays remove child update', () => {
     const parent = FOLDER_WITH_SUBFOLDER_ITEM.items[0];
-    beforeWs(buildMainPath({ rootId: parent.id, id: null }));
+    beforeWs(buildMainPath({ rootId: parent.id, id: null }), client);
 
     // button should exist
     cy.get(`#${buildFolderButtonId(newChild.id)}`)
