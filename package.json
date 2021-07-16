@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@graasp/query-client": "git://github.com/graasp/graasp-query-client.git",
-    "@graasp/ui": "git://github.com/graasp/graasp-ui.git",
+    "@graasp/ui": "git://github.com/graasp/graasp-ui.git#master",
     "@material-ui/core": "4.11.4",
     "@material-ui/icons": "4.11.2",
     "@material-ui/lab": "4.0.0-alpha.58",
@@ -68,11 +68,11 @@
     ]
   },
   "devDependencies": {
-    "@graasp/websockets": "git://github.com/graasp/graasp-websockets.git",
     "@commitlint/cli": "12.1.1",
     "@commitlint/config-conventional": "12.1.1",
     "@cypress/code-coverage": "3.9.6",
     "@cypress/instrument-cra": "1.4.0",
+    "@graasp/websockets": "git://github.com/graasp/graasp-websockets.git",
     "@testing-library/jest-dom": "5.11.6",
     "@testing-library/react": "11.2.2",
     "@testing-library/user-event": "13.1.8",

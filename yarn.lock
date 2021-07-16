@@ -1605,9 +1605,9 @@
     react-query "3.16.0"
     uuid "8.3.2"
 
-"@graasp/ui@git://github.com/graasp/graasp-ui.git":
+"@graasp/ui@git://github.com/graasp/graasp-ui.git#31/itemIcon":
   version "0.2.0"
-  resolved "git://github.com/graasp/graasp-ui.git#994c4a06183833ed5c6bd2b92492c384d72a2696"
+  resolved "git://github.com/graasp/graasp-ui.git#7a3357b5741fd62b842b89f85c2c7b0330d2bd4e"
   dependencies:
     clsx "1.1.1"
     immutable "4.0.0-rc.12"
@@ -2876,9 +2876,9 @@ ajv-keywords@^3.1.0, ajv-keywords@^3.4.1, ajv-keywords@^3.5.2:
   integrity sha512-5p6WTN0DdTGVQk6VjcEju19IgaHudalcfabD7yhDGeA6bcQnmL+CpveLJq/3hvfwd1aof6L386Ougkx6RfyMIQ==
 
 "ajv-latest@npm:ajv@^8.6.0":
-  version "8.6.1"
-  resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.6.1.tgz#ae65764bf1edde8cd861281cda5057852364a295"
-  integrity sha512-42VLtQUOLefAvKFAQIxIZDaThq6om/PrfP0CYk3/vn+y4BMNkKnbli8ON2QCiHov4KkzOSJ/xSoBJdayiiYvVQ==
+  version "8.6.2"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.6.2.tgz#2fb45e0e5fcbc0813326c1c3da535d1881bb0571"
+  integrity sha512-9807RlWAgT564wT+DjeyU5OFMPjmzxVobvDFmNAhY+5zD6A2ly3jDp6sgnfyDtlIQ+7H97oc/DGCzzfu9rjw9w==
   dependencies:
     fast-deep-equal "^3.1.1"
     json-schema-traverse "^1.0.0"
@@ -6903,9 +6903,9 @@ find-cache-dir@^3.2.0, find-cache-dir@^3.3.1:
     pkg-dir "^4.1.0"
 
 find-my-way@^4.0.0:
-  version "4.3.2"
-  resolved "https://registry.yarnpkg.com/find-my-way/-/find-my-way-4.3.2.tgz#30c0ea8154cf024e75ebfe5192038b61489cc145"
-  integrity sha512-hjd9Oe7cJUknsm4cj91RLjz4TDsgFDkTTeKax44059GPI/nBYbGVG5RvCMDLcXLJhq1561QqknstRUwup0INzg==
+  version "4.3.3"
+  resolved "https://registry.yarnpkg.com/find-my-way/-/find-my-way-4.3.3.tgz#2ab3880a03bcaa8594548d66b0cd1c5a6e98dd44"
+  integrity sha512-5E4bRdaATB1MewjOCBjx4xvD205a4t2ripCnXB+YFhYEJ0NABtrcC7XLXLq0TPoFe/WYGUFqys3Qk3HCOGeNcw==
   dependencies:
     fast-decode-uri-component "^1.0.1"
     fast-deep-equal "^3.1.3"
