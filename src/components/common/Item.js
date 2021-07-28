@@ -21,9 +21,15 @@ import {
   buildFolderButtonId,
   FOLDER_NAME_TITLE_CLASS,
 } from '../../config/selectors';
-import { SCREEN_MAX_HEIGHT } from '../../config/constants';
+import { API_HOST, SCREEN_MAX_HEIGHT } from '../../config/constants';
 
-const { useItem, useChildren, useFileContent, useS3FileContent } = hooks;
+const {
+  useItem,
+  useChildren,
+  useFileContent,
+  useS3FileContent,
+  useCurrentMember,
+} = hooks;
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -36,6 +42,7 @@ const Item = ({ id, isChildren }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const { data: item, isLoading, isError } = useItem(id);
+  const { data: user, isLoading: isMemberLoading } = useCurrentMember();
 
   // fetch children if item is folder
   const isFolder = Boolean(item?.get('type') === ITEM_TYPES.FOLDER);
@@ -110,7 +117,18 @@ const Item = ({ id, isChildren }) => {
       return <DocumentItem id={buildDocumentId(id)} item={item} readOnly />;
     }
     case ITEM_TYPES.APP: {
-      return <AppItem id={buildAppId(id)} item={item} readOnly />;
+      if (isMemberLoading) {
+        return <Loader />;
+      }
+
+      return (
+        <AppItem
+          id={buildAppId(id)}
+          item={item}
+          apiHost={API_HOST} // todo: to change
+          user={user}
+        />
+      );
     }
     default:
       console.error(`The type ${item?.get('type')} is not defined`);
