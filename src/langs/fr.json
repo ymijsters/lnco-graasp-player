@@ -1,3 +1,8 @@
 {
-  "translations": {}
+  "translations": {
+    "Graasp Perform": "Graasp Perform",
+    "My Items": "Mes Eléments",
+    "Shared Items": "Eléments Partagés",
+    "You are not signed in.": "Vous n'êtes pas connecté."
+  }
 }

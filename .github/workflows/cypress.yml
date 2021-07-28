@@ -1,20 +1,23 @@
-name: Cypress tests
+name: cypress tests
 on: [push]
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: checkout
         uses: actions/checkout@v2
 
-      - name: Cypress run
+      - name: install
+        # network-concurrency 1 is necessary to avoid errors when using github packages
+        run: yarn cache clean && rm yarn.lock && yarn install --network-concurrency 1
+
+      - name: cypress run
         uses: cypress-io/github-action@v2
         env:
           REACT_APP_API_HOST: ${{ secrets.REACT_APP_API_HOST }}
           REACT_APP_NODE_ENV: test
         with:
-          # network-concurrency 1 is necessary to avoid errors when using github packages
-          install-command: yarn install --network-concurrency 1
+          install: false
           config: baseUrl=http://localhost:3000
           start: yarn start:ci
           wait-on: 'http://localhost:3000'
@@ -23,5 +26,5 @@ jobs:
           headless: true
           quiet: true
 
-      - name: Coverage Report
+      - name: coverage report
         run: npx nyc report --reporter=text-summary
