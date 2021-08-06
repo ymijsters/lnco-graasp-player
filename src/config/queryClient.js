@@ -6,7 +6,6 @@ const {
   queryClient,
   QueryClientProvider,
   hooks,
-  ws,
   useMutation,
   ReactQueryDevtools,
 } = configureQueryClient({
@@ -18,7 +17,6 @@ export {
   queryClient,
   QueryClientProvider,
   hooks,
-  ws,
   useMutation,
   ReactQueryDevtools,
 };
