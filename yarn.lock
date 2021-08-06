@@ -2147,9 +2147,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graasp/query-client@git://github.com/graasp/graasp-query-client.git":
+"@graasp/query-client@git://github.com/graasp/graasp-query-client.git#main":
   version: 0.1.0
-  resolution: "@graasp/query-client@git://github.com/graasp/graasp-query-client.git#commit=ea0cc5ddbb634234c2407365a6509065b79342ee"
+  resolution: "@graasp/query-client@git://github.com/graasp/graasp-query-client.git#commit=5cd8e1392d81583d754baaa9371157400543b77e"
   dependencies:
     http-status-codes: 2.1.4
     immutable: 4.0.0-rc.12
@@ -2160,13 +2160,13 @@ __metadata:
     uuid: 8.3.2
   peerDependencies:
     react: ^17.0.0
-  checksum: 9d051a733c7d13ed5ddc90489fb90fa4f8f7c4cc894d5f9d0a4d91b756486f698cc49b11d824af7406e5c6c336bb1fcf1fc1fc32a859168c4be0dabd7bc0fe13
+  checksum: e7ae74dd2ceab657da8341ca3b8d244fdb978c3dabf12802ca267d686ab9588995a3b85640386cc39436625b5c2f46285523b0329b0216659e60b1541f490a41
   languageName: node
   linkType: hard
 
-"@graasp/ui@git://github.com/graasp/graasp-ui.git#39/yarn2":
+"@graasp/ui@git://github.com/graasp/graasp-ui.git#master":
   version: 0.2.0
-  resolution: "@graasp/ui@git://github.com/graasp/graasp-ui.git#commit=a8b57ffe073eb78597e61119b72b493b9a213368"
+  resolution: "@graasp/ui@git://github.com/graasp/graasp-ui.git#commit=7191a5654c55601d4e476ba6011d160ac8243cb5"
   dependencies:
     clsx: 1.1.1
     immutable: 4.0.0-rc.12
@@ -2179,8 +2179,7 @@ __metadata:
     "@material-ui/lab": 4.0.0-alpha.58
     react: ^16.13.1
     react-dom: 16.13.1
-    react-scripts: 4.0.3
-  checksum: 9a69ba0dfd648fe58e4d4214bbdef2065a38ac0ed004d4ce7163e7b3baa56d4f08e09b2db66d129aaa2d6ad65c7de1bf8c66dab8ed27c68656a8eaca8565edbc
+  checksum: 7e1e517057b976f757b77a44db4d2b71c965ac5298c6c16ac4f45c56527798b6a4e179cb4e3ba5cbf8d20cbac3c30cb9889ccd01dce58dfed4d2f43fb254e000
   languageName: node
   linkType: hard
 
@@ -9883,8 +9882,8 @@ fsevents@^1.2.7:
     "@commitlint/config-conventional": ^13.1.0
     "@cypress/code-coverage": 3.9.6
     "@cypress/instrument-cra": 1.4.0
-    "@graasp/query-client": "git://github.com/graasp/graasp-query-client.git"
-    "@graasp/ui": "git://github.com/graasp/graasp-ui.git#39/yarn2"
+    "@graasp/query-client": "git://github.com/graasp/graasp-query-client.git#main"
+    "@graasp/ui": "git://github.com/graasp/graasp-ui.git#master"
     "@graasp/websockets": "git://github.com/graasp/graasp-websockets.git"
     "@material-ui/core": 4.11.4
     "@material-ui/icons": 4.11.2
