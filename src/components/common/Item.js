@@ -11,7 +11,7 @@ import {
 import Alert from '@material-ui/lab/Alert';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
-import { hooks, ws } from '../../config/queryClient';
+import { hooks } from '../../config/queryClient';
 import { ITEM_TYPES } from '../../enums';
 import FolderButton from './FolderButton';
 import {
@@ -48,8 +48,8 @@ const Item = ({ id, isChildren }) => {
   const isFolder = Boolean(item?.get('type') === ITEM_TYPES.FOLDER);
   const { data: children, isLoading: isChildrenLoading } = useChildren(id, {
     enabled: isFolder,
+    getUpdates: isFolder,
   });
-  ws.hooks.useChildrenUpdates(isFolder ? id : null);
 
   // fetch file content if type is file
   const { data: content, isError: isFileError } = useFileContent(id, {

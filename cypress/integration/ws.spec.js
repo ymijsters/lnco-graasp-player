@@ -47,12 +47,12 @@ describe('Websocket interactions', () => {
         client.receive({
           realm: 'notif',
           type: 'update',
+          topic: 'item',
           channel: parent.id,
           body: {
-            entity: 'item',
-            kind: 'childItem',
+            kind: 'child',
             op: 'create',
-            value: newChild,
+            item: newChild,
           },
         });
 
@@ -74,12 +74,12 @@ describe('Websocket interactions', () => {
         client.receive({
           realm: 'notif',
           type: 'update',
+          topic: 'item',
           channel: parent.id,
           body: {
-            entity: 'item',
-            kind: 'childItem',
+            kind: 'child',
             op: 'delete',
-            value: newChild,
+            item: newChild,
           },
         });
 

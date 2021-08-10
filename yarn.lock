@@ -2147,9 +2147,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graasp/query-client@git://github.com/graasp/graasp-query-client.git#35b96c40d668bbded90882c9b8a88cf15d747c09":
+"@graasp/query-client@git://github.com/graasp/graasp-query-client.git#main":
   version: 0.1.0
-  resolution: "@graasp/query-client@git://github.com/graasp/graasp-query-client.git#commit=35b96c40d668bbded90882c9b8a88cf15d747c09"
+  resolution: "@graasp/query-client@git://github.com/graasp/graasp-query-client.git#commit=b7aa5e2e66d8e23152f55be894b1bfc6d0fd6fc1"
   dependencies:
     http-status-codes: 2.1.4
     immutable: 4.0.0-rc.12
@@ -2160,7 +2160,7 @@ __metadata:
     uuid: 8.3.2
   peerDependencies:
     react: ^17.0.0
-  checksum: c194a207703a7de9c97812f5cb4707373ae64078859dad16e6dc9fffa1718c1f317e0541dc47f4ee01034132204dde0fa175d32a027f6ee7a9c1ea4b4d534702
+  checksum: 53b9ca38abb73890dc6f0e91c9e936f52131556b0ff21ead9bc0d8e4fee5497eeba7e933c97da7c01b20e6e7a606470351760a4f93da85af8dcd8f8bd7013549
   languageName: node
   linkType: hard
 
@@ -2178,11 +2178,11 @@ __metadata:
     "@material-ui/lab": 4.0.0-alpha.58
     react: ^16.13.1
     react-dom: 16.13.1
-  checksum: 93418bb4b34eaab44c8ac6aee1e751847c249879682f7b0e92b4c8a600f2cf485c9de0c0144c8ddb99aceb9347809a06bd755210c18b612c237d8383c02ebf77
+  checksum: a90e58ad39023ede26cc497b34bb56e31ccb60b245c58a7ee3b1cdf73da3f245ff5b335273872765f9b15ec11707467b62455f9e2140befcb181f1ccf7691b79
   languageName: node
   linkType: hard
 
-"@graasp/websockets@git://github.com/graasp/graasp-websockets.git":
+"@graasp/websockets@git://github.com/graasp/graasp-websockets.git#master":
   version: 1.0.0
   resolution: "@graasp/websockets@git://github.com/graasp/graasp-websockets.git#commit=64fe09b0529249282e476e03eaeedd0b5586e5f7"
   dependencies:
@@ -9881,9 +9881,9 @@ fsevents@^1.2.7:
     "@commitlint/config-conventional": ^13.1.0
     "@cypress/code-coverage": 3.9.6
     "@cypress/instrument-cra": 1.4.0
-    "@graasp/query-client": "git://github.com/graasp/graasp-query-client.git#35b96c40d668bbded90882c9b8a88cf15d747c09"
+    "@graasp/query-client": "git://github.com/graasp/graasp-query-client.git#main"
     "@graasp/ui": "git://github.com/graasp/graasp-ui.git#41/rollup"
-    "@graasp/websockets": "git://github.com/graasp/graasp-websockets.git"
+    "@graasp/websockets": "git://github.com/graasp/graasp-websockets.git#master"
     "@material-ui/core": 4.11.4
     "@material-ui/icons": 4.11.2
     "@material-ui/lab": 4.0.0-alpha.58
