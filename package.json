@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@graasp/query-client": "git://github.com/graasp/graasp-query-client.git#main",
-    "@graasp/ui": "git://github.com/graasp/graasp-ui.git#master",
+    "@graasp/query-client": "git://github.com/graasp/graasp-query-client.git#35b96c40d668bbded90882c9b8a88cf15d747c09",
+    "@graasp/ui": "git://github.com/graasp/graasp-ui.git#41/rollup",
     "@material-ui/core": "4.11.4",
     "@material-ui/icons": "4.11.2",
     "@material-ui/lab": "4.0.0-alpha.58",
