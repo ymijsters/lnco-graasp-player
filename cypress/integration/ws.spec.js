@@ -50,7 +50,7 @@ describe('Websocket interactions', () => {
           topic: 'item',
           channel: parent.id,
           body: {
-            kind: 'childItem',
+            kind: 'child',
             op: 'create',
             item: newChild,
           },
@@ -77,7 +77,7 @@ describe('Websocket interactions', () => {
           topic: 'item',
           channel: parent.id,
           body: {
-            kind: 'childItem',
+            kind: 'child',
             op: 'delete',
             item: newChild,
           },
