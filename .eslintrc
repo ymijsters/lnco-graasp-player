@@ -11,7 +11,13 @@
     "cy": true,
     "Cypress": true
   },
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "requireConfigFile": false,
+    "babelOptions": {
+      "presets": ["@babel/preset-react"]
+    }
+  },
   "rules": {
     "no-underscore-dangle": [
       "error",
