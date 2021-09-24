@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Item = ({ id, isChildren }) => {
+const Item = ({ id, isChildren, pinnedOnly }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const { data: item, isLoading, isError } = useItem(id);
@@ -85,7 +85,7 @@ const Item = ({ id, isChildren }) => {
           <Typography className={FOLDER_NAME_TITLE_CLASS} variant="h2">
             {item.get('name')}
           </Typography>
-          {children.map((thisItem) => (
+          {children.filter(i => pinnedOnly && i.settings.isPinned).map((thisItem) => (
             <Container key={thisItem.id} className={classes.container}>
               <Item isChildren id={thisItem.id} />
             </Container>
@@ -139,10 +139,12 @@ const Item = ({ id, isChildren }) => {
 Item.propTypes = {
   id: PropTypes.string.isRequired,
   isChildren: PropTypes.bool,
+  pinnedOnly: PropTypes.bool,
 };
 
 Item.defaultProps = {
   isChildren: false,
+  pinnedOnly: false
 };
 
 export default Item;

@@ -10,8 +10,25 @@ import Item from '../common/Item';
 import { hooks } from '../../config/queryClient';
 import HeaderRightContent from './HeaderRightContent';
 import ItemHeader from '../common/ItemHeader';
+import PinnedItems from '../common/PinnedItems';
 
 const MainScreen = () => {
+ const getParentsIdsFromPath = (path) => {
+    if (!path) {
+      return [];
+    }
+    return path.replace(/_/g, '-').split('.');
+  };
+
+  const getDirectParentId = (path) => {
+    const ids = getParentsIdsFromPath(path);
+    const parentIdx = ids.length - 2;
+    if (parentIdx < 0) {
+      return null;
+    }
+    return ids[parentIdx];
+  };
+  
   const { id, rootId } = useParams();
   const mainId = id || rootId;
   const { data: item, isLoading, isError } = hooks.useItem(mainId);
@@ -26,6 +43,7 @@ const MainScreen = () => {
   }
 
   const leftContent = item.get('name');
+  const parentId = getDirectParentId(item.get('path')) || rootId;
 
   const content = !rootId ? (
     <Typography align="center" variant="h4">
@@ -45,7 +63,9 @@ const MainScreen = () => {
       headerLeftContent={leftContent}
       headerRightContent={<HeaderRightContent id={mainId} />}
     >
-      {content}
+      <PinnedItems content={content}>
+        <Item id={parentId} pinnedOnly />
+      </PinnedItems>
     </Main>
   );
 };
