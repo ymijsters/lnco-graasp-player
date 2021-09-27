@@ -63,8 +63,8 @@ const MainScreen = () => {
       headerLeftContent={leftContent}
       headerRightContent={<HeaderRightContent id={mainId} />}
     >
-      <PinnedItems content={content}>
-        <Item id={parentId} pinnedOnly />
+      <PinnedItems sideContent={<Item id={parentId} pinnedOnly />}>
+        {content}
       </PinnedItems>
     </Main>
   );
