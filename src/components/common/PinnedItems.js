@@ -5,12 +5,16 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Box, Slide } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 const drawerWidth = 400;
 
 const useStyles = makeStyles((theme) => ({
+  iconButton:{
+    float: 'right'
+  },
   root: {
     display: 'flex',
   },
@@ -46,7 +50,7 @@ export default function PersistentDrawerRight({ children, sideContent }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
-  const handleDrawerOpen = () => {
+  const handleDrawerToggle = () => {
     setOpen(!open);
   };
 
@@ -62,16 +66,15 @@ export default function PersistentDrawerRight({ children, sideContent }) {
           [classes.contentShift]: open,
         })}
       >
-            <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="end"
-            onClick={handleDrawerOpen}
+        <div>
+          <IconButton
+            className={classes.iconButton}
+            aria-label={ open ? "Hide pinned items" : "Show pinned items"}
+            onClick={handleDrawerToggle}
           >
-            <VisibilityIcon />
+            { open ? <VisibilityOffIcon /> : <VisibilityIcon /> }
           </IconButton>
-
-        <div className={classes.drawerHeader} />
+        </div>
         {children}
       </main>
 
