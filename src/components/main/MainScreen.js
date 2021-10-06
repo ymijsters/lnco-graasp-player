@@ -11,6 +11,7 @@ import Item from '../common/Item';
 import { hooks } from '../../config/queryClient';
 import HeaderRightContent from './HeaderRightContent';
 import ItemHeader from '../common/ItemHeader';
+import ChatPannel from '../common/ChatPannel';
 
 
 const MainScreen = () => {
@@ -47,8 +48,9 @@ const MainScreen = () => {
       headerLeftContent={leftContent}
       headerRightContent={<HeaderRightContent id={mainId} />}
     >
-      {content}
-      <Chatbox item={item} />
+      <ChatPannel sideContent={[ <Chatbox item={item} /> ]}>
+        {content}
+      </ChatPannel>
     </Main>
   );
 };
