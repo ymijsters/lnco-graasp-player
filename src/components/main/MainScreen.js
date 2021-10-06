@@ -6,10 +6,12 @@ import { useTranslation } from 'react-i18next';
 import Alert from '@material-ui/lab/Alert';
 import { useParams, withRouter } from 'react-router';
 import MainMenu from '../common/MainMenu';
+import Chatbox from '../common/Chatbox';
 import Item from '../common/Item';
 import { hooks } from '../../config/queryClient';
 import HeaderRightContent from './HeaderRightContent';
 import ItemHeader from '../common/ItemHeader';
+
 
 const MainScreen = () => {
   const { id, rootId } = useParams();
@@ -46,6 +48,7 @@ const MainScreen = () => {
       headerRightContent={<HeaderRightContent id={mainId} />}
     >
       {content}
+      <Chatbox item={item} />
     </Main>
   );
 };
