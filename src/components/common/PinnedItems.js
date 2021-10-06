@@ -2,12 +2,13 @@ import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types'
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Box, Slide } from '@material-ui/core';
+import { Box, Paper, Slide } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import { HEADER_HEIGHT } from '../../config/constants';
 
 const drawerWidth = 400;
 
@@ -78,17 +79,19 @@ export default function PersistentDrawerRight({ children, sideContent }) {
         {children}
       </main>
 
-      <Slide anchor="right" direction="left" in={open} mountOnEnter unmountOnExit>
-        <Box className={classes.drawer}>
-          <div className={classes.drawerHeader}>
-            <IconButton onClick={handleDrawerClose}>
-              {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-            </IconButton>
-          </div>
+      <Paper square>
+        <Slide anchor="right" direction="left" in={open} mountOnEnter unmountOnExit minHeight={window.innerHeight - HEADER_HEIGHT}>  
+            <Box className={classes.drawer}>
+              <div className={classes.drawerHeader}>
+                <IconButton onClick={handleDrawerClose}>
+                  {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                </IconButton>
+              </div>
 
-          {sideContent}
-        </Box>
-      </Slide>
+              {sideContent}
+            </Box>
+        </Slide>
+      </Paper>
     </div>
   );
 }
