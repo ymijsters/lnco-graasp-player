@@ -85,7 +85,7 @@ const Item = ({ id, isChildren, pinnedOnly }) => {
           <Typography className={FOLDER_NAME_TITLE_CLASS} variant="h2">
             {item.get('name')}
           </Typography>
-          {children.filter(i => pinnedOnly && i.settings.isPinned).map((thisItem) => (
+          {children.filter(i => (pinnedOnly && i.settings.isPinned) || !pinnedOnly).map((thisItem) => (
             <Container key={thisItem.id} className={classes.container}>
               <Item isChildren id={thisItem.id} />
             </Container>

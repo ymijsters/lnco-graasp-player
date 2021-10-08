@@ -6,6 +6,10 @@ export const DEFAULT_FOLDER_ITEM = {
   extra: {},
   creator: CURRENT_USER.id,
   type: ITEM_TYPES.FOLDER,
+  settings: {
+    isPinned: false,
+    showChat: false,
+  }
 };
 
 export const FOLDER_WITH_SUBFOLDER_ITEM = {
@@ -18,6 +22,10 @@ export const FOLDER_WITH_SUBFOLDER_ITEM = {
       extra: {
         image: 'someimageurl',
       },
+      settings: {
+        isPinned: false,
+        showChat: false,
+      }
     },
     {
       ...DEFAULT_FOLDER_ITEM,
@@ -27,6 +35,10 @@ export const FOLDER_WITH_SUBFOLDER_ITEM = {
       extra: {
         image: 'someimageurl',
       },
+      settings: {
+        isPinned: false,
+        showChat: false,
+      }
     },
   ],
 };
@@ -40,6 +52,10 @@ export const SHORTCUT = {
   extra: {
     image: 'someimageurl',
   },
+  settings: {
+    isPinned: false,
+    showChat: false,
+  }
 };
 
 export const FOLDER_FIXTURE = {
@@ -51,4 +67,8 @@ export const FOLDER_FIXTURE = {
   extra: {
     image: 'someimageurl',
   },
+  settings: {
+    isPinned: false,
+    showChat: false,
+  }
 };

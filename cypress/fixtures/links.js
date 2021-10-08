@@ -16,6 +16,10 @@ export const GRAASP_LINK_ITEM = {
       'https://graasp.eu/cdn/img/epfl/favicons/favicon-32x32.png?v=yyxJ380oWY',
     ],
   }),
+  settings: {
+    isPinned: false,
+    showChat: false,
+  }
 };
 
 export const YOUTUBE_LINK_ITEM = {
@@ -31,4 +35,8 @@ export const YOUTUBE_LINK_ITEM = {
     thumbnails: ['https://i.ytimg.com/vi/FmiEgBMTPLo/maxresdefault.jpg'],
     icons: ['https://www.youtube.com/s/desktop/f0ff6c1d/img/favicon_96.png'],
   }),
+  settings: {
+    isPinned: false,
+    showChat: false,
+  }
 };

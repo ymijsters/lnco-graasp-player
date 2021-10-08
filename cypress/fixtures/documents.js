@@ -13,4 +13,8 @@ export const GRAASP_DOCUMENT_ITEM = {
   extra: buildDocumentExtra({
     content: '<h1>Some Title</h1>',
   }),
+  settings: {
+    isPinned: false,
+    showChat: false,
+  }
 };
