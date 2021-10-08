@@ -6,15 +6,15 @@ import { useTranslation } from 'react-i18next';
 import Alert from '@material-ui/lab/Alert';
 import { useParams, withRouter } from 'react-router';
 import MainMenu from '../common/MainMenu';
-import Chatbox from '../common/Chatbox';
 import Item from '../common/Item';
 import { hooks } from '../../config/queryClient';
 import HeaderRightContent from './HeaderRightContent';
 import ItemHeader from '../common/ItemHeader';
-import ChatPannel from '../common/ChatPannel';
-
+import SideContent from '../common/SideContent';
+import { LayoutContextProvider } from '../context/LayoutContext';
 
 const MainScreen = () => {
+  
   const { id, rootId } = useParams();
   const mainId = id || rootId;
   const { data: item, isLoading, isError } = hooks.useItem(mainId);
@@ -48,9 +48,11 @@ const MainScreen = () => {
       headerLeftContent={leftContent}
       headerRightContent={<HeaderRightContent id={mainId} />}
     >
-      <ChatPannel sideContent={[ <Chatbox item={item} /> ]}>
-        {content}
-      </ChatPannel>
+      <LayoutContextProvider>
+        <SideContent item={item}>
+          {content}
+        </SideContent>
+      </LayoutContextProvider>
     </Main>
   );
 };

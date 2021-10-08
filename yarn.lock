@@ -1765,6 +1765,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.14.5, @babel/runtime@npm:^7.14.8":
+  version: 7.15.4
+  resolution: "@babel/runtime@npm:7.15.4"
+  dependencies:
+    regenerator-runtime: ^0.13.4
+  checksum: c40825430400e47c19b97e4142d5315d2910305b9714d44a711472587ee2fd4521fdba5f02ddd9df3902f5e988d9854fa83f4da1e0c091f70f6983fa52480606
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.10.4, @babel/template@npm:^7.14.5, @babel/template@npm:^7.3.3, @babel/template@npm:^7.4.4":
   version: 7.14.5
   resolution: "@babel/template@npm:7.14.5"
@@ -2147,26 +2156,46 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@graasp/chatbox@git://github.com/graasp/graasp-chatbox.git#main":
+  version: 0.1.0
+  resolution: "@graasp/chatbox@git://github.com/graasp/graasp-chatbox.git#commit=307ba6b04b1f7038a1ac64d1b7fa2c9a7b3b16b8"
+  dependencies:
+    clsx: 1.1.1
+    i18next: 20.4.0
+    immutable: 4.0.0-rc.12
+    lodash.truncate: 4.4.2
+    moment: 2.29.1
+    react-i18next: 11.11.4
+  peerDependencies:
+    "@material-ui/core": "*"
+    "@material-ui/icons": "*"
+    "@material-ui/lab": "*"
+    react: "*"
+    react-dom: "*"
+  checksum: d48cfa192095426c6a570d2d90de6a265ea8802eaf908b09f6d76a9736fcf6d6ba9d92fd9e86442a69d666352c2b45cd574e79f041b9986096a4502daea187df
+  languageName: node
+  linkType: hard
+
 "@graasp/query-client@git://github.com/graasp/graasp-query-client.git#main":
   version: 0.1.0
-  resolution: "@graasp/query-client@git://github.com/graasp/graasp-query-client.git#commit=b7aa5e2e66d8e23152f55be894b1bfc6d0fd6fc1"
+  resolution: "@graasp/query-client@git://github.com/graasp/graasp-query-client.git#commit=3503b979f5873b66dbc26cc6f49464a7b33dcfd7"
   dependencies:
+    axios: 0.21.4
     http-status-codes: 2.1.4
     immutable: 4.0.0-rc.12
     js-cookie: 3.0.0
-    node-fetch: 2.6.1
     qs: 6.10.1
     react-query: 3.16.0
     uuid: 8.3.2
   peerDependencies:
     react: ^17.0.0
-  checksum: 53b9ca38abb73890dc6f0e91c9e936f52131556b0ff21ead9bc0d8e4fee5497eeba7e933c97da7c01b20e6e7a606470351760a4f93da85af8dcd8f8bd7013549
+  checksum: 546038e171d268f1877f9059137f4e0db9f3dfcd23a007a12f717f8018f77f894dc2e7609223d2e8227932b48209166d5130ad12a50972fe0579824727c85fae
   languageName: node
   linkType: hard
 
-"@graasp/ui@git://github.com/graasp/graasp-ui.git#41/rollup":
+"@graasp/ui@git://github.com/graasp/graasp-ui.git":
   version: 0.2.0
-  resolution: "@graasp/ui@git://github.com/graasp/graasp-ui.git#commit=e57cbacca08a77b2da7ed1c70ce956c24480000c"
+  resolution: "@graasp/ui@git://github.com/graasp/graasp-ui.git#commit=ac52dbaa0b6e79c9aa098e9614632387773d3524"
   dependencies:
     clsx: 1.1.1
     immutable: 4.0.0-rc.12
@@ -2178,7 +2207,7 @@ __metadata:
     "@material-ui/lab": 4.0.0-alpha.58
     react: ^16.13.1
     react-dom: 16.13.1
-  checksum: a90e58ad39023ede26cc497b34bb56e31ccb60b245c58a7ee3b1cdf73da3f245ff5b335273872765f9b15ec11707467b62455f9e2140befcb181f1ccf7691b79
+  checksum: 4ca71e509d667933e71bec8dc4a967261ddf10afcb61612274ac45dd39e8c9bd57f926501d2640556d67d7bec4c5aa7275a9613594aaeb07aeb2f1bd54dec6d4
   languageName: node
   linkType: hard
 
@@ -2521,20 +2550,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@material-ui/icons@npm:4.11.2":
-  version: 4.11.2
-  resolution: "@material-ui/icons@npm:4.11.2"
+"@material-ui/icons@npm:5.0.0-beta.4":
+  version: 5.0.0-beta.4
+  resolution: "@material-ui/icons@npm:5.0.0-beta.4"
   dependencies:
-    "@babel/runtime": ^7.4.4
+    "@babel/runtime": ^7.14.8
   peerDependencies:
-    "@material-ui/core": ^4.0.0
+    "@material-ui/core": ^5.0.0-alpha.36
     "@types/react": ^16.8.6 || ^17.0.0
-    react: ^16.8.0 || ^17.0.0
-    react-dom: ^16.8.0 || ^17.0.0
+    react: ^17.0.0
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 0cd1d54b25a4237bd0cefd383d287911f721d4c4ac4fd7980370566b9927f3a9725e7a715042f7c65c87fa554173fbef5328de1d08e60eb996038f375ddf583a
+  checksum: c5880edaa5d7460d67ae00985e7d0227b327c2be1dda6dab35bf5830eb605299bc8f765a766623150459591859b75a5d0cfe7416d1bb5a2eb5059d5b558e44cf
   languageName: node
   linkType: hard
 
@@ -4435,6 +4463,15 @@ __metadata:
   version: 4.3.2
   resolution: "axe-core@npm:4.3.2"
   checksum: ecedf159c4f24fe9c64689890e9b95082f1dab362e57ecd74d2d28573fca2f6b3b915784ccb46d9c3f1506c38524144066066c6d8759d0c5628d22ba3cdc57e0
+  languageName: node
+  linkType: hard
+
+"axios@npm:0.21.4":
+  version: 0.21.4
+  resolution: "axios@npm:0.21.4"
+  dependencies:
+    follow-redirects: ^1.14.0
+  checksum: 44245f24ac971e7458f3120c92f9d66d1fc695e8b97019139de5b0cc65d9b8104647db01e5f46917728edfc0cfd88eb30fc4c55e6053eef4ace76768ce95ff3c
   languageName: node
   linkType: hard
 
@@ -9292,6 +9329,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"follow-redirects@npm:^1.14.0":
+  version: 1.14.4
+  resolution: "follow-redirects@npm:1.14.4"
+  peerDependenciesMeta:
+    debug:
+      optional: true
+  checksum: d4ce74cf5c6f363168b97e706b914eb9ffb6bf4d4c6d8f8330b93088d9b90e566611ddbcf0e42c8ed5fd17598dfeda1d19230d3e9d6d6c6b4d1c10ec3a0b99be
+  languageName: node
+  linkType: hard
+
 "for-in@npm:^1.0.2":
   version: 1.0.2
   resolution: "for-in@npm:1.0.2"
@@ -9881,11 +9928,12 @@ fsevents@^1.2.7:
     "@commitlint/config-conventional": ^13.1.0
     "@cypress/code-coverage": 3.9.6
     "@cypress/instrument-cra": 1.4.0
+    "@graasp/chatbox": "git://github.com/graasp/graasp-chatbox.git#main"
     "@graasp/query-client": "git://github.com/graasp/graasp-query-client.git#main"
-    "@graasp/ui": "git://github.com/graasp/graasp-ui.git#41/rollup"
+    "@graasp/ui": "git://github.com/graasp/graasp-ui.git"
     "@graasp/websockets": "git://github.com/graasp/graasp-websockets.git#master"
     "@material-ui/core": 4.11.4
-    "@material-ui/icons": 4.11.2
+    "@material-ui/icons": 5.0.0-beta.4
     "@material-ui/lab": 4.0.0-alpha.58
     "@testing-library/jest-dom": 5.11.6
     "@testing-library/react": 11.2.2
@@ -10527,6 +10575,15 @@ fsevents@^1.2.7:
   dependencies:
     "@babel/runtime": ^7.12.0
   checksum: 004dc68912201c25f35d8931ed2ddf5485fc3223b715f008dda03663bef525f312a1b7c9468fed53942392e5170388a815674d1a0ff037c46a57b3c9878067bd
+  languageName: node
+  linkType: hard
+
+"i18next@npm:20.4.0":
+  version: 20.4.0
+  resolution: "i18next@npm:20.4.0"
+  dependencies:
+    "@babel/runtime": ^7.12.0
+  checksum: e2e3697132317f241b6290d4d0b549b0e445a9b400666505f549d62d38cd2f8347fb511e79c6f88f59021f0c9976c6f18cfe345fa3f223c110a3b0072a256f66
   languageName: node
   linkType: hard
 
@@ -13443,6 +13500,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"moment@npm:2.29.1":
+  version: 2.29.1
+  resolution: "moment@npm:2.29.1"
+  checksum: 1e14d5f422a2687996be11dd2d50c8de3bd577c4a4ca79ba5d02c397242a933e5b941655de6c8cb90ac18f01cc4127e55b4a12ae3c527a6c0a274e455979345e
+  languageName: node
+  linkType: hard
+
 "moo@npm:^0.5.0":
   version: 0.5.1
   resolution: "moo@npm:0.5.1"
@@ -16144,6 +16208,19 @@ fsevents@^1.2.7:
   version: 6.0.9
   resolution: "react-error-overlay@npm:6.0.9"
   checksum: 695853bc885e798008a00c10d8d94e5ac91626e8130802fea37345f9c037f41b80104345db2ee87f225feb4a4ef71b0df572b17c378a6d397b6815f6d4a84293
+  languageName: node
+  linkType: hard
+
+"react-i18next@npm:11.11.4":
+  version: 11.11.4
+  resolution: "react-i18next@npm:11.11.4"
+  dependencies:
+    "@babel/runtime": ^7.14.5
+    html-parse-stringify: ^3.0.1
+  peerDependencies:
+    i18next: ">= 19.0.0"
+    react: ">= 16.8.0"
+  checksum: 5630bfe1b39e6ce893fcccfba62cd42db92d130c0d00f181ec3bc68884ee0db3c698d0b6320d05dc783e5e32c14f7e547bb8aa034788a5f317563ad32f29edf9
   languageName: node
   linkType: hard
 
