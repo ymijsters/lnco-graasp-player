@@ -88,13 +88,17 @@ export default function SideContent({ children, item }) {
           [classes.contentShift]: (isChatboxMenuOpen || isPinnedMenuOpen),
         })}
       >
-        <IconButton
-          className={classes.iconButton}
-          aria-label="open drawer"
-          onClick={toggleChatOpen}
-        > 
-          <ForumIcon />
-        </IconButton>
+        {
+          item.get('settings').showChatbox ?
+          <IconButton
+            className={classes.iconButton}
+            aria-label="open drawer"
+            onClick={toggleChatOpen}
+          > 
+            <ForumIcon />
+          </IconButton>
+          : undefined
+        }
 
         <IconButton
           className={classes.iconButton}
@@ -107,18 +111,22 @@ export default function SideContent({ children, item }) {
         {children}
       </main>
 
-      <Paper square>
-        <Slide anchor="right" direction="left" in={isChatboxMenuOpen} mountOnEnter unmountOnExit minHeight={window.innerHeight - HEADER_HEIGHT}>  
-          <Box className={classes.drawer}>
-            <div className={classes.drawerHeader}>
-                <IconButton onClick={toggleChatOpen}>
-                {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                </IconButton>
-            </div>
-              <Chatbox item={item} />
-           </Box>
-        </Slide>
-      </Paper>
+      {
+        item.get('settings').showChatbox ?
+        <Paper square>
+          <Slide anchor="right" direction="left" in={isChatboxMenuOpen} mountOnEnter unmountOnExit minHeight={window.innerHeight - HEADER_HEIGHT}>  
+            <Box className={classes.drawer}>
+              <div className={classes.drawerHeader}>
+                  <IconButton onClick={toggleChatOpen}>
+                  {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                  </IconButton>
+              </div>
+                <Chatbox item={item} />
+            </Box>
+          </Slide>
+        </Paper>
+        : undefined
+      }
 
       <Paper square>
         <Slide anchor="right" direction="left" in={isPinnedMenuOpen} mountOnEnter unmountOnExit minHeight={window.innerHeight - HEADER_HEIGHT}>  
