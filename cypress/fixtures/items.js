@@ -58,6 +58,19 @@ export const FOLDER_WITH_SUBFOLDER_ITEM = {
         image: 'someimageurl',
       },
       settings: {
+        isPinned: true,
+        showChatbox: false,
+      },
+    },
+    {
+      ...DEFAULT_FOLDER_ITEM,
+      id: 'fdf09f5a-5688-11eb-ae93-0242ac130004',
+      name: 'child folder',
+      path: 'ecafbd2a_5688_11eb_ae93_0242ac130002.fdf09f5a_5688_11eb_ae93_0242ac130004',
+      extra: {
+        image: 'someimageurl',
+      },
+      settings: {
         isPinned: false,
         showChatbox: false,
       },

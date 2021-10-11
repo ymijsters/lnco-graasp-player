@@ -79,6 +79,7 @@ const Item = ({ id, isChildren, pinnedOnly }) => {
         return <FolderButton id={buildFolderButtonId(id)} item={item} />;
       }
 
+
       // render each children recursively
       return (
         <Container>

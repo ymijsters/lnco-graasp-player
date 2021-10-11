@@ -48,7 +48,7 @@ const MainScreen = () => {
       headerRightContent={<HeaderRightContent id={mainId} />}
     >
       <LayoutContextProvider>
-        <SideContent item={item}>{content}</SideContent>
+        <SideContent item={item}>{[content]}</SideContent>
       </LayoutContextProvider>
     </Main>
   );

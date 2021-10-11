@@ -24,7 +24,10 @@ import {
   FOLDER_NAME_TITLE_CLASS,
   ITEM_CHATBOX_ID,
   ITEM_CHATBOX_BUTTON_ID,
-  CHATBOX_CLOSE_BUTTON_ID,
+  PANNEL_CLOSE_BUTTON_ID,
+  ITEM_PINNED_BUTTON_ID,
+  ITEM_PINNED_ID,
+  buildFolderButtonId,
 } from '../../src/config/selectors';
 import { STATIC_ELECTRICITY } from '../fixtures/useCases/staticElectricity';
 
@@ -108,11 +111,34 @@ describe('Main Screen', () => {
       });
     });
 
-    describe('Pinned Items', () => {});
+    describe('Pinned Items', () => {
+      it('Pinned button should toggle sidebar visiblity', () => {
+        const parent = FOLDER_WITH_SUBFOLDER_ITEM.items[0];
+        const item = FOLDER_WITH_SUBFOLDER_ITEM.items[2];
+
+        cy.visit(buildMainPath({ rootId: parent.id, id: item.id }));
+
+        cy.get(`#${ITEM_PINNED_BUTTON_ID}`).should('exist');
+        cy.get(`#${ITEM_PINNED_ID}`).should('be.visible');
+
+        cy.get(`#${ITEM_PINNED_BUTTON_ID}`).click();
+        cy.get(`#${parent.id}`).should('not.exist');
+      });
+
+      it('Side Pannel should contain pinned items', () => {
+        const parent = FOLDER_WITH_SUBFOLDER_ITEM.items[0];
+        const item = FOLDER_WITH_SUBFOLDER_ITEM.items[2];
+        const pinned = FOLDER_WITH_SUBFOLDER_ITEM.items[1];
+
+        cy.visit(buildMainPath({ rootId: parent.id, id: item.id }));
+
+        cy.get(`#${ITEM_PINNED_ID} #${buildFolderButtonId(pinned.id)}`).should('contain', pinned.name);
+      });
+    });
 
     describe('Chatbox', () => {
       beforeEach(() => {
-        cy.setUpApi({ items: [ITEM_WITH_CHAT_BOX] });
+        cy.setUpApi({ items: [ITEM_WITH_CHAT_BOX, ITEM_WITHOUT_CHAT_BOX] });
       });
 
       it('Chatbox button should toggle chatbox visiblity', () => {
@@ -134,8 +160,8 @@ describe('Main Screen', () => {
         cy.get(`#${ITEM_CHATBOX_BUTTON_ID}`).click();
         cy.get(`#${ITEM_CHATBOX_ID}`).should('be.visible');
 
-        cy.get(`#${CHATBOX_CLOSE_BUTTON_ID}`).click();
-        cy.get(`#${ITEM_CHATBOX_ID}`).should('be.visible');
+        cy.get(`#${PANNEL_CLOSE_BUTTON_ID}`).click();
+        cy.get(`#${ITEM_CHATBOX_ID}`).should('not.exist');
       });
 
       it('Disabled chatbox should not have button', () => {

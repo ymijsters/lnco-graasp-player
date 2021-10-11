@@ -15,8 +15,9 @@ import { LayoutContext } from '../context/LayoutContext';
 import Item from './Item';
 import {
   ITEM_CHATBOX_BUTTON_ID,
-  CHATBOX_CLOSE_BUTTON_ID,
+  PANNEL_CLOSE_BUTTON_ID,
   ITEM_PINNED_BUTTON_ID,
+  ITEM_PINNED_ID
 } from '../../config/selectors';
 
 const drawerWidth = 400;
@@ -130,7 +131,7 @@ export default function SideContent({ children, item }) {
             <Box className={classes.drawer}>
               <div className={classes.drawerHeader}>
                 <IconButton
-                  id={CHATBOX_CLOSE_BUTTON_ID}
+                  id={PANNEL_CLOSE_BUTTON_ID}
                   onClick={toggleChatOpen}
                 >
                   {theme.direction === 'rtl' ? (
@@ -154,10 +155,14 @@ export default function SideContent({ children, item }) {
           mountOnEnter
           unmountOnExit
           minHeight={window.innerHeight - HEADER_HEIGHT}
+          id={ITEM_PINNED_ID}
         >
           <Box className={classes.drawer}>
             <div className={classes.drawerHeader}>
-              <IconButton onClick={togglePinnedOpen}>
+              <IconButton
+                id={PANNEL_CLOSE_BUTTON_ID} 
+                onClick={togglePinnedOpen}
+              >
                 {theme.direction === 'rtl' ? (
                   <ChevronLeftIcon />
                 ) : (
