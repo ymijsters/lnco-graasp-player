@@ -25,7 +25,7 @@ export const IMAGE_ITEM_DEFAULT = {
   filepath: 'files/icon.png',
   settings: {
     isPinned: false,
-    showChat: false,
+    showChatbox: false,
   }
 };
 
@@ -49,7 +49,7 @@ export const VIDEO_ITEM_DEFAULT = {
   filepath: 'files/video.mp4',
   settings: {
     isPinned: false,
-    showChat: false,
+    showChatbox: false,
   }
 };
 
@@ -73,7 +73,7 @@ export const PDF_ITEM_DEFAULT = {
   filepath: 'files/doc.pdf',
   settings: {
     isPinned: false,
-    showChat: false,
+    showChatbox: false,
   }
 };
 
@@ -93,7 +93,7 @@ export const IMAGE_ITEM_S3 = {
   }),
   settings: {
     isPinned: false,
-    showChat: false,
+    showChatbox: false,
   }
 };
 
@@ -113,7 +113,7 @@ export const VIDEO_ITEM_S3 = {
   }),
   settings: {
     isPinned: false,
-    showChat: false,
+    showChatbox: false,
   }
 };
 
@@ -133,6 +133,6 @@ export const PDF_ITEM_S3 = {
   }),
   settings: {
     isPinned: false,
-    showChat: false,
+    showChatbox: false,
   }
 };

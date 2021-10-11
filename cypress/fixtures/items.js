@@ -8,7 +8,29 @@ export const DEFAULT_FOLDER_ITEM = {
   type: ITEM_TYPES.FOLDER,
   settings: {
     isPinned: false,
-    showChat: false,
+    showChatbox: false,
+  }
+};
+
+export const ITEM_WITH_CHAT_BOX = {
+  ...DEFAULT_FOLDER_ITEM,
+  id: 'ecafbd2a-5688-11eb-ae93-0242ac130002',
+  name: 'parent folder',
+  path: 'ecafbd2a_5688_11eb_ae93_0242ac130002',
+  settings: {
+    isPinned: false,
+    showChatbox: true,
+  }
+};
+
+export const ITEM_WITHOUT_CHAT_BOX = {
+  ...DEFAULT_FOLDER_ITEM,
+  id: 'fdf09f5a-5688-11eb-ae93-0242ac130003',
+  name: 'child folder',
+  path: 'ecafbd2a_5688_11eb_ae93_0242ac130002.fdf09f5a_5688_11eb_ae93_0242ac130003',
+  settings: {
+    isPinned: false,
+    showChatbox: false,
   }
 };
 
@@ -24,7 +46,7 @@ export const FOLDER_WITH_SUBFOLDER_ITEM = {
       },
       settings: {
         isPinned: false,
-        showChat: false,
+        showChatbox: false,
       }
     },
     {
@@ -37,7 +59,7 @@ export const FOLDER_WITH_SUBFOLDER_ITEM = {
       },
       settings: {
         isPinned: false,
-        showChat: false,
+        showChatbox: false,
       }
     },
   ],
@@ -54,7 +76,7 @@ export const SHORTCUT = {
   },
   settings: {
     isPinned: false,
-    showChat: false,
+    showChatbox: false,
   }
 };
 
@@ -69,6 +91,6 @@ export const FOLDER_FIXTURE = {
   },
   settings: {
     isPinned: false,
-    showChat: false,
+    showChatbox: false,
   }
 };

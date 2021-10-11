@@ -13,6 +13,11 @@ import Chatbox from "./Chatbox";
 import { HEADER_HEIGHT } from '../../config/constants';
 import { LayoutContext } from '../context/LayoutContext';
 import Item from './Item';
+import { 
+  ITEM_CHATBOX_BUTTON_ID, 
+  CHATBOX_CLOSE_BUTTON_ID,
+  ITEM_PINNED_BUTTON_ID,
+} from '../../config/selectors';
 
 const drawerWidth = 400;
 
@@ -91,6 +96,7 @@ export default function SideContent({ children, item }) {
         {
           item.get('settings').showChatbox ?
           <IconButton
+            id={ITEM_CHATBOX_BUTTON_ID}
             className={classes.iconButton}
             aria-label="open drawer"
             onClick={toggleChatOpen}
@@ -101,6 +107,7 @@ export default function SideContent({ children, item }) {
         }
 
         <IconButton
+          id={ITEM_PINNED_BUTTON_ID}
           className={classes.iconButton}
           aria-label={ isPinnedMenuOpen ? "Hide pinned items" : "Show pinned items"}
           onClick={togglePinnedOpen}
@@ -117,8 +124,11 @@ export default function SideContent({ children, item }) {
           <Slide anchor="right" direction="left" in={isChatboxMenuOpen} mountOnEnter unmountOnExit minHeight={window.innerHeight - HEADER_HEIGHT}>  
             <Box className={classes.drawer}>
               <div className={classes.drawerHeader}>
-                  <IconButton onClick={toggleChatOpen}>
-                  {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                  <IconButton 
+                  id={CHATBOX_CLOSE_BUTTON_ID}
+                  onClick={toggleChatOpen}
+                  >
+                    {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                   </IconButton>
               </div>
                 <Chatbox item={item} />

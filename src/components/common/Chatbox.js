@@ -6,6 +6,7 @@ import GraaspChatbox from '@graasp/chatbox';
 import { MUTATION_KEYS } from '@graasp/query-client';
 import { Map, List } from 'immutable';
 import { Loader } from '@graasp/ui';
+import { ITEM_CHATBOX_ID } from '../../config/selectors';
 import { hooks, useMutation } from '../../config/queryClient';
 import { HEADER_HEIGHT } from '../../config/constants';
 
@@ -29,9 +30,8 @@ const Chatbox = ({ item }) => {
 
     return (
       <GraaspChatbox
-        id="test"
+        id={ITEM_CHATBOX_ID}
         members={members}
-        sendMessageBoxId="test"
         currentMember={currentMember}
         chatId={item.get('id')}
         messages={List(chat?.get('messages'))}

@@ -15,6 +15,6 @@ export const GRAASP_DOCUMENT_ITEM = {
   }),
   settings: {
     isPinned: false,
-    showChat: false,
+    showChatbox: false,
   }
 };

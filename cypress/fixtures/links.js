@@ -18,7 +18,7 @@ export const GRAASP_LINK_ITEM = {
   }),
   settings: {
     isPinned: false,
-    showChat: false,
+    showChatbox: false,
   }
 };
 
@@ -37,6 +37,6 @@ export const YOUTUBE_LINK_ITEM = {
   }),
   settings: {
     isPinned: false,
-    showChat: false,
+    showChatbox: false,
   }
 };
