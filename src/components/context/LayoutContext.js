@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 const LayoutContext = React.createContext();
 
 const LayoutContextProvider = ({ children }) => {
-
   const [isPinnedMenuOpen, setIsPinnedMenuOpen] = useState(true);
   const [isChatboxMenuOpen, setIsChatboxMenuOpen] = useState(false);
 

@@ -9,12 +9,12 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { Box, Paper, Slide } from '@material-ui/core';
 import { Map } from 'immutable';
-import Chatbox from "./Chatbox";
+import Chatbox from './Chatbox';
 import { HEADER_HEIGHT } from '../../config/constants';
 import { LayoutContext } from '../context/LayoutContext';
 import Item from './Item';
-import { 
-  ITEM_CHATBOX_BUTTON_ID, 
+import {
+  ITEM_CHATBOX_BUTTON_ID,
   CHATBOX_CLOSE_BUTTON_ID,
   ITEM_PINNED_BUTTON_ID,
 } from '../../config/selectors';
@@ -22,8 +22,8 @@ import {
 const drawerWidth = 400;
 
 const useStyles = makeStyles((theme) => ({
-  iconButton:{
-    float: 'right'
+  iconButton: {
+    float: 'right',
   },
   root: {
     display: 'flex',
@@ -57,7 +57,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SideContent({ children, item }) {
-
   const getDirectParentId = (path) => {
     const ids = path.replace(/_/g, '-').split('.');
     const parentIdx = ids.length - 2;
@@ -66,11 +65,11 @@ export default function SideContent({ children, item }) {
 
   const parentId = getDirectParentId(item.get('path')) || item.get('path');
 
-  const { 
+  const {
     isPinnedMenuOpen,
     setIsPinnedMenuOpen,
     isChatboxMenuOpen,
-    setIsChatboxMenuOpen
+    setIsChatboxMenuOpen,
   } = useContext(LayoutContext);
 
   const classes = useStyles();
@@ -83,33 +82,33 @@ export default function SideContent({ children, item }) {
 
   const togglePinnedOpen = () => {
     setIsPinnedMenuOpen(!isPinnedMenuOpen);
-    setIsChatboxMenuOpen(false)
+    setIsChatboxMenuOpen(false);
   };
 
   return (
     <div className={classes.root}>
       <main
         className={clsx(classes.content, {
-          [classes.contentShift]: (isChatboxMenuOpen || isPinnedMenuOpen),
+          [classes.contentShift]: isChatboxMenuOpen || isPinnedMenuOpen,
         })}
       >
-        {
-          item.get('settings').showChatbox ?
+        {item.get('settings').showChatbox ? (
           <IconButton
             id={ITEM_CHATBOX_BUTTON_ID}
             className={classes.iconButton}
             aria-label="open drawer"
             onClick={toggleChatOpen}
-          > 
+          >
             <ForumIcon />
           </IconButton>
-          : undefined
-        }
+        ) : undefined}
 
         <IconButton
           id={ITEM_PINNED_BUTTON_ID}
           className={classes.iconButton}
-          aria-label={ isPinnedMenuOpen ? "Hide pinned items" : "Show pinned items"}
+          aria-label={
+            isPinnedMenuOpen ? 'Hide pinned items' : 'Show pinned items'
+          }
           onClick={togglePinnedOpen}
         >
           <PushPinIcon />
@@ -118,43 +117,63 @@ export default function SideContent({ children, item }) {
         {children}
       </main>
 
-      {
-        item.get('settings').showChatbox ?
+      {item.get('settings').showChatbox ? (
         <Paper square>
-          <Slide anchor="right" direction="left" in={isChatboxMenuOpen} mountOnEnter unmountOnExit minHeight={window.innerHeight - HEADER_HEIGHT}>  
+          <Slide
+            anchor="right"
+            direction="left"
+            in={isChatboxMenuOpen}
+            mountOnEnter
+            unmountOnExit
+            minHeight={window.innerHeight - HEADER_HEIGHT}
+          >
             <Box className={classes.drawer}>
               <div className={classes.drawerHeader}>
-                  <IconButton 
+                <IconButton
                   id={CHATBOX_CLOSE_BUTTON_ID}
                   onClick={toggleChatOpen}
-                  >
-                    {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                  </IconButton>
+                >
+                  {theme.direction === 'rtl' ? (
+                    <ChevronLeftIcon />
+                  ) : (
+                    <ChevronRightIcon />
+                  )}
+                </IconButton>
               </div>
-                <Chatbox item={item} />
+              <Chatbox item={item} />
             </Box>
           </Slide>
         </Paper>
-        : undefined
-      }
+      ) : undefined}
 
       <Paper square>
-        <Slide anchor="right" direction="left" in={isPinnedMenuOpen} mountOnEnter unmountOnExit minHeight={window.innerHeight - HEADER_HEIGHT}>  
+        <Slide
+          anchor="right"
+          direction="left"
+          in={isPinnedMenuOpen}
+          mountOnEnter
+          unmountOnExit
+          minHeight={window.innerHeight - HEADER_HEIGHT}
+        >
           <Box className={classes.drawer}>
             <div className={classes.drawerHeader}>
-                <IconButton onClick={togglePinnedOpen}>
-                {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                </IconButton>
+              <IconButton onClick={togglePinnedOpen}>
+                {theme.direction === 'rtl' ? (
+                  <ChevronLeftIcon />
+                ) : (
+                  <ChevronRightIcon />
+                )}
+              </IconButton>
             </div>
-              <Item id={parentId} pinnedOnly />
-           </Box>
+            <Item id={parentId} pinnedOnly />
+          </Box>
         </Slide>
       </Paper>
     </div>
-  ); 
+  );
 }
 
 SideContent.propTypes = {
   children: PropTypes.arrayOf(PropTypes.element).isRequired,
   item: PropTypes.instanceOf(Map).isRequired,
-}
+};

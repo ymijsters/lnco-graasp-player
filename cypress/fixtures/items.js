@@ -9,7 +9,7 @@ export const DEFAULT_FOLDER_ITEM = {
   settings: {
     isPinned: false,
     showChatbox: false,
-  }
+  },
 };
 
 export const ITEM_WITH_CHAT_BOX = {
@@ -20,7 +20,7 @@ export const ITEM_WITH_CHAT_BOX = {
   settings: {
     isPinned: false,
     showChatbox: true,
-  }
+  },
 };
 
 export const ITEM_WITHOUT_CHAT_BOX = {
@@ -31,7 +31,7 @@ export const ITEM_WITHOUT_CHAT_BOX = {
   settings: {
     isPinned: false,
     showChatbox: false,
-  }
+  },
 };
 
 export const FOLDER_WITH_SUBFOLDER_ITEM = {
@@ -47,7 +47,7 @@ export const FOLDER_WITH_SUBFOLDER_ITEM = {
       settings: {
         isPinned: false,
         showChatbox: false,
-      }
+      },
     },
     {
       ...DEFAULT_FOLDER_ITEM,
@@ -60,7 +60,7 @@ export const FOLDER_WITH_SUBFOLDER_ITEM = {
       settings: {
         isPinned: false,
         showChatbox: false,
-      }
+      },
     },
   ],
 };
@@ -77,7 +77,7 @@ export const SHORTCUT = {
   settings: {
     isPinned: false,
     showChatbox: false,
-  }
+  },
 };
 
 export const FOLDER_FIXTURE = {
@@ -92,5 +92,5 @@ export const FOLDER_FIXTURE = {
   settings: {
     isPinned: false,
     showChatbox: false,
-  }
+  },
 };

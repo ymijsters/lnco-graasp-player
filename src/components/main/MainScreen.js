@@ -14,7 +14,6 @@ import SideContent from '../common/SideContent';
 import { LayoutContextProvider } from '../context/LayoutContext';
 
 const MainScreen = () => {
-  
   const { id, rootId } = useParams();
   const mainId = id || rootId;
   const { data: item, isLoading, isError } = hooks.useItem(mainId);
@@ -49,9 +48,7 @@ const MainScreen = () => {
       headerRightContent={<HeaderRightContent id={mainId} />}
     >
       <LayoutContextProvider>
-        <SideContent item={item}>
-          {content}
-        </SideContent>
+        <SideContent item={item}>{content}</SideContent>
       </LayoutContextProvider>
     </Main>
   );

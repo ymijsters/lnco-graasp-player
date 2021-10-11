@@ -15,16 +15,16 @@ import {
 } from '../fixtures/files';
 import { GRAASP_DOCUMENT_ITEM } from '../fixtures/documents';
 import { GRAASP_APP_ITEM } from '../fixtures/apps';
-import { 
+import {
   FOLDER_WITH_SUBFOLDER_ITEM,
   ITEM_WITHOUT_CHAT_BOX,
   ITEM_WITH_CHAT_BOX,
 } from '../fixtures/items';
-import { 
-  FOLDER_NAME_TITLE_CLASS, 
+import {
+  FOLDER_NAME_TITLE_CLASS,
   ITEM_CHATBOX_ID,
   ITEM_CHATBOX_BUTTON_ID,
-  CHATBOX_CLOSE_BUTTON_ID
+  CHATBOX_CLOSE_BUTTON_ID,
 } from '../../src/config/selectors';
 import { STATIC_ELECTRICITY } from '../fixtures/useCases/staticElectricity';
 
@@ -107,10 +107,8 @@ describe('Main Screen', () => {
         expectFolderButtonLayout(FOLDER_WITH_SUBFOLDER_ITEM.items[1]);
       });
     });
-    
-    describe('Pinned Items', () => {
-      
-    });
+
+    describe('Pinned Items', () => {});
 
     describe('Chatbox', () => {
       beforeEach(() => {

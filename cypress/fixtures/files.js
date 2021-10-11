@@ -26,7 +26,7 @@ export const IMAGE_ITEM_DEFAULT = {
   settings: {
     isPinned: false,
     showChatbox: false,
-  }
+  },
 };
 
 export const VIDEO_ITEM_DEFAULT = {
@@ -50,7 +50,7 @@ export const VIDEO_ITEM_DEFAULT = {
   settings: {
     isPinned: false,
     showChatbox: false,
-  }
+  },
 };
 
 export const PDF_ITEM_DEFAULT = {
@@ -74,7 +74,7 @@ export const PDF_ITEM_DEFAULT = {
   settings: {
     isPinned: false,
     showChatbox: false,
-  }
+  },
 };
 
 export const IMAGE_ITEM_S3 = {
@@ -94,7 +94,7 @@ export const IMAGE_ITEM_S3 = {
   settings: {
     isPinned: false,
     showChatbox: false,
-  }
+  },
 };
 
 export const VIDEO_ITEM_S3 = {
@@ -114,7 +114,7 @@ export const VIDEO_ITEM_S3 = {
   settings: {
     isPinned: false,
     showChatbox: false,
-  }
+  },
 };
 
 export const PDF_ITEM_S3 = {
@@ -134,5 +134,5 @@ export const PDF_ITEM_S3 = {
   settings: {
     isPinned: false,
     showChatbox: false,
-  }
+  },
 };
