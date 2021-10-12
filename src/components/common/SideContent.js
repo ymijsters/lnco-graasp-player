@@ -21,6 +21,7 @@ import {
   ITEM_PINNED_ID
 } from '../../config/selectors';
 import { getDirectParentId } from '../../utils/item';
+import { ITEM_TYPES } from '../../enums';
 
 const useStyles = makeStyles((theme) => ({
   iconButton: {
@@ -59,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SideContent({ children, item }) {
 
-  const parentId = getDirectParentId(item.get('path')) || item.get('path');
+  const parentId = (item.get('type') !== ITEM_TYPES.FOLDER && getDirectParentId(item.get('path'))) || item.get('id');
 
   const {
     isPinnedMenuOpen,
