@@ -17,6 +17,7 @@ import { GRAASP_DOCUMENT_ITEM } from '../fixtures/documents';
 import { GRAASP_APP_ITEM } from '../fixtures/apps';
 import {
   FOLDER_WITH_SUBFOLDER_ITEM,
+  FOLDER_WITH_PINNED_ITEMS,
   ITEM_WITHOUT_CHAT_BOX,
   ITEM_WITH_CHAT_BOX,
 } from '../fixtures/items';
@@ -44,6 +45,7 @@ describe('Main Screen', () => {
           GRAASP_DOCUMENT_ITEM,
           GRAASP_APP_ITEM,
           ...FOLDER_WITH_SUBFOLDER_ITEM.items,
+          ...FOLDER_WITH_PINNED_ITEMS.items,
         ],
       });
     });
@@ -125,11 +127,18 @@ describe('Main Screen', () => {
         cy.get(`#${parent.id}`).should('not.exist');
       });
 
-      it('Side Pannel should contain pinned items', () => {
-        const parent = FOLDER_WITH_SUBFOLDER_ITEM.items[0];
-        const item = FOLDER_WITH_SUBFOLDER_ITEM.items[2];
-        const pinned = FOLDER_WITH_SUBFOLDER_ITEM.items[1];
+      it('Parent folder should display pinned children', () => {
+        const parent = FOLDER_WITH_PINNED_ITEMS.items[0];
+        const pinned = FOLDER_WITH_PINNED_ITEMS.items[2];
+        cy.visit(buildMainPath({ rootId: parent.id, id: null }));
 
+        cy.get(`#${ITEM_PINNED_ID} #${buildFolderButtonId(pinned.id)}`).should('contain', pinned.name);
+      });
+
+      it('Children should display pinned siblings', () => {
+        const parent = FOLDER_WITH_PINNED_ITEMS.items[0];
+        const item = FOLDER_WITH_PINNED_ITEMS.items[1];
+        const pinned = FOLDER_WITH_PINNED_ITEMS.items[2];
         cy.visit(buildMainPath({ rootId: parent.id, id: item.id }));
 
         cy.get(`#${ITEM_PINNED_ID} #${buildFolderButtonId(pinned.id)}`).should('contain', pinned.name);

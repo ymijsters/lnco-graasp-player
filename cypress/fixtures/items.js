@@ -78,6 +78,51 @@ export const FOLDER_WITH_SUBFOLDER_ITEM = {
   ],
 };
 
+export const FOLDER_WITH_PINNED_ITEMS = {
+  items: [
+    {
+      ...DEFAULT_FOLDER_ITEM,
+      id: 'ecafbd2a-5688-11eb-ae93-0242ac130005',
+      name: 'parent folder',
+      path: 'ecafbd2a_5688_11eb_ae93_0242ac130005',
+      extra: {
+        image: 'someimageurl',
+      },
+      settings: {
+        isPinned: false,
+        showChatbox: false,
+      },
+    },
+    {
+      ...DEFAULT_FOLDER_ITEM,
+      type: ITEM_TYPES.LINK,
+      id: 'fdf09f5a-5688-11eb-ae93-0242ac130006',
+      name: 'NOT PINNED',
+      path: 'ecafbd2a_5688_11eb_ae93_0242ac130005.fdf09f5a_5688_11eb_ae93_0242ac130006',
+      extra: {
+        image: 'someimageurl',
+      },
+      settings: {
+        isPinned: false,
+        showChatbox: false,
+      },
+    },
+    {
+      ...DEFAULT_FOLDER_ITEM,
+      id: 'fdf09f5a-5688-11eb-ae93-0242ac130007',
+      name: 'PINNED',
+      path: 'ecafbd2a_5688_11eb_ae93_0242ac130005.fdf09f5a_5688_11eb_ae93_0242ac130007',
+      extra: {
+        image: 'someimageurl',
+      },
+      settings: {
+        isPinned: true,
+        showChatbox: false,
+      },
+    },
+  ],
+};
+
 export const SHORTCUT = {
   ...DEFAULT_FOLDER_ITEM,
   id: 'gcafbd2a-5688-11eb-ae92-0242ac130002',
