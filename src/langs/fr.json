@@ -3,6 +3,10 @@
     "Graasp Perform": "Graasp Perform",
     "My Items": "Mes Eléments",
     "Shared Items": "Eléments Partagés",
-    "You are not signed in.": "Vous n'êtes pas connecté."
+    "You are not signed in.": "Vous n'êtes pas connecté.",
+    "Show Chat": "Montrer le chat",
+    "Hide Chat": "Cacher le chat",
+    "Show Pinned Items": "Montrer les eléments épinglés",
+    "Hide Pinned Items": "Cacher les eléments épinglés"
   }
 }

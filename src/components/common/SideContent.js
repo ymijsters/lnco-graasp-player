@@ -9,8 +9,9 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { Box, Paper, Slide } from '@material-ui/core';
 import { Map } from 'immutable';
+import { useTranslation } from 'react-i18next';
 import Chatbox from './Chatbox';
-import { HEADER_HEIGHT } from '../../config/constants';
+import { HEADER_HEIGHT, DRAWER_WIDTH } from '../../config/constants';
 import { LayoutContext } from '../context/LayoutContext';
 import Item from './Item';
 import {
@@ -19,8 +20,7 @@ import {
   ITEM_PINNED_BUTTON_ID,
   ITEM_PINNED_ID
 } from '../../config/selectors';
-
-const drawerWidth = 400;
+import { getDirectParentId } from '../../utils/item';
 
 const useStyles = makeStyles((theme) => ({
   iconButton: {
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
   },
   drawer: {
-    width: drawerWidth,
+    width: DRAWER_WIDTH,
     flexShrink: 0,
   },
   drawerHeader: {
@@ -58,11 +58,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SideContent({ children, item }) {
-  const getDirectParentId = (path) => {
-    const ids = path.replace(/_/g, '-').split('.');
-    const parentIdx = ids.length - 2;
-    return ids[parentIdx];
-  };
 
   const parentId = getDirectParentId(item.get('path')) || item.get('path');
 
@@ -73,6 +68,7 @@ export default function SideContent({ children, item }) {
     setIsChatboxMenuOpen,
   } = useContext(LayoutContext);
 
+  const { t } = useTranslation();
   const classes = useStyles();
   const theme = useTheme();
 
@@ -97,7 +93,9 @@ export default function SideContent({ children, item }) {
           <IconButton
             id={ITEM_CHATBOX_BUTTON_ID}
             className={classes.iconButton}
-            aria-label="open drawer"
+            aria-label={
+              isChatboxMenuOpen ? t('Hide Chat') : t('Hide Chat')
+            }
             onClick={toggleChatOpen}
           >
             <ForumIcon />
@@ -108,7 +106,7 @@ export default function SideContent({ children, item }) {
           id={ITEM_PINNED_BUTTON_ID}
           className={classes.iconButton}
           aria-label={
-            isPinnedMenuOpen ? 'Hide pinned items' : 'Show pinned items'
+            isPinnedMenuOpen ? t('Hide Pinned Items') : t('Show Pinned Items')
           }
           onClick={togglePinnedOpen}
         >
@@ -170,7 +168,7 @@ export default function SideContent({ children, item }) {
                 )}
               </IconButton>
             </div>
-            <Item id={parentId} pinnedOnly />
+            <Item id={parentId} showPinnedOnly />
           </Box>
         </Slide>
       </Paper>

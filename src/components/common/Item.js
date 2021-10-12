@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Item = ({ id, isChildren, pinnedOnly }) => {
+const Item = ({ id, isChildren, showPinnedOnly }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const { data: item, isLoading, isError } = useItem(id);
@@ -87,7 +87,7 @@ const Item = ({ id, isChildren, pinnedOnly }) => {
             {item.get('name')}
           </Typography>
           {children
-            .filter((i) => (pinnedOnly && i.settings.isPinned) || !pinnedOnly)
+            .filter((i) => (showPinnedOnly && i.settings?.isPinned) || !showPinnedOnly)
             .map((thisItem) => (
               <Container key={thisItem.id} className={classes.container}>
                 <Item isChildren id={thisItem.id} />
@@ -142,12 +142,12 @@ const Item = ({ id, isChildren, pinnedOnly }) => {
 Item.propTypes = {
   id: PropTypes.string.isRequired,
   isChildren: PropTypes.bool,
-  pinnedOnly: PropTypes.bool,
+  showPinnedOnly: PropTypes.bool,
 };
 
 Item.defaultProps = {
   isChildren: false,
-  pinnedOnly: false,
+  showPinnedOnly: false,
 };
 
 export default Item;
