@@ -79,7 +79,6 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
         return <FolderButton id={buildFolderButtonId(id)} item={item} />;
       }
 
-
       // render each children recursively
       return (
         <Container>
@@ -87,7 +86,10 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
             {item.get('name')}
           </Typography>
           {children
-            .filter((i) => (showPinnedOnly && i.settings?.isPinned) || !showPinnedOnly)
+            .filter(
+              (i) =>
+                (showPinnedOnly && i.settings?.isPinned) || !showPinnedOnly,
+            )
             .map((thisItem) => (
               <Container key={thisItem.id} className={classes.container}>
                 <Item isChildren id={thisItem.id} />

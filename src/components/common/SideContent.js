@@ -18,7 +18,7 @@ import {
   ITEM_CHATBOX_BUTTON_ID,
   PANNEL_CLOSE_BUTTON_ID,
   ITEM_PINNED_BUTTON_ID,
-  ITEM_PINNED_ID
+  ITEM_PINNED_ID,
 } from '../../config/selectors';
 import { getDirectParentId } from '../../utils/item';
 import { ITEM_TYPES } from '../../enums';
@@ -58,9 +58,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SideContent({ children, item }) {
-
-  const parentId = (item.get('type') !== ITEM_TYPES.FOLDER && getDirectParentId(item.get('path'))) || item.get('id');
+const SideContent = ({ children, item }) => {
+  const parentId =
+    (item.get('type') !== ITEM_TYPES.FOLDER &&
+      getDirectParentId(item.get('path'))) ||
+    item.get('id');
+  const settings = item.get('settings');
 
   const {
     isPinnedMenuOpen,
@@ -83,6 +86,51 @@ export default function SideContent({ children, item }) {
     setIsChatboxMenuOpen(false);
   };
 
+  const diplayChatButton = () => {
+    if (!settings?.showChatbox) return null;
+
+    return (
+      <IconButton
+        id={ITEM_CHATBOX_BUTTON_ID}
+        className={classes.iconButton}
+        aria-label={isChatboxMenuOpen ? t('Hide Chat') : t('Show Chat')}
+        onClick={toggleChatOpen}
+      >
+        <ForumIcon />
+      </IconButton>
+    );
+  };
+
+  const displayChatbox = () => {
+    if (!settings?.showChatbox) return null;
+    
+    return (
+      <Paper square>
+        <Slide
+          anchor="right"
+          direction="left"
+          in={isChatboxMenuOpen}
+          mountOnEnter
+          unmountOnExit
+          minHeight={window.innerHeight - HEADER_HEIGHT}
+        >
+          <Box className={classes.drawer}>
+            <div className={classes.drawerHeader}>
+              <IconButton id={PANNEL_CLOSE_BUTTON_ID} onClick={toggleChatOpen}>
+                {theme.direction === 'rtl' ? (
+                  <ChevronLeftIcon />
+                ) : (
+                  <ChevronRightIcon />
+                )}
+              </IconButton>
+            </div>
+            <Chatbox item={item} />
+          </Box>
+        </Slide>
+      </Paper>
+    );
+  };
+
   return (
     <div className={classes.root}>
       <main
@@ -90,18 +138,7 @@ export default function SideContent({ children, item }) {
           [classes.contentShift]: isChatboxMenuOpen || isPinnedMenuOpen,
         })}
       >
-        {item.get('settings').showChatbox ? (
-          <IconButton
-            id={ITEM_CHATBOX_BUTTON_ID}
-            className={classes.iconButton}
-            aria-label={
-              isChatboxMenuOpen ? t('Hide Chat') : t('Hide Chat')
-            }
-            onClick={toggleChatOpen}
-          >
-            <ForumIcon />
-          </IconButton>
-        ) : undefined}
+        {diplayChatButton()}
 
         <IconButton
           id={ITEM_PINNED_BUTTON_ID}
@@ -117,34 +154,7 @@ export default function SideContent({ children, item }) {
         {children}
       </main>
 
-      {item.get('settings').showChatbox ? (
-        <Paper square>
-          <Slide
-            anchor="right"
-            direction="left"
-            in={isChatboxMenuOpen}
-            mountOnEnter
-            unmountOnExit
-            minHeight={window.innerHeight - HEADER_HEIGHT}
-          >
-            <Box className={classes.drawer}>
-              <div className={classes.drawerHeader}>
-                <IconButton
-                  id={PANNEL_CLOSE_BUTTON_ID}
-                  onClick={toggleChatOpen}
-                >
-                  {theme.direction === 'rtl' ? (
-                    <ChevronLeftIcon />
-                  ) : (
-                    <ChevronRightIcon />
-                  )}
-                </IconButton>
-              </div>
-              <Chatbox item={item} />
-            </Box>
-          </Slide>
-        </Paper>
-      ) : undefined}
+      {displayChatbox()}
 
       <Paper square>
         <Slide
@@ -159,7 +169,7 @@ export default function SideContent({ children, item }) {
           <Box className={classes.drawer}>
             <div className={classes.drawerHeader}>
               <IconButton
-                id={PANNEL_CLOSE_BUTTON_ID} 
+                id={PANNEL_CLOSE_BUTTON_ID}
                 onClick={togglePinnedOpen}
               >
                 {theme.direction === 'rtl' ? (
@@ -175,9 +185,11 @@ export default function SideContent({ children, item }) {
       </Paper>
     </div>
   );
-}
+};
 
 SideContent.propTypes = {
-  children: PropTypes.arrayOf(PropTypes.element).isRequired,
+  children: PropTypes.element.isRequired,
   item: PropTypes.instanceOf(Map).isRequired,
 };
+
+export default SideContent;
