@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Loader, Main } from '@graasp/ui';
 import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
@@ -12,10 +12,12 @@ import HeaderRightContent from './HeaderRightContent';
 import ItemHeader from '../common/ItemHeader';
 import SideContent from '../common/SideContent';
 import { LayoutContextProvider } from '../context/LayoutContext';
+import { ItemContext } from '../context/ItemContext';
 
 const MainScreen = () => {
-  const { id, rootId } = useParams();
-  const mainId = id || rootId;
+  const { rootId } = useParams();
+  const { focusedItemId } = useContext(ItemContext);
+  const mainId = focusedItemId || rootId;
   const { data: item, isLoading, isError } = hooks.useItem(mainId);
   const { t } = useTranslation();
 

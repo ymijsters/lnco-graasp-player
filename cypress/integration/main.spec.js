@@ -190,7 +190,7 @@ describe('Main Screen', () => {
     it(`Display ${STATIC_ELECTRICITY.items[0].name}`, () => {
       const parentFolder = STATIC_ELECTRICITY.items[0];
       const rootId = parentFolder.id;
-      cy.visit(buildMainPath({ rootId, id: null }));
+      cy.visit(buildMainPath({ rootId }));
 
       expectFolderLayout({ rootId, items: STATIC_ELECTRICITY.items });
     });
