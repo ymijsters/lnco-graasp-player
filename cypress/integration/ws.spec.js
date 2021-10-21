@@ -7,7 +7,11 @@ import {
 import { FOLDER_WITH_SUBFOLDER_ITEM } from '../fixtures/items';
 import { CURRENT_USER } from '../fixtures/members';
 import { expectFolderButtonLayout } from '../support/integrationUtils';
-import { mockGetChildren, mockGetItem } from '../support/server';
+import {
+  mockGetChildren,
+  mockGetCurrentMember,
+  mockGetItem,
+} from '../support/server';
 
 function beforeWs(visitRoute, wsClientStub) {
   cy.visit(visitRoute, {
@@ -28,6 +32,7 @@ describe('Websocket interactions', () => {
 
   beforeEach(() => {
     client = new WebSocket();
+    mockGetCurrentMember(CURRENT_USER);
     mockGetItem({ items, currentMember: CURRENT_USER }, false);
     mockGetChildren(items);
   });

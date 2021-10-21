@@ -1,5 +1,5 @@
-import React from 'react';
-import { useHistory, useParams } from 'react-router';
+import React, { useContext } from 'react';
+import { useParams } from 'react-router';
 import Alert from '@material-ui/lab/Alert';
 import { useTranslation } from 'react-i18next';
 import {
@@ -10,13 +10,14 @@ import {
 import { buildTreeItemClass, MAIN_MENU_ID } from '../../config/selectors';
 import { hooks } from '../../config/queryClient';
 import { ITEM_TYPES } from '../../enums';
+import { ItemContext } from '../context/ItemContext';
 
 const { useItem, useChildren } = hooks;
 
 const MainMenu = () => {
-  const { push } = useHistory();
-  const { rootId, id } = useParams();
+  const { rootId } = useParams();
   const { t } = useTranslation();
+  const { setFocusedItemId, focusedItemId } = useContext(ItemContext);
 
   const {
     data: rootItem,
@@ -60,9 +61,9 @@ const MainMenu = () => {
         initialExpendedItems={[rootId]}
         showCheckbox={false}
         showItemFilter={() => true}
-        selectedId={id}
+        selectedId={focusedItemId}
         onTreeItemSelect={(payload) => {
-          push(`/${rootId}/${payload}`);
+          setFocusedItemId(payload);
         }}
         shouldFetchChildrenForItem={(item) =>
           item.get('type') === ITEM_TYPES.FOLDER
