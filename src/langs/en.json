@@ -3,6 +3,10 @@
     "Graasp Perform": "Graasp Perform",
     "My Items": "My Items",
     "Shared Items": "Shared Items",
-    "You are not signed in.": "You are not signed in."
+    "You are not signed in.": "You are not signed in.",
+    "Show Chat": "Show chat",
+    "Hide Chat": "Hide chat",
+    "Show Pinned Items": "Show pinned items",
+    "Hide Pinned Items": "Hide pinned items"
   }
 }

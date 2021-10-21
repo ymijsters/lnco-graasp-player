@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Item = ({ id, isChildren }) => {
+const Item = ({ id, isChildren, showPinnedOnly }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const { data: item, isLoading, isError } = useItem(id);
@@ -85,11 +85,16 @@ const Item = ({ id, isChildren }) => {
           <Typography className={FOLDER_NAME_TITLE_CLASS} variant="h2">
             {item.get('name')}
           </Typography>
-          {children.map((thisItem) => (
-            <Container key={thisItem.id} className={classes.container}>
-              <Item isChildren id={thisItem.id} />
-            </Container>
-          ))}
+          {children
+            .filter(
+              (i) =>
+                (showPinnedOnly && i.settings?.isPinned) || !showPinnedOnly,
+            )
+            .map((thisItem) => (
+              <Container key={thisItem.id} className={classes.container}>
+                <Item isChildren id={thisItem.id} />
+              </Container>
+            ))}
         </Container>
       );
     case ITEM_TYPES.LINK:
@@ -139,10 +144,12 @@ const Item = ({ id, isChildren }) => {
 Item.propTypes = {
   id: PropTypes.string.isRequired,
   isChildren: PropTypes.bool,
+  showPinnedOnly: PropTypes.bool,
 };
 
 Item.defaultProps = {
   isChildren: false,
+  showPinnedOnly: false,
 };
 
 export default Item;

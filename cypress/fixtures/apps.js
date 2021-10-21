@@ -13,4 +13,8 @@ export const GRAASP_APP_ITEM = {
   extra: {
     app: { url: 'https://graasp.eu' },
   },
+  settings: {
+    isPinned: false,
+    showChatbox: false,
+  },
 };

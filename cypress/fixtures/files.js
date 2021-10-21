@@ -23,6 +23,10 @@ export const IMAGE_ITEM_DEFAULT = {
   }),
   // for testing
   filepath: 'files/icon.png',
+  settings: {
+    isPinned: false,
+    showChatbox: false,
+  },
 };
 
 export const VIDEO_ITEM_DEFAULT = {
@@ -43,6 +47,10 @@ export const VIDEO_ITEM_DEFAULT = {
   }),
   // for testing
   filepath: 'files/video.mp4',
+  settings: {
+    isPinned: false,
+    showChatbox: false,
+  },
 };
 
 export const PDF_ITEM_DEFAULT = {
@@ -63,6 +71,10 @@ export const PDF_ITEM_DEFAULT = {
   }),
   // for testing
   filepath: 'files/doc.pdf',
+  settings: {
+    isPinned: false,
+    showChatbox: false,
+  },
 };
 
 export const IMAGE_ITEM_S3 = {
@@ -79,6 +91,10 @@ export const IMAGE_ITEM_S3 = {
     size: 32439,
     contenttype: 'image/png',
   }),
+  settings: {
+    isPinned: false,
+    showChatbox: false,
+  },
 };
 
 export const VIDEO_ITEM_S3 = {
@@ -95,6 +111,10 @@ export const VIDEO_ITEM_S3 = {
     size: 52345,
     contenttype: MIME_TYPES.VIDEO[0],
   }),
+  settings: {
+    isPinned: false,
+    showChatbox: false,
+  },
 };
 
 export const PDF_ITEM_S3 = {
@@ -111,4 +131,8 @@ export const PDF_ITEM_S3 = {
     size: 54321,
     contenttype: MIME_TYPES.PDF[0],
   }),
+  settings: {
+    isPinned: false,
+    showChatbox: false,
+  },
 };

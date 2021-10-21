@@ -10,6 +10,8 @@ import Item from '../common/Item';
 import { hooks } from '../../config/queryClient';
 import HeaderRightContent from './HeaderRightContent';
 import ItemHeader from '../common/ItemHeader';
+import SideContent from '../common/SideContent';
+import { LayoutContextProvider } from '../context/LayoutContext';
 
 const MainScreen = () => {
   const { id, rootId } = useParams();
@@ -45,7 +47,9 @@ const MainScreen = () => {
       headerLeftContent={leftContent}
       headerRightContent={<HeaderRightContent id={mainId} />}
     >
-      {content}
+      <LayoutContextProvider>
+        <SideContent item={item}>{content}</SideContent>
+      </LayoutContextProvider>
     </Main>
   );
 };
