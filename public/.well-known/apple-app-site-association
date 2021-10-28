@@ -1,0 +1,20 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+        {
+            "appID": "org.graasp.mobile",
+            "paths": ["/*"]
+        },
+        {
+             "appIDs": [ "org.graasp.mobile"],
+             "components": [
+               {
+                  "/": "/*",
+                  "comment": "Matches any URL/"
+               }
+             ]
+        }
+    ]
+  }
+}
