@@ -3,11 +3,11 @@
     "apps": [],
     "details": [
         {
-            "appID": "org.graasp.mobile",
+            "appID": "66RNQ59XM2.org.graasp.mobile",
             "paths": ["/*"]
         },
         {
-             "appIDs": [ "org.graasp.mobile"],
+             "appIDs": [ "66RNQ59XM2.org.graasp.mobile"],
              "components": [
                {
                   "/": "/*",
