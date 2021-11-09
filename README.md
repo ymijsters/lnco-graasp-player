@@ -1,4 +1,4 @@
-# Graasp Perform
+# Graasp Player
 
 ## Installation
 

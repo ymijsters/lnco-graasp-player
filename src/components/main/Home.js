@@ -168,7 +168,7 @@ const Home = () => {
     <Main
       open
       sidebar={sidebar}
-      headerLeftContent={t('Graasp Perform')}
+      headerLeftContent={t('Graasp Player')}
       headerRightContent={<HeaderRightContent />}
     >
       {renderContent()}
