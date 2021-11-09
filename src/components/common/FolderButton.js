@@ -1,16 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Map } from 'immutable';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import FolderIcon from '@material-ui/icons/Folder';
-import { useHistory, useParams } from 'react-router';
+import { ItemContext } from '../context/ItemContext';
 
 const FolderButton = ({ id, item }) => {
-  const { rootId } = useParams();
-  const { push } = useHistory();
+  const { setFocusedItemId } = useContext(ItemContext);
 
   const onClick = () => {
-    push(`/${rootId}/${item.get('id')}`);
+    setFocusedItemId(item.get('id'));
   };
 
   return (
