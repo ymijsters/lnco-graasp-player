@@ -22,6 +22,7 @@ import {
 } from '../../config/selectors';
 import { getDirectParentId } from '../../utils/item';
 import { ITEM_TYPES } from '../../enums';
+import { hooks } from '../../config/queryClient';
 
 const useStyles = makeStyles((theme) => ({
   iconButton: {
@@ -58,12 +59,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+const {
+  useChildren,
+} = hooks;
+
 const SideContent = ({ children, item }) => {
+  const isFolder = item.get('type') !== ITEM_TYPES.FOLDER;
+
   const parentId =
-    (item.get('type') !== ITEM_TYPES.FOLDER &&
+    (isFolder &&
       getDirectParentId(item.get('path'))) ||
     item.get('id');
   const settings = item.get('settings');
+
+  const { data: child } = useChildren(parentId, {
+    enabled: isFolder,
+    getUpdates: isFolder,
+  });
 
   const {
     isPinnedMenuOpen,
@@ -84,6 +97,24 @@ const SideContent = ({ children, item }) => {
   const togglePinnedOpen = () => {
     setIsPinnedMenuOpen(!isPinnedMenuOpen);
     setIsChatboxMenuOpen(false);
+  };
+
+  const displayPinButton = () => {
+    const size = child?.filter(({ settings: s }) => s.isPinned).size;
+    if (!size) return null;
+
+    return(
+      <IconButton
+        id={ITEM_PINNED_BUTTON_ID}
+        className={classes.iconButton}
+        aria-label={
+          isPinnedMenuOpen ? t('Hide Pinned Items') : t('Show Pinned Items')
+        }
+        onClick={togglePinnedOpen}
+      >
+        <PushPinIcon />
+      </IconButton>
+    );
   };
 
   const diplayChatButton = () => {
@@ -131,6 +162,39 @@ const SideContent = ({ children, item }) => {
     );
   };
 
+  const displayPinnedItems = () => {
+    const size = child?.filter(({ settings: s }) => s.isPinned).size;
+    if (!size) return null;
+
+    return(<Paper square>
+    <Slide
+      anchor="right"
+      direction="left"
+      in={isPinnedMenuOpen}
+      mountOnEnter
+      unmountOnExit
+      minHeight={window.innerHeight - HEADER_HEIGHT}
+      id={ITEM_PINNED_ID}
+    >
+      <Box className={classes.drawer}>
+        <div className={classes.drawerHeader}>
+          <IconButton
+            id={PANNEL_CLOSE_BUTTON_ID}
+            onClick={togglePinnedOpen}
+          >
+            {theme.direction === 'rtl' ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
+          </IconButton>
+        </div>
+        <Item id={parentId} showPinnedOnly />
+      </Box>
+    </Slide>
+  </Paper>);
+  };
+
   return (
     <div className={classes.root}>
       <main
@@ -140,49 +204,14 @@ const SideContent = ({ children, item }) => {
       >
         {diplayChatButton()}
 
-        <IconButton
-          id={ITEM_PINNED_BUTTON_ID}
-          className={classes.iconButton}
-          aria-label={
-            isPinnedMenuOpen ? t('Hide Pinned Items') : t('Show Pinned Items')
-          }
-          onClick={togglePinnedOpen}
-        >
-          <PushPinIcon />
-        </IconButton>
+        {displayPinButton()}
 
         {children}
       </main>
 
       {displayChatbox()}
 
-      <Paper square>
-        <Slide
-          anchor="right"
-          direction="left"
-          in={isPinnedMenuOpen}
-          mountOnEnter
-          unmountOnExit
-          minHeight={window.innerHeight - HEADER_HEIGHT}
-          id={ITEM_PINNED_ID}
-        >
-          <Box className={classes.drawer}>
-            <div className={classes.drawerHeader}>
-              <IconButton
-                id={PANNEL_CLOSE_BUTTON_ID}
-                onClick={togglePinnedOpen}
-              >
-                {theme.direction === 'rtl' ? (
-                  <ChevronLeftIcon />
-                ) : (
-                  <ChevronRightIcon />
-                )}
-              </IconButton>
-            </div>
-            <Item id={parentId} showPinnedOnly />
-          </Box>
-        </Slide>
-      </Paper>
+      {displayPinnedItems()}
     </div>
   );
 };
