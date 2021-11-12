@@ -82,9 +82,11 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
       // render each children recursively
       return (
         <Container>
-          <Typography className={FOLDER_NAME_TITLE_CLASS} variant="h2">
-            {item.get('name')}
-          </Typography>
+          {!showPinnedOnly && (
+            <Typography className={FOLDER_NAME_TITLE_CLASS} variant="h2">
+              {item.get('name')}
+            </Typography>
+          )}
           {children
             .filter(
               (i) =>
