@@ -90,7 +90,7 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
           {children
             .filter(
               (i) =>
-                (showPinnedOnly && i.settings?.isPinned) || !showPinnedOnly,
+                (showPinnedOnly === i.settings?.isPinned),
             )
             .map((thisItem) => (
               <Container key={thisItem.id} className={classes.container}>
