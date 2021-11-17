@@ -87,10 +87,11 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
               {item.get('name')}
             </Typography>
           )}
+          
           {children
             .filter(
               (i) =>
-                (showPinnedOnly === i.settings?.isPinned),
+                (showPinnedOnly === (i.settings?.isPinned || false)),
             )
             .map((thisItem) => (
               <Container key={thisItem.id} className={classes.container}>

@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useParams } from 'react-router';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -20,7 +21,7 @@ import {
   ITEM_PINNED_BUTTON_ID,
   ITEM_PINNED_ID,
 } from '../../config/selectors';
-import { getDirectParentId } from '../../utils/item';
+import { getDirectParentId, getParentsIdsFromPath } from '../../utils/item';
 import { ITEM_TYPES } from '../../enums';
 import { hooks } from '../../config/queryClient';
 
@@ -65,18 +66,24 @@ const {
 } = hooks;
 
 const SideContent = ({ children, item }) => {
-  const isFolder = item.get('type') !== ITEM_TYPES.FOLDER;
+  
+  const settings = item.get('settings');
+  const isFolder = item.get('type') === ITEM_TYPES.FOLDER;
+  const { rootId } = useParams();
+
+  const parents = getParentsIdsFromPath(item.get('path') || item.get('id'));
+  const x = parents.slice(parents.indexOf(rootId), isFolder ? parents.length : parents.length -1);
 
   const parentId =
-    (isFolder &&
+    ( isFolder &&
       getDirectParentId(item.get('path'))) ||
     item.get('id');
-  const settings = item.get('settings');
 
   const { data: child } = useChildren(parentId, {
     enabled: isFolder,
     getUpdates: isFolder,
   });
+
 
   const {
     isPinnedMenuOpen,
@@ -161,7 +168,7 @@ const SideContent = ({ children, item }) => {
       </Paper>
     );
   };
-
+  
   const displayPinnedItems = () => {
     const size = child?.filter(({ settings: s }) => s.isPinned).size;
     if (!size) return null;
@@ -189,7 +196,8 @@ const SideContent = ({ children, item }) => {
             )}
           </IconButton>
         </div>
-        <Item id={parentId} showPinnedOnly />
+
+        {x.map(i => <Item id={i} showPinnedOnly /> )}
       </Box>
     </Slide>
   </Paper>);
