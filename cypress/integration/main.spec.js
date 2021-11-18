@@ -145,7 +145,7 @@ describe('Main Screen', () => {
         cy.get(`#${ITEM_PINNED_ID} #${buildFolderButtonId(pinned.id)}`).should('contain', pinned.name);
       });
 
-      it('If no items are pinned toggle pinned should no exist', () => {
+      it('If no items are pinned toggle pinned should not exist', () => {
         const parent = FOLDER_WITH_SUBFOLDER_ITEM.items[0];
         cy.visit(buildMainPath({ rootId: parent.id, id: null }));
 

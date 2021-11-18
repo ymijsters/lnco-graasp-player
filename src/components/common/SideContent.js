@@ -67,9 +67,17 @@ const SideContent = ({ children, item }) => {
   const isFolder = item.get('type') === ITEM_TYPES.FOLDER;
   const { rootId } = useParams();
 
+  /* This removes the parents that are higher than the perform root element
+  Ex: if we are in item 6 and the root is 3, when spliting the path we get [ 1, 2, 3, 4, 5, 6 ].
+  However the student cannot go higher than element 3, so we remove the element before 3, this
+  give us [ 3, 4, 5, 6], which is the visible range of the student. */
   const parents = getParentsIdsFromPath(item.get('path') || item.get('id'));
   const parentsIds = parents.slice(
     parents.indexOf(rootId),
+    /* When splitting the path, it returns the current element in the array. 
+    However because we use the item components, if the item is not a folder it will be rendered 
+    pinned or not. Because we just loop over the parents to get their pinned items.
+    If the item is a folder, we can keep it in the path to show the items that are pinned in it */
     isFolder ? parents.length : -1,
   );
 
@@ -193,6 +201,8 @@ const SideContent = ({ children, item }) => {
                 )}
               </IconButton>
             </div>
+
+            { /* show parents pinned items */}
             {parentsIds.map((i) => (
               <Item id={i} showPinnedOnly />
             ))}
