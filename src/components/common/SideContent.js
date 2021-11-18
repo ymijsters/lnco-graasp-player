@@ -21,7 +21,7 @@ import {
   ITEM_PINNED_BUTTON_ID,
   ITEM_PINNED_ID,
 } from '../../config/selectors';
-import { getDirectParentId, getParentsIdsFromPath } from '../../utils/item';
+import { getParentsIdsFromPath } from '../../utils/item';
 import { ITEM_TYPES } from '../../enums';
 import { hooks } from '../../config/queryClient';
 
@@ -60,30 +60,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
-const {
-  useChildren,
-} = hooks;
+const { useItemsChildren } = hooks;
 
 const SideContent = ({ children, item }) => {
-  
   const settings = item.get('settings');
   const isFolder = item.get('type') === ITEM_TYPES.FOLDER;
   const { rootId } = useParams();
 
   const parents = getParentsIdsFromPath(item.get('path') || item.get('id'));
-  const x = parents.slice(parents.indexOf(rootId), isFolder ? parents.length : parents.length -1);
+  const parentsIds = parents.slice(
+    parents.indexOf(rootId),
+    isFolder ? parents.length : -1,
+  );
 
-  const parentId =
-    ( isFolder &&
-      getDirectParentId(item.get('path'))) ||
-    item.get('id');
-
-  const { data: child } = useChildren(parentId, {
+  const { data: child } = useItemsChildren([...parentsIds], {
     enabled: isFolder,
     getUpdates: isFolder,
   });
 
+  let pinnedCount = 0;
+  child?.forEach((elt) => {
+    pinnedCount += elt?.filter(({ settings: s }) => s.isPinned).size;
+  });
 
   const {
     isPinnedMenuOpen,
@@ -107,10 +105,9 @@ const SideContent = ({ children, item }) => {
   };
 
   const displayPinButton = () => {
-    const size = child?.filter(({ settings: s }) => s.isPinned).size;
-    if (!size) return null;
+    if (!pinnedCount) return null;
 
-    return(
+    return (
       <IconButton
         id={ITEM_PINNED_BUTTON_ID}
         className={classes.iconButton}
@@ -141,7 +138,7 @@ const SideContent = ({ children, item }) => {
 
   const displayChatbox = () => {
     if (!settings?.showChatbox) return null;
-    
+
     return (
       <Paper square>
         <Slide
@@ -168,39 +165,41 @@ const SideContent = ({ children, item }) => {
       </Paper>
     );
   };
-  
+
   const displayPinnedItems = () => {
-    const size = child?.filter(({ settings: s }) => s.isPinned).size;
-    if (!size) return null;
+    if (!pinnedCount) return null;
 
-    return(<Paper square>
-    <Slide
-      anchor="right"
-      direction="left"
-      in={isPinnedMenuOpen}
-      mountOnEnter
-      unmountOnExit
-      minHeight={window.innerHeight - HEADER_HEIGHT}
-      id={ITEM_PINNED_ID}
-    >
-      <Box className={classes.drawer}>
-        <div className={classes.drawerHeader}>
-          <IconButton
-            id={PANNEL_CLOSE_BUTTON_ID}
-            onClick={togglePinnedOpen}
-          >
-            {theme.direction === 'rtl' ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
-        </div>
-
-        {x.map(i => <Item id={i} showPinnedOnly /> )}
-      </Box>
-    </Slide>
-  </Paper>);
+    return (
+      <Paper square>
+        <Slide
+          anchor="right"
+          direction="left"
+          in={isPinnedMenuOpen}
+          mountOnEnter
+          unmountOnExit
+          minHeight={window.innerHeight - HEADER_HEIGHT}
+          id={ITEM_PINNED_ID}
+        >
+          <Box className={classes.drawer}>
+            <div className={classes.drawerHeader}>
+              <IconButton
+                id={PANNEL_CLOSE_BUTTON_ID}
+                onClick={togglePinnedOpen}
+              >
+                {theme.direction === 'rtl' ? (
+                  <ChevronLeftIcon />
+                ) : (
+                  <ChevronRightIcon />
+                )}
+              </IconButton>
+            </div>
+            {parentsIds.map((i) => (
+              <Item id={i} showPinnedOnly />
+            ))}
+          </Box>
+        </Slide>
+      </Paper>
+    );
   };
 
   return (
