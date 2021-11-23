@@ -2201,9 +2201,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graasp/query-client@git://github.com/graasp/graasp-query-client.git#91/multipleItemsChildren":
+"@graasp/query-client@git://github.com/graasp/graasp-query-client.git#93/sortHash":
   version: 0.1.0
-  resolution: "@graasp/query-client@git://github.com/graasp/graasp-query-client.git#commit=9364d43a13b025cefef911c030938ed36b1d8273"
+  resolution: "@graasp/query-client@git://github.com/graasp/graasp-query-client.git#commit=c5370f15bd7661dbe8ab49f0e4cf1edb55ca248b"
   dependencies:
     axios: 0.21.4
     http-status-codes: 2.1.4
@@ -2214,7 +2214,7 @@ __metadata:
     uuid: 8.3.2
   peerDependencies:
     react: ^17.0.0
-  checksum: 9b9f40d32d5411c89ba9951ea7075d8df202119049422012af6bd1ac907ef47bba8ae068c66d51061c5dbd44a2718a3c34c4a47af9202e93109256299422ccc8
+  checksum: 84d31a667cc441295ab1da0a1e68621222f071f78e899e278feef666547423b813fec0ab30549250651b39228f1cc3d6a2d46b7aef0b4bd33c6d11d289848d7d
   languageName: node
   linkType: hard
 
@@ -2237,7 +2237,7 @@ __metadata:
     i18next: 21.3.1
     react: ^16.13.1
     react-dom: 16.13.1
-  checksum: 06dde1384a6af13299e44c964028bf32022f1b6c8a7cfe49d365ac44e50111c67da8ecf07f142eb204848c34135a8aac25507f8530c7999024d6cb235a816a51
+  checksum: f8721bf93f81c328cf199e92d1196a035aac0205ae0312e7e8b1b69cee08dedd0d9d815816465ef2c52a8b7ab832b6f964458fe5a6d31011978e11a7ee171322
   languageName: node
   linkType: hard
 
@@ -10063,7 +10063,7 @@ fsevents@^1.2.7:
     "@cypress/code-coverage": 3.9.6
     "@cypress/instrument-cra": 1.4.0
     "@graasp/chatbox": "git://github.com/graasp/graasp-chatbox.git#main"
-    "@graasp/query-client": "git://github.com/graasp/graasp-query-client.git#91/multipleItemsChildren"
+    "@graasp/query-client": "git://github.com/graasp/graasp-query-client.git#93/sortHash"
     "@graasp/ui": "git://github.com/graasp/graasp-ui.git#master"
     "@graasp/websockets": "git://github.com/graasp/graasp-websockets.git#master"
     "@material-ui/core": 4.11.4

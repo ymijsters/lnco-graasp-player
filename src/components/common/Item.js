@@ -83,7 +83,7 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
       return (
         <Container>
           {!showPinnedOnly && (
-            <Typography className={FOLDER_NAME_TITLE_CLASS} variant="h2">
+            <Typography className={FOLDER_NAME_TITLE_CLASS} variant="h4">
               {item.get('name')}
             </Typography>
           )}
