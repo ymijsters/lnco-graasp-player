@@ -31,6 +31,7 @@ import {
   buildFolderButtonId,
 } from '../../src/config/selectors';
 import { STATIC_ELECTRICITY } from '../fixtures/useCases/staticElectricity';
+import { LOAD_CHATBOX_PAUSE } from '../fixtures/constants';
 
 describe('Main Screen', () => {
   describe('Individual Items', () => {
@@ -143,6 +144,14 @@ describe('Main Screen', () => {
 
         cy.get(`#${ITEM_PINNED_ID} #${buildFolderButtonId(pinned.id)}`).should('contain', pinned.name);
       });
+
+      it('If no items are pinned toggle pinned should not exist', () => {
+        const parent = FOLDER_WITH_SUBFOLDER_ITEM.items[0];
+        cy.visit(buildMainPath({ rootId: parent.id, id: null }));
+
+        cy.get(`#${ITEM_PINNED_BUTTON_ID}`).should('not.exist');
+        cy.get(`#${ITEM_PINNED_ID}`).should('not.exist');
+      });
     });
 
     describe('Chatbox', () => {
@@ -157,6 +166,9 @@ describe('Main Screen', () => {
         cy.get(`#${ITEM_CHATBOX_ID}`).should('not.exist');
 
         cy.get(`#${ITEM_CHATBOX_BUTTON_ID}`).click();
+
+        cy.wait(LOAD_CHATBOX_PAUSE);
+
         cy.get(`#${ITEM_CHATBOX_ID}`).should('be.visible');
       });
 
@@ -167,6 +179,8 @@ describe('Main Screen', () => {
         cy.get(`#${ITEM_CHATBOX_ID}`).should('not.be.exist');
 
         cy.get(`#${ITEM_CHATBOX_BUTTON_ID}`).click();
+
+        cy.wait(LOAD_CHATBOX_PAUSE);
         cy.get(`#${ITEM_CHATBOX_ID}`).should('be.visible');
 
         cy.get(`#${PANNEL_CLOSE_BUTTON_ID}`).click();

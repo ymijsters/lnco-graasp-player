@@ -83,15 +83,13 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
       return (
         <Container>
           {!showPinnedOnly && (
-            <Typography className={FOLDER_NAME_TITLE_CLASS} variant="h2">
+            <Typography className={FOLDER_NAME_TITLE_CLASS} variant="h4">
               {item.get('name')}
             </Typography>
           )}
+
           {children
-            .filter(
-              (i) =>
-                (showPinnedOnly && i.settings?.isPinned) || !showPinnedOnly,
-            )
+            .filter((i) => showPinnedOnly === (i.settings?.isPinned || false))
             .map((thisItem) => (
               <Container key={thisItem.id} className={classes.container}>
                 <Item isChildren id={thisItem.id} />
