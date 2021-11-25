@@ -67,3 +67,5 @@ export const isUrlValid = (str) => {
   ); // fragment locator
   return str && pattern.test(str);
 };
+
+export const stripHtml = (str) => str?.replace(/<[^>]*>?/gm, '');

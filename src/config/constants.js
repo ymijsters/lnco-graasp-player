@@ -48,3 +48,7 @@ export const buildGraaspComposeItemRoute = (id) =>
 export const ITEM_CARD_MAX_LENGTH = 18;
 export const HEADER_HEIGHT = 64;
 export const DRAWER_WIDTH = 400;
+export const DESCRIPTION_MAX_LENGTH = 130;
+
+export const DEFAULT_IMAGE_SRC =
+  'https://pbs.twimg.com/profile_images/1300707321262346240/IsQAyu7q_400x400.jpg';
