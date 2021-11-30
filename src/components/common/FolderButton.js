@@ -1,28 +1,72 @@
 import React, { useContext } from 'react';
-import { Map } from 'immutable';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import FolderIcon from '@material-ui/icons/Folder';
+import truncate from 'lodash.truncate';
+import { makeStyles, Tooltip } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import { Card as GraaspCard } from '@graasp/ui';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
 import { ItemContext } from '../context/ItemContext';
+import { stripHtml } from '../../utils/item';
+import {
+  DEFAULT_IMAGE_SRC,
+  DESCRIPTION_MAX_LENGTH,
+} from '../../config/constants';
+
+const useStyles = makeStyles({
+  card: {
+    // todo: responsive
+    maxWidth: '70vh',
+  },
+  link: {
+    textTransform: 'none',
+    padding: 0,
+    margin: 0,
+    border: 0,
+    background: 'transparent',
+
+    '&:hover': {
+      cursor: 'pointer',
+    },
+  },
+});
 
 const FolderButton = ({ id, item }) => {
   const { setFocusedItemId } = useContext(ItemContext);
+  const description = item.get('description');
+  const name = item.get('name');
+
+  const image = DEFAULT_IMAGE_SRC;
 
   const onClick = () => {
     setFocusedItemId(item.get('id'));
   };
 
+  const classes = useStyles();
+
   return (
-    <Button
-      id={id}
-      variant="outlined"
-      size="large"
-      color="primary"
-      onClick={onClick}
-      startIcon={<FolderIcon />}
-    >
-      {`Navigate to ${item.get('name')}`}
-    </Button>
+    <GraaspCard
+      className={classes.card}
+      description={truncate(stripHtml(description), {
+        length: DESCRIPTION_MAX_LENGTH,
+      })}
+      name={name}
+      image={image}
+      cardId={id}
+      NameWrapper={({ children }) => (
+        <button type="button" className={classes.link} onClick={onClick}>
+          {children}
+        </button>
+      )}
+      Actions={
+        <Tooltip title="coming soon" aria-label="favorite">
+          <span>
+            <IconButton disabled>
+              <StarBorderIcon />
+            </IconButton>
+          </span>
+        </Tooltip>
+      }
+    />
   );
 };
 
