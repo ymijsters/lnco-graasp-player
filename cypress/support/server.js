@@ -4,7 +4,6 @@ import { getItemById, isChild } from '../../src/utils/item';
 import { MEMBERS } from '../fixtures/members';
 import { ID_FORMAT, parseStringToRegExp, EMAIL_FORMAT } from './utils';
 import { DEFAULT_GET } from '../../src/api/utils';
-import { getS3FileExtra } from '../../src/utils/itemExtra';
 
 const {
   buildGetChildrenRoute,
@@ -12,7 +11,6 @@ const {
   buildGetMemberBy,
   GET_CURRENT_MEMBER_ROUTE,
   buildDownloadFilesRoute,
-  buildGetS3MetadataRoute,
 } = API_ROUTES;
 
 const API_HOST = Cypress.env('API_HOST');
@@ -125,26 +123,6 @@ export const mockDefaultDownloadFile = (items, shouldThrowError) => {
       reply({ fixture: filepath });
     },
   ).as('downloadFile');
-};
-
-export const mockGetS3Metadata = (items, shouldThrowError) => {
-  cy.intercept(
-    {
-      method: DEFAULT_GET.method,
-      url: new RegExp(`${API_HOST}/${buildGetS3MetadataRoute(ID_FORMAT)}$`),
-    },
-    ({ reply, url }) => {
-      if (shouldThrowError) {
-        reply({ statusCode: StatusCodes.BAD_REQUEST });
-        return;
-      }
-
-      const id = url.slice(API_HOST.length).split('/')[2];
-      const { extra } = items.find(({ id: thisId }) => id === thisId);
-
-      reply(getS3FileExtra(extra));
-    },
-  ).as('getS3Metadata');
 };
 
 // bug: mockGetS3FileContent intercept static/js/bundle.js which fails tests
