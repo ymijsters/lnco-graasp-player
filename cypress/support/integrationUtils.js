@@ -48,7 +48,7 @@ export const expectAppViewScreenLayout = ({ id, name, extra }) => {
 
 export const expectFileViewScreenLayout = ({ id, name, extra }) => {
   const mimetype =
-    getFileExtra(extra)?.mimetype || getS3FileExtra(extra)?.contenttype;
+    getFileExtra(extra)?.mimetype || getS3FileExtra(extra)?.mimetype;
 
   // embedded element
   let selector = null;

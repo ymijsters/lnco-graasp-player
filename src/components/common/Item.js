@@ -1,13 +1,6 @@
 import React from 'react';
 import { Container, makeStyles, Typography } from '@material-ui/core';
-import {
-  Loader,
-  FileItem,
-  DocumentItem,
-  LinkItem,
-  AppItem,
-  S3FileItem,
-} from '@graasp/ui';
+import { Loader, FileItem, DocumentItem, LinkItem, AppItem } from '@graasp/ui';
 import Alert from '@material-ui/lab/Alert';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
@@ -23,13 +16,7 @@ import {
 } from '../../config/selectors';
 import { API_HOST, SCREEN_MAX_HEIGHT } from '../../config/constants';
 
-const {
-  useItem,
-  useChildren,
-  useFileContent,
-  useS3FileContent,
-  useCurrentMember,
-} = hooks;
+const { useItem, useChildren, useFileContent, useCurrentMember } = hooks;
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -53,22 +40,16 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
 
   // fetch file content if type is file
   const { data: content, isError: isFileError } = useFileContent(id, {
-    enabled: Boolean(item && item.get('type') === ITEM_TYPES.FILE),
+    enabled: Boolean(
+      item && [ITEM_TYPES.FILE, ITEM_TYPES.S3_FILE].includes(item.get('type')),
+    ),
   });
-
-  // fetch file content if type is s3File
-  const { data: s3Content, isError: isS3FileError } = useS3FileContent(
-    item?.get('id'),
-    {
-      enabled: Boolean(item?.get('type') === ITEM_TYPES.S3_FILE),
-    },
-  );
 
   if (isLoading || isChildrenLoading) {
     return <Loader />;
   }
 
-  if (isError || !item || isFileError || isS3FileError) {
+  if (isError || !item || isFileError) {
     return <Alert severity="error">{t('An unexpected error occured.')}</Alert>;
   }
 
@@ -99,21 +80,13 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
       );
     case ITEM_TYPES.LINK:
       return <LinkItem item={item} height={SCREEN_MAX_HEIGHT} />;
-    case ITEM_TYPES.FILE: {
+    case ITEM_TYPES.FILE:
+    case ITEM_TYPES.S3_FILE: {
       return (
         <FileItem
           id={buildFileId(id)}
           item={item}
           content={content}
-          maxHeight={SCREEN_MAX_HEIGHT}
-        />
-      );
-    }
-    case ITEM_TYPES.S3_FILE: {
-      return (
-        <S3FileItem
-          item={item}
-          content={s3Content}
           maxHeight={SCREEN_MAX_HEIGHT}
         />
       );

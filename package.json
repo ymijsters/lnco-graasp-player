@@ -43,6 +43,7 @@
     "start:ci": "react-scripts -r @cypress/instrument-cra start",
     "build": "react-scripts build",
     "dist": "env-cmd -f ./.env.production react-scripts build",
+    "dist:dev": "env-cmd -f ./.env.development react-scripts build",
     "eject": "react-scripts eject",
     "lint": "eslint .",
     "prettier:check": "prettier --check src/**/*.js",

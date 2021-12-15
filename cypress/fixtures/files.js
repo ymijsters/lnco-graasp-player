@@ -87,9 +87,9 @@ export const IMAGE_ITEM_S3 = {
   createdAt: '2021-03-16T16:00:50.968Z',
   updatedAt: '2021-03-16T16:00:52.655Z',
   extra: buildS3FileExtra({
-    key: 'files/icon.png', // for testing
+    path: 'files/icon.png', // for testing
     size: 32439,
-    contenttype: 'image/png',
+    mimetype: 'image/png',
   }),
   settings: {
     isPinned: false,
@@ -107,9 +107,9 @@ export const VIDEO_ITEM_S3 = {
   createdAt: '2021-03-16T16:00:50.968Z',
   updatedAt: '2021-03-16T16:00:52.655Z',
   extra: buildS3FileExtra({
-    key: 'files/video.mp4', // for testing
+    path: 'files/video.mp4', // for testing
     size: 52345,
-    contenttype: MIME_TYPES.VIDEO[0],
+    mimetype: MIME_TYPES.VIDEO[0],
   }),
   settings: {
     isPinned: false,
@@ -127,9 +127,9 @@ export const PDF_ITEM_S3 = {
   createdAt: '2021-03-16T16:00:50.968Z',
   updatedAt: '2021-03-16T16:00:52.655Z',
   extra: buildS3FileExtra({
-    key: 'files/doc.pdf', // for testing
+    path: 'files/doc.pdf', // for testing
     size: 54321,
-    contenttype: MIME_TYPES.PDF[0],
+    mimetype: MIME_TYPES.PDF[0],
   }),
   settings: {
     isPinned: false,

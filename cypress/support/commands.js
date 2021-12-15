@@ -15,7 +15,6 @@ import {
   mockGetCurrentMember,
   mockGetItem,
   mockGetMemberBy,
-  mockGetS3Metadata,
 } from './server';
 
 Cypress.Commands.add(
@@ -31,6 +30,8 @@ Cypress.Commands.add(
     const cachedItems = JSON.parse(JSON.stringify(items));
     const cachedMembers = JSON.parse(JSON.stringify(members));
 
+    cy.setCookie('session', currentMember ? 'somecookie' : null);
+
     mockGetItem(
       { items: cachedItems, currentMember },
       getItemError || getCurrentMemberError,
@@ -43,7 +44,5 @@ Cypress.Commands.add(
     mockGetCurrentMember(currentMember, getCurrentMemberError);
 
     mockDefaultDownloadFile(cachedItems);
-
-    mockGetS3Metadata(cachedItems);
   },
 );

@@ -14,6 +14,7 @@ import {
 } from '../support/server';
 
 function beforeWs(visitRoute, wsClientStub) {
+  cy.setCookie('session', 'somecookie');
   cy.visit(visitRoute, {
     onBeforeLoad: (win) => {
       cy.stub(win, 'WebSocket', () => wsClientStub);
