@@ -4,7 +4,11 @@ import { Loader, FileItem, DocumentItem, LinkItem, AppItem } from '@graasp/ui';
 import Alert from '@material-ui/lab/Alert';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+<<<<<<< HEAD
 import { Api } from '@graasp/query-client';
+=======
+import { Redirect } from 'react-router';
+>>>>>>> feat: redirect to home if item is hidden
 import { hooks } from '../../config/queryClient';
 import { ITEM_TYPES } from '../../enums';
 import FolderButton from './FolderButton';
@@ -16,8 +20,9 @@ import {
   FOLDER_NAME_TITLE_CLASS,
 } from '../../config/selectors';
 import { API_HOST, SCREEN_MAX_HEIGHT } from '../../config/constants';
+import { HOME_PATH } from '../../config/paths';
 
-const { useItem, useChildren, useFileContent, useCurrentMember } = hooks;
+const { useItem, useChildren, useFileContent, useCurrentMember, useItemTags } = hooks;
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -30,8 +35,8 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const { data: item, isLoading, isError } = useItem(id);
+  const { data: x, isLoading: isTagsLoading, /* isError: z */ } = useItemTags(id);
   const { data: user, isLoading: isMemberLoading } = useCurrentMember();
-
   // fetch children if item is folder
   const isFolder = Boolean(item?.get('type') === ITEM_TYPES.FOLDER);
   const { data: children, isLoading: isChildrenLoading } = useChildren(id, {
@@ -46,8 +51,13 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
     ),
   });
 
-  if (isLoading || isChildrenLoading) {
+  if (isLoading || isTagsLoading || isChildrenLoading) {
     return <Loader />;
+  }
+
+  const isHidden = x.filter(({ tagId }) => tagId === 'b5373e38-e89b-4dc7-b4b9-fd3601504467').size > 0;
+  if(isHidden && item.get('type') !== ITEM_TYPES.FOLDER){
+    return <Redirect to={HOME_PATH} />;
   }
 
   if (isError || !item || isFileError) {
@@ -57,6 +67,10 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
   switch (item.get('type')) {
     case ITEM_TYPES.FOLDER:
       // display only one level of a folder
+      if(isHidden){
+        return isChildren ? null :<Redirect to={HOME_PATH} />;
+      }
+
       if (isChildren) {
         return <FolderButton id={buildFolderButtonId(id)} item={item} />;
       }
