@@ -16,7 +16,7 @@ import { buildTreeItemClass } from '../../config/selectors';
 import ItemCard from '../common/ItemCard';
 import { buildMainPath } from '../../config/paths';
 
-const { useItem, useOwnItems, useChildren, useSharedItems } = hooks;
+const { useItem, useOwnItems, useChildren, useSharedItems, useItemsTags } = hooks;
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -30,8 +30,14 @@ const Home = () => {
   const navigate = useNavigate();
 
   const { data: ownItems, isLoading: isLoadingOwnItems } = useOwnItems();
-  const { data: sharedItems, isLoading: isLoadingSharedItems } =
-    useSharedItems();
+  const { data: ownItemsTags } = useItemsTags(ownItems?.map(({ id }) => id).toJS())
+  const { data: sharedItems, isLoading: isLoadingSharedItems } = useSharedItems();
+
+  const filtred = ownItems.filter((item, idx) => ownItemsTags[idx].filter(({ tagId }) => tagId === 'b5373e38-e89b-4dc7-b4b9-fd3601504467').size <= 0);
+
+  console.log(ownItems);
+  console.log(ownItemsTags);
+  console.log(filtred);
 
   const renderSharedItems = () => {
     if (isLoadingSharedItems) {
@@ -142,14 +148,14 @@ const Home = () => {
           buildTreeItemClass={(nodeId) => buildTreeItemClass(nodeId)}
           initialExpendedItems={[]}
           showCheckbox={false}
-          showItemFilter={() => true}
+          showItemFilter={() => true /* ownItemsTags[0].filter(({ tagId }) => tagId === 'b5373e38-e89b-4dc7-b4b9-fd3601504467').size <= 0 */ }
           onTreeItemSelect={(payload) => {
             if (payload !== rootSharedId) {
               navigate(buildMainPath({ rootId: payload, id: null }));
             }
           }}
           useChildren={useChildren}
-          shouldFetchChildrenForItem={() => false}
+          shouldFetchChildrenForItem={() => true}
           isTreeItemDisabled={() => false}
           items={sharedItems}
         />
