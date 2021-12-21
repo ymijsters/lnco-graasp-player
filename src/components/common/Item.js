@@ -4,11 +4,8 @@ import { Loader, FileItem, DocumentItem, LinkItem, AppItem } from '@graasp/ui';
 import Alert from '@material-ui/lab/Alert';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
-<<<<<<< HEAD
 import { Api } from '@graasp/query-client';
-=======
 import { Redirect } from 'react-router';
->>>>>>> feat: redirect to home if item is hidden
 import { hooks } from '../../config/queryClient';
 import { ITEM_TYPES } from '../../enums';
 import FolderButton from './FolderButton';
