@@ -5,7 +5,6 @@ import Alert from '@material-ui/lab/Alert';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { Api } from '@graasp/query-client';
-import { Redirect } from 'react-router';
 import { hooks } from '../../config/queryClient';
 import { ITEM_TYPES } from '../../enums';
 import FolderButton from './FolderButton';
@@ -16,8 +15,7 @@ import {
   buildFolderButtonId,
   FOLDER_NAME_TITLE_CLASS,
 } from '../../config/selectors';
-import { API_HOST, SCREEN_MAX_HEIGHT } from '../../config/constants';
-import { HOME_PATH } from '../../config/paths';
+import { API_HOST, HIDDEN_ITEM_TAG_ID, SCREEN_MAX_HEIGHT } from '../../config/constants';
 
 const { useItem, useChildren, useFileContent, useCurrentMember, useItemTags } = hooks;
 
@@ -52,9 +50,13 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
     return <Loader />;
   }
 
-  const isHidden = x.filter(({ tagId }) => tagId === 'b5373e38-e89b-4dc7-b4b9-fd3601504467').size > 0;
-  if(isHidden && item.get('type') !== ITEM_TYPES.FOLDER){
-    return <Redirect to={HOME_PATH} />;
+  const isHidden = x.filter(({ tagId }) => tagId === HIDDEN_ITEM_TAG_ID).size > 0;
+  if(isHidden && isChildren){
+    return null;
+  }
+
+  if(isHidden){
+    return <Alert severity="error">{t('You cannnot access this item')}</Alert>;
   }
 
   if (isError || !item || isFileError) {
@@ -64,10 +66,6 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
   switch (item.get('type')) {
     case ITEM_TYPES.FOLDER:
       // display only one level of a folder
-      if(isHidden){
-        return isChildren ? null :<Redirect to={HOME_PATH} />;
-      }
-
       if (isChildren) {
         return <FolderButton id={buildFolderButtonId(id)} item={item} />;
       }
