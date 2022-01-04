@@ -38,7 +38,7 @@ export const GRAASP_COMPOSE_HOST =
   ENV_GRAASP_COMPOSE_HOST ||
   process.env.REACT_APP_GRAASP_COMPOSE_HOST ||
   'http://localhost:3111';
-  
+
 export const HIDDEN_ITEM_TAG_ID =
   process.env.REACT_APP_HIDDEN_ITEM_TAG_ID || false;
 

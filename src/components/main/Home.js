@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import {
   Main,
   MainMenu as GraaspMainMenu,
-  DynamicTreeView,
   Loader,
 } from '@graasp/ui';
 import { Divider, Grid, Container } from '@material-ui/core';
@@ -15,8 +14,11 @@ import { hooks } from '../../config/queryClient';
 import { buildTreeItemClass } from '../../config/selectors';
 import ItemCard from '../common/ItemCard';
 import { buildMainPath } from '../../config/paths';
+import { HIDDEN_ITEM_TAG_ID } from '../../config/constants';
+import DynamicTreeView from '../common/Tree/Tree';
 
-const { useItem, useOwnItems, useChildren, useSharedItems, useItemsTags } = hooks;
+const { useItem, useOwnItems, useChildren, useSharedItems, useItemTags, useItemsTags } =
+  hooks;
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -30,21 +32,35 @@ const Home = () => {
   const navigate = useNavigate();
 
   const { data: ownItems, isLoading: isLoadingOwnItems } = useOwnItems();
-  const { data: ownItemsTags } = useItemsTags(ownItems?.map(({ id }) => id).toJS())
-  const { data: sharedItems, isLoading: isLoadingSharedItems } = useSharedItems();
+  const { data: ownItemsTags, isLoading: isLoadingOwnTags } = useItemsTags(
+    ownItems?.map(({ id }) => id).toJS(),
+  );
+  const { data: sharedItems, isLoading: isLoadingSharedItems } =
+    useSharedItems();
+  const { data: sharedItemsTags, isLoading: isLoadingSharedTags } =
+    useItemsTags(sharedItems?.map(({ id }) => id).toJS());
 
-  const filtred = ownItems.filter((item, idx) => ownItemsTags[idx].filter(({ tagId }) => tagId === 'b5373e38-e89b-4dc7-b4b9-fd3601504467').size <= 0);
+  const filtred = ownItems?.filter(
+    (item, idx) =>
+      !isLoadingOwnTags &&
+      ownItemsTags.get(idx).filter(({ tagId }) => tagId === HIDDEN_ITEM_TAG_ID)
+        .length <= 0,
+  );
 
-  console.log(ownItems);
-  console.log(ownItemsTags);
-  console.log(filtred);
+  const shared = sharedItems?.filter(
+    (item, idx) =>
+      !isLoadingSharedTags &&
+      sharedItemsTags
+        .get(idx)
+        .filter(({ tagId }) => tagId === HIDDEN_ITEM_TAG_ID).length <= 0,
+  );
 
   const renderSharedItems = () => {
     if (isLoadingSharedItems) {
       return <Loader />;
     }
 
-    if (!sharedItems?.size) {
+    if (!shared?.size) {
       return null;
     }
 
@@ -53,7 +69,7 @@ const Home = () => {
         <Divider className={classes.divider} />
         <Typography variant="h4">{t('Shared Items')}</Typography>
         <Grid container spacing={3} justify="center">
-          {sharedItems.map((i) => (
+          {shared.map((i) => (
             <Grid item lg={3} md={4} sm={6}>
               <ItemCard item={i} />
             </Grid>
@@ -68,7 +84,7 @@ const Home = () => {
       return <Loader />;
     }
 
-    if (!ownItems?.size) {
+    if (!filtred?.size) {
       return null;
     }
 
@@ -76,7 +92,7 @@ const Home = () => {
       <>
         <Typography variant="h4">{t('My Items')}</Typography>
         <Grid container spacing={3} justify="center">
-          {ownItems.map((i) => (
+          {filtred.map((i) => (
             <Grid item lg={3} md={4} sm={6}>
               <ItemCard item={i} />
             </Grid>
@@ -111,18 +127,16 @@ const Home = () => {
           rootId={rootOwnId}
           useItem={useItem}
           buildTreeItemClass={(nodeId) => buildTreeItemClass(nodeId)}
-          initialExpendedItems={[]}
-          showCheckbox={false}
-          showItemFilter={() => true}
+          initialExpendedItems={[rootOwnId]}
+          showItemFilter={(item, tags) => tags.filter(({ tagId }) => tagId === HIDDEN_ITEM_TAG_ID).size <= 0}
           onTreeItemSelect={(payload) => {
             if (payload !== rootOwnId) {
               navigate(buildMainPath({ rootId: payload, id: null }));
             }
           }}
           useChildren={useChildren}
-          shouldFetchChildrenForItem={() => false}
-          isTreeItemDisabled={() => false}
-          items={ownItems}
+          useTags={useItemTags}
+          items={filtred}
         />
       </GraaspMainMenu>
     );
@@ -135,7 +149,7 @@ const Home = () => {
       return <Loader />;
     }
 
-    if (!sharedItems?.size) {
+    if (!shared?.size) {
       return null;
     }
 
@@ -145,10 +159,11 @@ const Home = () => {
           rootLabel={t('Shared Items')}
           rootId={rootSharedId}
           useItem={useItem}
+          useTags={useItemTags}
           buildTreeItemClass={(nodeId) => buildTreeItemClass(nodeId)}
           initialExpendedItems={[]}
           showCheckbox={false}
-          showItemFilter={() => true /* ownItemsTags[0].filter(({ tagId }) => tagId === 'b5373e38-e89b-4dc7-b4b9-fd3601504467').size <= 0 */ }
+          showItemFilter={(item, tags) => tags.filter(({ tagId }) => tagId === HIDDEN_ITEM_TAG_ID).size <= 0}
           onTreeItemSelect={(payload) => {
             if (payload !== rootSharedId) {
               navigate(buildMainPath({ rootId: payload, id: null }));
@@ -157,7 +172,7 @@ const Home = () => {
           useChildren={useChildren}
           shouldFetchChildrenForItem={() => true}
           isTreeItemDisabled={() => false}
-          items={sharedItems}
+          items={shared}
         />
       </GraaspMainMenu>
     );

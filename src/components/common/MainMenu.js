@@ -4,15 +4,16 @@ import Alert from '@material-ui/lab/Alert';
 import { useTranslation } from 'react-i18next';
 import {
   MainMenu as GraaspMainMenu,
-  DynamicTreeView,
   Loader,
 } from '@graasp/ui';
-import { buildTreeItemClass, MAIN_MENU_ID } from '../../config/selectors';
+import { MAIN_MENU_ID } from '../../config/selectors';
 import { hooks } from '../../config/queryClient';
 import { ITEM_TYPES } from '../../enums';
 import { ItemContext } from '../context/ItemContext';
+import DynamicTreeView from './Tree/Tree';
+import { HIDDEN_ITEM_TAG_ID } from '../../config/constants';
 
-const { useItem, useChildren } = hooks;
+const { useItem, useChildren, useItemTags } = hooks;
 
 const MainMenu = () => {
   const { rootId } = useParams();
@@ -56,19 +57,14 @@ const MainMenu = () => {
         rootLabel={rootItem.get('name')}
         rootId={rootId}
         useItem={useItem}
+        useTags={useItemTags}
         useChildren={useChildren}
-        buildTreeItemClass={(nodeId) => buildTreeItemClass(nodeId)}
         initialExpendedItems={[rootId]}
-        showCheckbox={false}
-        showItemFilter={() => true}
+        showItemFilter={(item, tags) => tags.filter(({ tagId }) => tagId === HIDDEN_ITEM_TAG_ID).size <= 0}
         selectedId={focusedItemId}
         onTreeItemSelect={(payload) => {
           setFocusedItemId(payload);
         }}
-        shouldFetchChildrenForItem={(item) =>
-          item.get('type') === ITEM_TYPES.FOLDER
-        }
-        isTreeItemDisabled={() => false}
         items={children && !children.isEmpty() ? children : []}
       />
     </GraaspMainMenu>
