@@ -1,3 +1,5 @@
+import { HIDDEN_ITEM_TAG_ID } from '../config/constants';
+
 // eslint-disable-next-line no-useless-escape
 export const transformIdForPath = (id) => id.replace(/\-/g, '_');
 
@@ -46,6 +48,9 @@ export const isChild = (id) => {
 };
 
 export const getChildren = (items, id) => items.filter(isChild(id));
+
+export const isHidden = (tags) =>
+  tags?.filter(({ tagId }) => tagId === HIDDEN_ITEM_TAG_ID).length <= 0;
 
 export const areItemsEqual = (i1, i2) => {
   if (!i1 && !i2) return true;

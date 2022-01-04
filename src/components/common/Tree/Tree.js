@@ -11,22 +11,18 @@ const DynamicTreeView = ({
   id,
   rootLabel,
   rootId,
-  useItem,
-  useTags,
-  useChildren,
   initialExpendedItems = [],
   items,
-  showItemFilter = () => true,
   selectedId,
   onTreeItemSelect,
 }) => {
   const [expandedItems, setExpandedItems] = useState(initialExpendedItems);
 
   // types based on TreeView types
-  const onSelect = (event, value) => onTreeItemSelect?.(value);
+  const onSelect = (_event, value) => onTreeItemSelect?.(value);
 
   // types based on TreeView types
-  const onToggle = (event, nodeIds) => setExpandedItems(nodeIds);
+  const onToggle = (_event, nodeIds) => setExpandedItems(nodeIds);
 
   return (
     <TreeView
@@ -44,10 +40,6 @@ const DynamicTreeView = ({
             itemId={itemId}
             expandedItems={expandedItems}
             selectedId={selectedId}
-            useItem={useItem}
-            useChildren={useChildren}
-            useTags={useTags}
-            showItemFilter={showItemFilter}
           />
         ))}
       </TreeItem>
@@ -63,10 +55,6 @@ DynamicTreeView.propTypes = {
   initialExpendedItems: PropTypes.arrayOf(PropTypes.string).isRequired,
   selectedId: PropTypes.string.isRequired,
   onTreeItemSelect: PropTypes.any.isRequired,
-  useItem: PropTypes.any.isRequired,
-  useTags: PropTypes.any.isRequired, 
-  useChildren: PropTypes.any.isRequired,
-  showItemFilter: PropTypes.any.isRequired,
 };
 
 export default DynamicTreeView;

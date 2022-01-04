@@ -1,10 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Main,
-  MainMenu as GraaspMainMenu,
-  Loader,
-} from '@graasp/ui';
+import { Main, MainMenu as GraaspMainMenu, Loader } from '@graasp/ui';
 import { Divider, Grid, Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -14,11 +10,10 @@ import { hooks } from '../../config/queryClient';
 import { buildTreeItemClass } from '../../config/selectors';
 import ItemCard from '../common/ItemCard';
 import { buildMainPath } from '../../config/paths';
-import { HIDDEN_ITEM_TAG_ID } from '../../config/constants';
 import DynamicTreeView from '../common/Tree/Tree';
+import { isHidden } from '../../utils/item';
 
-const { useItem, useOwnItems, useChildren, useSharedItems, useItemTags, useItemsTags } =
-  hooks;
+const { useOwnItems, useSharedItems, useItemsTags } = hooks;
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -41,18 +36,11 @@ const Home = () => {
     useItemsTags(sharedItems?.map(({ id }) => id).toJS());
 
   const filtred = ownItems?.filter(
-    (item, idx) =>
-      !isLoadingOwnTags &&
-      ownItemsTags.get(idx).filter(({ tagId }) => tagId === HIDDEN_ITEM_TAG_ID)
-        .length <= 0,
+    (_item, idx) => !isLoadingOwnTags && isHidden(ownItemsTags.get(idx)),
   );
 
   const shared = sharedItems?.filter(
-    (item, idx) =>
-      !isLoadingSharedTags &&
-      sharedItemsTags
-        .get(idx)
-        .filter(({ tagId }) => tagId === HIDDEN_ITEM_TAG_ID).length <= 0,
+    (_item, idx) => !isLoadingSharedTags && isHidden(sharedItemsTags.get(idx)),
   );
 
   const renderSharedItems = () => {
@@ -125,17 +113,13 @@ const Home = () => {
         <DynamicTreeView
           rootLabel={t('My Items')}
           rootId={rootOwnId}
-          useItem={useItem}
           buildTreeItemClass={(nodeId) => buildTreeItemClass(nodeId)}
           initialExpendedItems={[rootOwnId]}
-          showItemFilter={(item, tags) => tags.filter(({ tagId }) => tagId === HIDDEN_ITEM_TAG_ID).size <= 0}
           onTreeItemSelect={(payload) => {
             if (payload !== rootOwnId) {
               navigate(buildMainPath({ rootId: payload, id: null }));
             }
           }}
-          useChildren={useChildren}
-          useTags={useItemTags}
           items={filtred}
         />
       </GraaspMainMenu>
@@ -158,20 +142,13 @@ const Home = () => {
         <DynamicTreeView
           rootLabel={t('Shared Items')}
           rootId={rootSharedId}
-          useItem={useItem}
-          useTags={useItemTags}
           buildTreeItemClass={(nodeId) => buildTreeItemClass(nodeId)}
           initialExpendedItems={[]}
-          showCheckbox={false}
-          showItemFilter={(item, tags) => tags.filter(({ tagId }) => tagId === HIDDEN_ITEM_TAG_ID).size <= 0}
           onTreeItemSelect={(payload) => {
             if (payload !== rootSharedId) {
               navigate(buildMainPath({ rootId: payload, id: null }));
             }
           }}
-          useChildren={useChildren}
-          shouldFetchChildrenForItem={() => true}
-          isTreeItemDisabled={() => false}
           items={shared}
         />
       </GraaspMainMenu>

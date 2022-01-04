@@ -5,6 +5,10 @@ import TreeItem from '@material-ui/lab/TreeItem';
 import PropTypes from 'prop-types';
 import { buildTreeItemClass } from '../../../config/selectors';
 import { ITEM_TYPES } from '../../../enums';
+import { hooks } from '../../../config/queryClient';
+import { isHidden } from '../../../utils/item';
+
+const { useItem, useItemTags, useItemsTags, useChildren } = hooks;
 
 const LoadingTreeItem = <Skeleton variant="text" />;
 
@@ -12,15 +16,11 @@ const CustomTreeItem = ({
   itemId,
   expandedItems = [],
   selectedId,
-  useChildren,
-  useItem,
-  useTags,
-  showItemFilter,
 }) => {
   const { data: item, isLoading, isError } = useItem(itemId);
-  const { data: tags, isLoading: isTagLoading } = useTags(itemId);
+  const { data: tags, isLoading: isTagLoading } = useItemTags(itemId);
 
-  const showItem = item && tags && showItemFilter?.(item, tags);
+  const showItem = item && tags && isHidden(tags.toJS());
   const isExpanded = expandedItems?.includes(itemId);
 
   const { data: children, isLoading: childrenIsLoading } = useChildren(itemId, {
@@ -28,6 +28,10 @@ const CustomTreeItem = ({
       item && showItem && item.get('type') === ITEM_TYPES.FOLDER && isExpanded,
     ),
   });
+  const { data: childrenTags, isLoading: isChildrenTagsLoading } = useItemsTags(
+    children?.map((child) => child.id),
+    { enabled: Boolean(children) },
+  );
 
   if (isLoading || isTagLoading) {
     return (
@@ -39,18 +43,17 @@ const CustomTreeItem = ({
     );
   }
 
-  // display only folders
   if (!showItem || !item || isError) {
     return null;
   }
 
   const renderChildrenItems = () => {
-    if (childrenIsLoading) {
+    if (childrenIsLoading || isChildrenTagsLoading) {
       return LoadingTreeItem;
     }
 
-    const filteredChildren = children?.filter((child) =>
-      showItemFilter?.(child),
+    const filteredChildren = children?.filter((_child, idx) =>
+      isHidden(childrenTags.get(idx).toJS()),
     );
 
     if (!filteredChildren?.size) {
@@ -63,18 +66,11 @@ const CustomTreeItem = ({
         itemId={childId}
         expandedItems={expandedItems}
         selectedId={selectedId}
-        useChildren={useChildren}
-        useItem={useItem}
-        useTags={useTags}
-        showItemFilter={showItemFilter}
       />
     ));
   };
 
-  const childrenTreeItems = renderChildrenItems();
-
-  // render child with checkbox
-  const content = childrenIsLoading ? LoadingTreeItem : <>{item.get('name')}</>;
+  const content = childrenIsLoading ? LoadingTreeItem : item.get('name');
 
   // recursive display of children
   return (
@@ -84,7 +80,7 @@ const CustomTreeItem = ({
       label={content}
       className={buildTreeItemClass(itemId)}
     >
-      {childrenTreeItems}
+      {renderChildrenItems()}
     </TreeItem>
   );
 };
@@ -93,10 +89,6 @@ CustomTreeItem.propTypes = {
   itemId: PropTypes.string.isRequired,
   expandedItems: PropTypes.arrayOf(PropTypes.string).isRequired,
   selectedId: PropTypes.string.isRequired,
-  useChildren: PropTypes.any.isRequired,
-  useItem: PropTypes.any.isRequired,
-  useTags: PropTypes.any.isRequired,
-  showItemFilter: PropTypes.any.isRequired,
 };
 
 export default CustomTreeItem;
