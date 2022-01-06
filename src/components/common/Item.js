@@ -4,6 +4,7 @@ import { Loader, FileItem, DocumentItem, LinkItem, AppItem } from '@graasp/ui';
 import Alert from '@material-ui/lab/Alert';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+import { Api } from '@graasp/query-client';
 import { hooks } from '../../config/queryClient';
 import { ITEM_TYPES } from '../../enums';
 import FolderButton from './FolderButton';
@@ -105,6 +106,7 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
           item={item}
           apiHost={API_HOST} // todo: to change
           user={user}
+          requestApiAccessToken={Api.requestApiAccessToken}
         />
       );
     }
