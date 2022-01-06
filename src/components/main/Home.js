@@ -9,7 +9,7 @@ import {
 import { Divider, Grid, Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import HeaderRightContent from './HeaderRightContent';
 import { hooks } from '../../config/queryClient';
 import { buildTreeItemClass } from '../../config/selectors';
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 const Home = () => {
   const { t } = useTranslation();
   const classes = useStyles();
-  const { push } = useHistory();
+  const navigate = useNavigate();
 
   const { data: ownItems, isLoading: isLoadingOwnItems } = useOwnItems();
   const { data: sharedItems, isLoading: isLoadingSharedItems } =
@@ -110,7 +110,7 @@ const Home = () => {
           showItemFilter={() => true}
           onTreeItemSelect={(payload) => {
             if (payload !== rootOwnId) {
-              push(buildMainPath({ rootId: payload, id: null }));
+              navigate(buildMainPath({ rootId: payload, id: null }));
             }
           }}
           useChildren={useChildren}
@@ -145,7 +145,7 @@ const Home = () => {
           showItemFilter={() => true}
           onTreeItemSelect={(payload) => {
             if (payload !== rootSharedId) {
-              push(buildMainPath({ rootId: payload, id: null }));
+              navigate(buildMainPath({ rootId: payload, id: null }));
             }
           }}
           useChildren={useChildren}

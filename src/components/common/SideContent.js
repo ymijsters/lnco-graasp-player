@@ -202,7 +202,7 @@ const SideContent = ({ children, item }) => {
               </IconButton>
             </div>
 
-            { /* show parents pinned items */}
+            {/* show parents pinned items */}
             {parentsIds.map((i) => (
               <Item id={i} showPinnedOnly />
             ))}

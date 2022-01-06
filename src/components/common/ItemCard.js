@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import { ItemIcon } from '@graasp/ui';
 import PropTypes from 'prop-types';
 import CardContent from '@material-ui/core/CardContent';
@@ -28,10 +28,10 @@ const useStyles = makeStyles((theme) => ({
 
 const SimpleCard = ({ item }) => {
   const classes = useStyles();
-  const { push } = useHistory();
+  const navigate = useNavigate();
 
   const onClick = () => {
-    push(buildMainPath({ rootId: item.id, id: null }));
+    navigate(buildMainPath({ rootId: item.id, id: null }));
   };
   return (
     <Card className={classes.root}>
