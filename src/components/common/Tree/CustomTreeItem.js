@@ -30,7 +30,6 @@ const CustomTreeItem = ({
   });
   const { data: childrenTags, isLoading: isChildrenTagsLoading } = useItemsTags(
     children?.map((child) => child.id).toJS(),
-    { enabled: Boolean(children) },
   );
 
   if (isLoading || isTagLoading) {

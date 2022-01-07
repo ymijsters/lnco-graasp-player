@@ -33,7 +33,8 @@ const Home = () => {
   const { data: sharedItems, isLoading: isLoadingSharedItems } =
     useSharedItems();
   const { data: sharedItemsTags, isLoading: isLoadingSharedTags } =
-    useItemsTags(sharedItems?.map(({ id }) => id).toJS());
+    useItemsTags(sharedItems?.map(({ id }) => id).toJS(),
+  );
 
   const filtred = ownItems?.filter(
     (_item, idx) => !isLoadingOwnTags && isHidden(ownItemsTags.get(idx)),

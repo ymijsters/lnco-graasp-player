@@ -18,6 +18,7 @@ import { GRAASP_APP_ITEM } from '../fixtures/apps';
 import {
   FOLDER_WITH_SUBFOLDER_ITEM,
   FOLDER_WITH_PINNED_ITEMS,
+  FOLDER_WITH_HIDDEN_ITEMS,
   ITEM_WITHOUT_CHAT_BOX,
   ITEM_WITH_CHAT_BOX,
 } from '../fixtures/items';
@@ -47,6 +48,7 @@ describe('Main Screen', () => {
           GRAASP_APP_ITEM,
           ...FOLDER_WITH_SUBFOLDER_ITEM.items,
           ...FOLDER_WITH_PINNED_ITEMS.items,
+          ...FOLDER_WITH_HIDDEN_ITEMS.items,
         ],
       });
     });
@@ -112,6 +114,16 @@ describe('Main Screen', () => {
 
         expectFolderButtonLayout(FOLDER_WITH_SUBFOLDER_ITEM.items[1]);
       });
+    });
+
+    describe('Hidden Items', () => {
+      it.only('Don\'t display Hidden items', () => {
+        const parent = FOLDER_WITH_HIDDEN_ITEMS.items[0];
+        cy.visit(buildMainPath({ rootId: parent.id, id: null }));
+
+        cy.get(`#${buildFolderButtonId(FOLDER_WITH_HIDDEN_ITEMS.items[1].id)}`).should('exist');
+        cy.get(`#${buildFolderButtonId(FOLDER_WITH_HIDDEN_ITEMS.items[2].id)}`).should('not.exist');
+      })
     });
 
     describe('Pinned Items', () => {
