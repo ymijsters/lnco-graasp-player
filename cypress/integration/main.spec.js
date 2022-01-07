@@ -117,7 +117,7 @@ describe('Main Screen', () => {
     });
 
     describe('Hidden Items', () => {
-      it.only('Don\'t display Hidden items', () => {
+      it('Don\'t display Hidden items', () => {
         const parent = FOLDER_WITH_HIDDEN_ITEMS.items[0];
         cy.visit(buildMainPath({ rootId: parent.id, id: null }));
 
