@@ -135,4 +135,5 @@ export const PDF_ITEM_S3 = {
     isPinned: false,
     showChatbox: false,
   },
+  tags: [],
 };

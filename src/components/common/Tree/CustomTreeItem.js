@@ -29,7 +29,7 @@ const CustomTreeItem = ({
     ),
   });
   const { data: childrenTags, isLoading: isChildrenTagsLoading } = useItemsTags(
-    children?.map((child) => child.id),
+    children?.map((child) => child.id).toJS(),
     { enabled: Boolean(children) },
   );
 
@@ -53,7 +53,7 @@ const CustomTreeItem = ({
     }
 
     const filteredChildren = children?.filter((_child, idx) =>
-      isHidden(childrenTags.get(idx).toJS()),
+      isHidden(childrenTags.get(idx)),
     );
 
     if (!filteredChildren?.size) {

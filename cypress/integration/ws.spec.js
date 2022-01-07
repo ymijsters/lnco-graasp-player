@@ -11,6 +11,8 @@ import {
   mockGetChildren,
   mockGetCurrentMember,
   mockGetItem,
+  mockGetItemTags,
+  mockGetItemsTags,
 } from '../support/server';
 
 function beforeWs(visitRoute, wsClientStub) {
@@ -36,6 +38,8 @@ describe('Websocket interactions', () => {
     mockGetCurrentMember(CURRENT_USER);
     mockGetItem({ items, currentMember: CURRENT_USER }, false);
     mockGetChildren(items);
+    mockGetItemTags(items);
+    mockGetItemsTags(items);
   });
 
   it('Displays create child update', () => {

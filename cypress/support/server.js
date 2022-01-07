@@ -3,12 +3,13 @@ import { API_ROUTES } from '@graasp/query-client';
 import { getItemById, isChild } from '../../src/utils/item';
 import { MEMBERS } from '../fixtures/members';
 import { ID_FORMAT, parseStringToRegExp, EMAIL_FORMAT } from './utils';
-import { DEFAULT_GET } from '../../src/api/utils';
+import { DEFAULT_GET } from '../../src/api/utils'; 
 
 const {
   buildGetChildrenRoute,
   buildGetItemRoute,
   buildGetMemberBy,
+  buildGetItemTagsRoute,
   GET_CURRENT_MEMBER_ROUTE,
   buildDownloadFilesRoute,
 } = API_ROUTES;
@@ -123,6 +124,42 @@ export const mockDefaultDownloadFile = (items, shouldThrowError) => {
       reply({ fixture: filepath });
     },
   ).as('downloadFile');
+};
+
+export const mockGetItemTags = (items) => {
+  cy.intercept(
+    {
+      method: DEFAULT_GET.method,
+      url: new RegExp(`${API_HOST}/${buildGetItemTagsRoute(ID_FORMAT)}$`),
+    },
+    ({ reply, url }) => {
+      const itemId = url.slice(API_HOST.length).split('/')[2];
+      const result = items.find(({ id }) => id === itemId).tags || [];
+      reply(result);
+    },
+  ).as('getItemTags');
+};
+
+export const mockGetItemsTags = (items) => {
+  cy.intercept(
+    {
+      method: DEFAULT_GET.method,
+      url: new RegExp(`${API_HOST}/items/tags\\?id\\=`),
+    },
+    ({ reply, url }) => {
+      const ids = url
+        .slice(API_HOST.length)
+        .split('=')
+        .splice(1)
+        .map((x) => x.replace('&id', ''));
+
+      const result = items.filter(({ id }) => ids.includes(id)).map(item => item.tags || []);
+      reply({
+        statusCode: StatusCodes.OK,
+        body: result,
+      });
+    },
+  ).as('getItemsTags');
 };
 
 // bug: mockGetS3FileContent intercept static/js/bundle.js which fails tests

@@ -10,6 +10,7 @@ export const DEFAULT_FOLDER_ITEM = {
     isPinned: false,
     showChatbox: false,
   },
+  tags: [],
 };
 
 export const ITEM_WITH_CHAT_BOX = {

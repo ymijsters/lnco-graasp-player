@@ -14,6 +14,8 @@ import {
   mockGetChildren,
   mockGetCurrentMember,
   mockGetItem,
+  mockGetItemTags,
+  mockGetItemsTags,
   mockGetMemberBy,
 } from './server';
 
@@ -36,6 +38,10 @@ Cypress.Commands.add(
       { items: cachedItems, currentMember },
       getItemError || getCurrentMemberError,
     );
+
+    mockGetItemTags(items);
+
+    mockGetItemsTags(items);
 
     mockGetChildren(cachedItems);
 
