@@ -4,7 +4,7 @@ import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import Alert from '@material-ui/lab/Alert';
-import { useParams, withRouter } from 'react-router';
+import { useParams } from 'react-router';
 import MainMenu from '../common/MainMenu';
 import Item from '../common/Item';
 import { hooks } from '../../config/queryClient';
@@ -62,4 +62,4 @@ MainScreen.propTypes = {
   }).isRequired,
 };
 
-export default withRouter(MainScreen);
+export default MainScreen;
