@@ -10,7 +10,6 @@ export const DEFAULT_FOLDER_ITEM = {
     isPinned: false,
     showChatbox: false,
   },
-  tags: [],
 };
 
 export const ITEM_WITH_CHAT_BOX = {
@@ -172,7 +171,6 @@ export const FOLDER_WITH_HIDDEN_ITEMS = {
     },
   ],
 };
-
 
 export const SHORTCUT = {
   ...DEFAULT_FOLDER_ITEM,

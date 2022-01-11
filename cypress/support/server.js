@@ -134,7 +134,7 @@ export const mockGetItemTags = (items) => {
     },
     ({ reply, url }) => {
       const itemId = url.slice(API_HOST.length).split('/')[2];
-      const result = items.find(({ id }) => id === itemId).tags || [];
+      const result = items.find(({ id }) => id === itemId)?.tags || [];
       reply(result);
     },
   ).as('getItemTags');
@@ -147,13 +147,9 @@ export const mockGetItemsTags = (items) => {
       url: new RegExp(`${API_HOST}/items/tags\\?id\\=`),
     },
     ({ reply, url }) => {
-      const ids = url
-        .slice(API_HOST.length)
-        .split('=')
-        .splice(1)
-        .map((x) => x.replace('&id', ''));
+      const ids = new URL(url).searchParams.getAll('id');
 
-      const result = items.filter(({ id }) => ids.includes(id)).map(item => item.tags || []);
+      const result = items.filter(({ id }) => ids.includes(id)).map(item => item?.tags || []);
       reply({
         statusCode: StatusCodes.OK,
         body: result,

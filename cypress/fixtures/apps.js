@@ -17,5 +17,4 @@ export const GRAASP_APP_ITEM = {
     isPinned: false,
     showChatbox: false,
   },
-  tags: [],
 };

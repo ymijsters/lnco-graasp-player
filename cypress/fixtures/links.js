@@ -20,7 +20,6 @@ export const GRAASP_LINK_ITEM = {
     isPinned: false,
     showChatbox: false,
   },
-  tags: [],
 };
 
 export const YOUTUBE_LINK_ITEM = {
@@ -40,5 +39,4 @@ export const YOUTUBE_LINK_ITEM = {
     isPinned: false,
     showChatbox: false,
   },
-  tags: [],
 };
