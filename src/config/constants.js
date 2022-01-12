@@ -7,6 +7,7 @@ const {
   GRAASP_COMPOSE_HOST: ENV_GRAASP_COMPOSE_HOST,
   NODE_ENV: ENV_NODE_ENV,
   GA_MEASUREMENT_ID: ENV_GA_MEASUREMENT_ID,
+  HIDDEN_ITEM_TAG_ID: ENV_HIDDEN_ITEM_TAG_ID,
 } = env;
 
 export const APP_NAME = 'Graasp';
@@ -40,7 +41,7 @@ export const GRAASP_COMPOSE_HOST =
   'http://localhost:3111';
 
 export const HIDDEN_ITEM_TAG_ID =
-  process.env.REACT_APP_HIDDEN_ITEM_TAG_ID || false;
+  ENV_HIDDEN_ITEM_TAG_ID || process.env.REACT_APP_HIDDEN_ITEM_TAG_ID || false;
 
 export const GA_MEASUREMENT_ID =
   ENV_GA_MEASUREMENT_ID || process.env.REACT_APP_GA_MEASUREMENT_ID;

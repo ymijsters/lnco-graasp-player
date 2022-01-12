@@ -11,11 +11,7 @@ const { useItem, useItemTags, useItemsTags, useChildren } = hooks;
 
 const LoadingTreeItem = <Skeleton variant="text" />;
 
-const CustomTreeItem = ({
-  itemId,
-  expandedItems = [],
-  selectedId,
-}) => {
+const CustomTreeItem = ({ itemId, expandedItems = [], selectedId }) => {
   const { data: item, isLoading, isError } = useItem(itemId);
   const { data: tags, isLoading: isTagLoading } = useItemTags(itemId);
 

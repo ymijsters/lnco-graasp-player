@@ -1,3 +1,4 @@
+import { HIDDEN_ITEM_TAG_ID } from '../../src/config/constants';
 import { ITEM_TYPES } from '../../src/enums';
 import { CURRENT_USER } from './members';
 
@@ -165,7 +166,7 @@ export const FOLDER_WITH_HIDDEN_ITEMS = {
       },
       tags: [
         {
-          tagId: false,
+          tagId: HIDDEN_ITEM_TAG_ID,
         }
       ],
     },
