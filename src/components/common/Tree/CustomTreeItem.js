@@ -1,3 +1,9 @@
+/* This file is a copy of CustomTreeItem in graasp-ui.
+  A lot of features have been stripped to accomodate the simple needs of hidden items. 
+  The main goal is to add the ability to filter the item based on their tags. The Tree
+  check for each element in the tree if it should be displayed (no hidden tag).
+  This feature should be ported to graasp-ui. */
+
 import React from 'react';
 import Skeleton from '@material-ui/lab/Skeleton';
 import TreeItem from '@material-ui/lab/TreeItem';
