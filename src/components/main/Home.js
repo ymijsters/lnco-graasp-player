@@ -1,11 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Main,
-  MainMenu as GraaspMainMenu,
-  DynamicTreeView,
-  Loader,
-} from '@graasp/ui';
+import { Main, MainMenu as GraaspMainMenu, Loader } from '@graasp/ui';
 import { Divider, Grid, Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -15,8 +10,10 @@ import { hooks } from '../../config/queryClient';
 import { buildTreeItemClass } from '../../config/selectors';
 import ItemCard from '../common/ItemCard';
 import { buildMainPath } from '../../config/paths';
+import DynamicTreeView from '../common/Tree/Tree';
+import { isHidden } from '../../utils/item';
 
-const { useItem, useOwnItems, useChildren, useSharedItems } = hooks;
+const { useOwnItems, useSharedItems, useItemsTags } = hooks;
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -30,15 +27,28 @@ const Home = () => {
   const navigate = useNavigate();
 
   const { data: ownItems, isLoading: isLoadingOwnItems } = useOwnItems();
+  const { data: ownItemsTags, isLoading: isLoadingOwnTags } = useItemsTags(
+    ownItems?.map(({ id }) => id).toJS(),
+  );
   const { data: sharedItems, isLoading: isLoadingSharedItems } =
     useSharedItems();
+  const { data: sharedItemsTags, isLoading: isLoadingSharedTags } =
+    useItemsTags(sharedItems?.map(({ id }) => id).toJS());
+
+  const filtred = ownItems?.filter(
+    (_item, idx) => !isLoadingOwnTags && isHidden(ownItemsTags.get(idx)),
+  );
+
+  const shared = sharedItems?.filter(
+    (_item, idx) => !isLoadingSharedTags && isHidden(sharedItemsTags.get(idx)),
+  );
 
   const renderSharedItems = () => {
     if (isLoadingSharedItems) {
       return <Loader />;
     }
 
-    if (!sharedItems?.size) {
+    if (!shared?.size) {
       return null;
     }
 
@@ -47,7 +57,7 @@ const Home = () => {
         <Divider className={classes.divider} />
         <Typography variant="h4">{t('Shared Items')}</Typography>
         <Grid container spacing={3} justify="center">
-          {sharedItems.map((i) => (
+          {shared.map((i) => (
             <Grid item lg={3} md={4} sm={6}>
               <ItemCard item={i} />
             </Grid>
@@ -62,7 +72,7 @@ const Home = () => {
       return <Loader />;
     }
 
-    if (!ownItems?.size) {
+    if (!filtred?.size) {
       return null;
     }
 
@@ -70,7 +80,7 @@ const Home = () => {
       <>
         <Typography variant="h4">{t('My Items')}</Typography>
         <Grid container spacing={3} justify="center">
-          {ownItems.map((i) => (
+          {filtred.map((i) => (
             <Grid item lg={3} md={4} sm={6}>
               <ItemCard item={i} />
             </Grid>
@@ -103,20 +113,14 @@ const Home = () => {
         <DynamicTreeView
           rootLabel={t('My Items')}
           rootId={rootOwnId}
-          useItem={useItem}
           buildTreeItemClass={(nodeId) => buildTreeItemClass(nodeId)}
-          initialExpendedItems={[]}
-          showCheckbox={false}
-          showItemFilter={() => true}
+          initialExpendedItems={[rootOwnId]}
           onTreeItemSelect={(payload) => {
             if (payload !== rootOwnId) {
               navigate(buildMainPath({ rootId: payload, id: null }));
             }
           }}
-          useChildren={useChildren}
-          shouldFetchChildrenForItem={() => false}
-          isTreeItemDisabled={() => false}
-          items={ownItems}
+          items={filtred}
         />
       </GraaspMainMenu>
     );
@@ -129,7 +133,7 @@ const Home = () => {
       return <Loader />;
     }
 
-    if (!sharedItems?.size) {
+    if (!shared?.size) {
       return null;
     }
 
@@ -138,20 +142,14 @@ const Home = () => {
         <DynamicTreeView
           rootLabel={t('Shared Items')}
           rootId={rootSharedId}
-          useItem={useItem}
           buildTreeItemClass={(nodeId) => buildTreeItemClass(nodeId)}
           initialExpendedItems={[]}
-          showCheckbox={false}
-          showItemFilter={() => true}
           onTreeItemSelect={(payload) => {
             if (payload !== rootSharedId) {
               navigate(buildMainPath({ rootId: payload, id: null }));
             }
           }}
-          useChildren={useChildren}
-          shouldFetchChildrenForItem={() => false}
-          isTreeItemDisabled={() => false}
-          items={sharedItems}
+          items={shared}
         />
       </GraaspMainMenu>
     );

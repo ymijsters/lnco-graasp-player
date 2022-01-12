@@ -15,9 +15,14 @@ import {
   buildFolderButtonId,
   FOLDER_NAME_TITLE_CLASS,
 } from '../../config/selectors';
-import { API_HOST, SCREEN_MAX_HEIGHT } from '../../config/constants';
+import {
+  API_HOST,
+  HIDDEN_ITEM_TAG_ID,
+  SCREEN_MAX_HEIGHT,
+} from '../../config/constants';
 
-const { useItem, useChildren, useFileContent, useCurrentMember } = hooks;
+const { useItem, useChildren, useFileContent, useCurrentMember, useItemTags } =
+  hooks;
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -30,8 +35,8 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const { data: item, isLoading, isError } = useItem(id);
+  const { data: itemTags, isLoading: isTagsLoading } = useItemTags(id);
   const { data: user, isLoading: isMemberLoading } = useCurrentMember();
-
   // fetch children if item is folder
   const isFolder = Boolean(item?.get('type') === ITEM_TYPES.FOLDER);
   const { data: children, isLoading: isChildrenLoading } = useChildren(id, {
@@ -46,8 +51,18 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
     ),
   });
 
-  if (isLoading || isChildrenLoading) {
+  if (isLoading || isTagsLoading || isChildrenLoading) {
     return <Loader />;
+  }
+
+  const isHidden =
+    itemTags.filter(({ tagId }) => tagId === HIDDEN_ITEM_TAG_ID).size > 0;
+  if (isHidden && isChildren) {
+    return null;
+  }
+
+  if (isHidden) {
+    return <Alert severity="error">{t('You cannnot access this item')}</Alert>;
   }
 
   if (isError || !item || isFileError) {
