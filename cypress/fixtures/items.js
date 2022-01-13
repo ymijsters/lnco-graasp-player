@@ -1,4 +1,3 @@
-import { HIDDEN_ITEM_TAG_ID } from '../../src/config/constants';
 import { ITEM_TYPES } from '../../src/enums';
 import { CURRENT_USER } from './members';
 
@@ -166,7 +165,7 @@ export const FOLDER_WITH_HIDDEN_ITEMS = {
       },
       tags: [
         {
-          tagId: HIDDEN_ITEM_TAG_ID,
+          tagId: '12345678-1234-1234-1234-123456789012',
         }
       ],
     },
