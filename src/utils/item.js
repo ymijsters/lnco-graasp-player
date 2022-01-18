@@ -49,8 +49,17 @@ export const isChild = (id) => {
 
 export const getChildren = (items, id) => items.filter(isChild(id));
 
-export const isHidden = (tags) =>
-  tags?.filter(({ tagId }) => tagId === HIDDEN_ITEM_TAG_ID).length <= 0;
+export const isError = (error) => error?.statusCode;
+
+export const isHidden = (tags) => {
+  // tags might have failed to be fetched and is an error
+  if (isError(tags)) {
+    return false;
+  }
+  return Boolean(
+    tags?.filter(({ tagId }) => tagId === HIDDEN_ITEM_TAG_ID).length,
+  );
+};
 
 export const areItemsEqual = (i1, i2) => {
   if (!i1 && !i2) return true;

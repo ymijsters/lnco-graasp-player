@@ -15,24 +15,16 @@ import {
 } from '../fixtures/files';
 import { GRAASP_DOCUMENT_ITEM } from '../fixtures/documents';
 import { GRAASP_APP_ITEM } from '../fixtures/apps';
-import {
-  FOLDER_WITH_SUBFOLDER_ITEM,
-  FOLDER_WITH_PINNED_ITEMS,
-  FOLDER_WITH_HIDDEN_ITEMS,
-  ITEM_WITHOUT_CHAT_BOX,
-  ITEM_WITH_CHAT_BOX,
-} from '../fixtures/items';
+import { FOLDER_WITH_SUBFOLDER_ITEM } from '../fixtures/items';
 import {
   FOLDER_NAME_TITLE_CLASS,
-  ITEM_CHATBOX_ID,
-  ITEM_CHATBOX_BUTTON_ID,
-  PANNEL_CLOSE_BUTTON_ID,
-  ITEM_PINNED_BUTTON_ID,
-  ITEM_PINNED_ID,
-  buildFolderButtonId,
+  MAIN_MENU_ID,
 } from '../../src/config/selectors';
-import { STATIC_ELECTRICITY } from '../fixtures/useCases/staticElectricity';
-import { LOAD_CHATBOX_PAUSE } from '../fixtures/constants';
+import {
+  PUBLIC_STATIC_ELECTRICITY,
+  STATIC_ELECTRICITY,
+} from '../fixtures/useCases/staticElectricity';
+import { MEMBERS } from '../fixtures/members';
 
 describe('Main Screen', () => {
   describe('Individual Items', () => {
@@ -47,8 +39,6 @@ describe('Main Screen', () => {
           GRAASP_DOCUMENT_ITEM,
           GRAASP_APP_ITEM,
           ...FOLDER_WITH_SUBFOLDER_ITEM.items,
-          ...FOLDER_WITH_PINNED_ITEMS.items,
-          ...FOLDER_WITH_HIDDEN_ITEMS.items,
         ],
       });
     });
@@ -115,110 +105,34 @@ describe('Main Screen', () => {
         expectFolderButtonLayout(FOLDER_WITH_SUBFOLDER_ITEM.items[1]);
       });
     });
-
-    describe('Hidden Items', () => {
-      it('Don\'t display Hidden items', () => {
-        const parent = FOLDER_WITH_HIDDEN_ITEMS.items[0];
-        cy.visit(buildMainPath({ rootId: parent.id, id: null }));
-
-        cy.get(`#${buildFolderButtonId(FOLDER_WITH_HIDDEN_ITEMS.items[1].id)}`).should('exist');
-        cy.get(`#${buildFolderButtonId(FOLDER_WITH_HIDDEN_ITEMS.items[2].id)}`).should('not.exist');
-      })
-    });
-
-    describe('Pinned Items', () => {
-      it('Pinned button should toggle sidebar visiblity', () => {
-        const parent = FOLDER_WITH_SUBFOLDER_ITEM.items[0];
-        const item = FOLDER_WITH_SUBFOLDER_ITEM.items[2];
-
-        cy.visit(buildMainPath({ rootId: parent.id, id: item.id }));
-
-        cy.get(`#${ITEM_PINNED_BUTTON_ID}`).should('exist');
-        cy.get(`#${ITEM_PINNED_ID}`).should('be.visible');
-
-        cy.get(`#${ITEM_PINNED_BUTTON_ID}`).click();
-        cy.get(`#${parent.id}`).should('not.exist');
-      });
-
-      it('Parent folder should display pinned children', () => {
-        const parent = FOLDER_WITH_PINNED_ITEMS.items[0];
-        const pinned = FOLDER_WITH_PINNED_ITEMS.items[2];
-        cy.visit(buildMainPath({ rootId: parent.id, id: null }));
-
-        cy.get(`#${ITEM_PINNED_ID} #${buildFolderButtonId(pinned.id)}`).should('contain', pinned.name);
-      });
-
-      it('Children should display pinned siblings', () => {
-        const parent = FOLDER_WITH_PINNED_ITEMS.items[0];
-        const item = FOLDER_WITH_PINNED_ITEMS.items[1];
-        const pinned = FOLDER_WITH_PINNED_ITEMS.items[2];
-        cy.visit(buildMainPath({ rootId: parent.id, id: item.id }));
-
-        cy.get(`#${ITEM_PINNED_ID} #${buildFolderButtonId(pinned.id)}`).should('contain', pinned.name);
-      });
-
-      it('If no items are pinned toggle pinned should not exist', () => {
-        const parent = FOLDER_WITH_SUBFOLDER_ITEM.items[0];
-        cy.visit(buildMainPath({ rootId: parent.id, id: null }));
-
-        cy.get(`#${ITEM_PINNED_BUTTON_ID}`).should('not.exist');
-        cy.get(`#${ITEM_PINNED_ID}`).should('not.exist');
-      });
-    });
-
-    describe('Chatbox', () => {
-      beforeEach(() => {
-        cy.setUpApi({ items: [ITEM_WITH_CHAT_BOX, ITEM_WITHOUT_CHAT_BOX] });
-      });
-
-      it('Chatbox button should toggle chatbox visiblity', () => {
-        cy.visit(buildMainPath({ rootId: ITEM_WITH_CHAT_BOX.id, id: null }));
-
-        cy.get(`#${ITEM_CHATBOX_BUTTON_ID}`).should('exist');
-        cy.get(`#${ITEM_CHATBOX_ID}`).should('not.exist');
-
-        cy.get(`#${ITEM_CHATBOX_BUTTON_ID}`).click();
-
-        cy.wait(LOAD_CHATBOX_PAUSE);
-
-        cy.get(`#${ITEM_CHATBOX_ID}`).should('be.visible');
-      });
-
-      it('Side pannel button sould hide chatbox', () => {
-        cy.visit(buildMainPath({ rootId: ITEM_WITH_CHAT_BOX.id, id: null }));
-
-        cy.get(`#${ITEM_CHATBOX_BUTTON_ID}`).should('exist');
-        cy.get(`#${ITEM_CHATBOX_ID}`).should('not.be.exist');
-
-        cy.get(`#${ITEM_CHATBOX_BUTTON_ID}`).click();
-
-        cy.wait(LOAD_CHATBOX_PAUSE);
-        cy.get(`#${ITEM_CHATBOX_ID}`).should('be.visible');
-
-        cy.get(`#${PANNEL_CLOSE_BUTTON_ID}`).click();
-        cy.get(`#${ITEM_CHATBOX_ID}`).should('not.exist');
-      });
-
-      it('Disabled chatbox should not have button', () => {
-        cy.visit(buildMainPath({ rootId: ITEM_WITHOUT_CHAT_BOX.id, id: null }));
-
-        cy.get(`#${ITEM_CHATBOX_BUTTON_ID}`).should('not.exist');
-        cy.get(`#${ITEM_CHATBOX_ID}`).should('not.exist');
-      });
-    });
   });
 
   describe('Use cases', () => {
-    beforeEach(() => {
-      cy.setUpApi({ items: [...STATIC_ELECTRICITY.items] });
-    });
-
     it(`Display ${STATIC_ELECTRICITY.items[0].name}`, () => {
+      cy.setUpApi(STATIC_ELECTRICITY);
       const parentFolder = STATIC_ELECTRICITY.items[0];
       const rootId = parentFolder.id;
       cy.visit(buildMainPath({ rootId }));
 
       expectFolderLayout({ rootId, items: STATIC_ELECTRICITY.items });
+    });
+    it(`Cannot display ${STATIC_ELECTRICITY.items[0].name} if does not have membership`, () => {
+      cy.setUpApi({
+        items: STATIC_ELECTRICITY.items,
+        currentMember: MEMBERS.BOB,
+      });
+      const parentFolder = STATIC_ELECTRICITY.items[0];
+      const rootId = parentFolder.id;
+      cy.visit(buildMainPath({ rootId }));
+      cy.get(`#${MAIN_MENU_ID}`).should('not.exist');
+    });
+    it(`Display ${PUBLIC_STATIC_ELECTRICITY.items[0].name}`, () => {
+      cy.setUpApi({ ...PUBLIC_STATIC_ELECTRICITY, currentMember: MEMBERS.BOB });
+      const parentFolder = PUBLIC_STATIC_ELECTRICITY.items[0];
+      const rootId = parentFolder.id;
+      cy.visit(buildMainPath({ rootId }));
+
+      expectFolderLayout({ rootId, items: PUBLIC_STATIC_ELECTRICITY.items });
     });
   });
 });

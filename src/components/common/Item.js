@@ -56,7 +56,7 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
   }
 
   const isHidden =
-    itemTags.filter(({ tagId }) => tagId === HIDDEN_ITEM_TAG_ID).size > 0;
+    itemTags?.filter(({ tagId }) => tagId === HIDDEN_ITEM_TAG_ID).size > 0;
   if (isHidden && isChildren) {
     return null;
   }

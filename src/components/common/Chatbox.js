@@ -28,13 +28,15 @@ const Chatbox = ({ item }) => {
       return <Loader />;
     }
 
+    const messages = chat?.get('messages') ?? [];
+
     return (
       <GraaspChatbox
         id={ITEM_CHATBOX_ID}
         members={members}
         currentMember={currentMember}
         chatId={item.get('id')}
-        messages={List(chat?.get('messages'))}
+        messages={List(messages)}
         height={window.innerHeight - HEADER_HEIGHT * 2}
         sendMessageFunction={sendMessage}
       />

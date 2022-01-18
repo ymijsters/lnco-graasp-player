@@ -20,8 +20,8 @@ const LoadingTreeItem = <Skeleton variant="text" />;
 const CustomTreeItem = ({ itemId, expandedItems = [], selectedId }) => {
   const { data: item, isLoading, isError } = useItem(itemId);
   const { data: tags, isLoading: isTagLoading } = useItemTags(itemId);
-
-  const showItem = item && tags && isHidden(tags.toJS());
+  const showItem =
+    item && (!tags || tags.isEmpty() || (tags && !isHidden(tags.toJS())));
   const isExpanded = expandedItems?.includes(itemId);
 
   const { data: children, isLoading: childrenIsLoading } = useChildren(itemId, {
@@ -42,7 +42,6 @@ const CustomTreeItem = ({ itemId, expandedItems = [], selectedId }) => {
       />
     );
   }
-
   if (!showItem || !item || isError) {
     return null;
   }
@@ -51,9 +50,8 @@ const CustomTreeItem = ({ itemId, expandedItems = [], selectedId }) => {
     if (childrenIsLoading || isChildrenTagsLoading) {
       return LoadingTreeItem;
     }
-
-    const filteredChildren = children?.filter((_child, idx) =>
-      isHidden(childrenTags.get(idx)),
+    const filteredChildren = children?.filter(
+      (_child, idx) => !isHidden(childrenTags?.get(idx)),
     );
 
     if (!filteredChildren?.size) {

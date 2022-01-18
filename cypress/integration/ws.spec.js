@@ -5,15 +5,7 @@ import {
   FOLDER_NAME_TITLE_CLASS,
 } from '../../src/config/selectors';
 import { FOLDER_WITH_SUBFOLDER_ITEM } from '../fixtures/items';
-import { CURRENT_USER } from '../fixtures/members';
 import { expectFolderButtonLayout } from '../support/integrationUtils';
-import {
-  mockGetChildren,
-  mockGetCurrentMember,
-  mockGetItem,
-  mockGetItemTags,
-  mockGetItemsTags,
-} from '../support/server';
 
 function beforeWs(visitRoute, wsClientStub) {
   cy.setCookie('session', 'somecookie');
@@ -35,11 +27,7 @@ describe('Websocket interactions', () => {
 
   beforeEach(() => {
     client = new WebSocket();
-    mockGetCurrentMember(CURRENT_USER);
-    mockGetItem({ items, currentMember: CURRENT_USER }, false);
-    mockGetChildren(items);
-    mockGetItemTags(items);
-    mockGetItemsTags(items);
+    cy.setUpApi(FOLDER_WITH_SUBFOLDER_ITEM);
   });
 
   it('Displays create child update', () => {

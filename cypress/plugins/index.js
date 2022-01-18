@@ -23,6 +23,8 @@ module.exports = (on, config) => {
     ...config,
     env: {
       API_HOST: process.env.REACT_APP_API_HOST,
+      PUBLIC_TAG_ID: process.env.REACT_APP_PUBLIC_TAG_ID,
+      HIDDEN_TAG_ID: process.env.REACT_APP_HIDDEN_ITEM_TAG_ID,
       // S3_FILES_HOST:
       // calls to this host are mocked, but still should be reachable
       // set an s3 host or fake it by using the same host as the api's

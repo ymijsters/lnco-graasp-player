@@ -7,6 +7,8 @@ import {
   buildFileExtra,
 } from '../../../src/utils/itemExtra';
 
+const PUBLIC_TAG_ID = Cypress.env('PUBLIC_TAG_ID');
+
 // eslint-disable-next-line import/prefer-default-export
 export const STATIC_ELECTRICITY = {
   items: [
@@ -217,3 +219,17 @@ export const STATIC_ELECTRICITY = {
     },
   ],
 };
+
+export const PUBLIC_STATIC_ELECTRICITY = JSON.parse(
+  JSON.stringify(STATIC_ELECTRICITY),
+);
+PUBLIC_STATIC_ELECTRICITY.items = PUBLIC_STATIC_ELECTRICITY.items.map(
+  (item) => {
+    const newItem = {
+      ...item,
+      tags: [...(item?.tags ?? []), { tagId: PUBLIC_TAG_ID }],
+    };
+    return newItem;
+  },
+);
+PUBLIC_STATIC_ELECTRICITY.items[0].name = 'public static electricity';

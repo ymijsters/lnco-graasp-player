@@ -1,6 +1,9 @@
 import { ITEM_TYPES } from '../../src/enums';
 import { CURRENT_USER } from './members';
 
+const PUBLIC_TAG_ID = Cypress.env('PUBLIC_TAG_ID');
+const HIDDEN_TAG_ID = Cypress.env('HIDDEN_TAG_ID');
+
 export const DEFAULT_FOLDER_ITEM = {
   description: '',
   extra: {},
@@ -123,6 +126,66 @@ export const FOLDER_WITH_PINNED_ITEMS = {
   ],
 };
 
+export const PUBLIC_FOLDER_WITH_PINNED_ITEMS = {
+  items: [
+    {
+      ...DEFAULT_FOLDER_ITEM,
+      id: 'ecafbd2a-5688-11eb-ae93-0242ac130005',
+      name: 'parent folder',
+      path: 'ecafbd2a_5688_11eb_ae93_0242ac130005',
+      extra: {
+        image: 'someimageurl',
+      },
+      settings: {
+        isPinned: false,
+        showChatbox: false,
+      },
+      tags: [
+        {
+          tagId: PUBLIC_TAG_ID,
+        },
+      ],
+    },
+    {
+      ...DEFAULT_FOLDER_ITEM,
+      type: ITEM_TYPES.LINK,
+      id: 'fdf09f5a-5688-11eb-ae93-0242ac130006',
+      name: 'NOT PINNED',
+      path: 'ecafbd2a_5688_11eb_ae93_0242ac130005.fdf09f5a_5688_11eb_ae93_0242ac130006',
+      extra: {
+        image: 'someimageurl',
+      },
+      settings: {
+        isPinned: false,
+        showChatbox: false,
+      },
+      tags: [
+        {
+          tagId: PUBLIC_TAG_ID,
+        },
+      ],
+    },
+    {
+      ...DEFAULT_FOLDER_ITEM,
+      id: 'fdf09f5a-5688-11eb-ae93-0242ac130007',
+      name: 'PINNED',
+      path: 'ecafbd2a_5688_11eb_ae93_0242ac130005.fdf09f5a_5688_11eb_ae93_0242ac130007',
+      extra: {
+        image: 'someimageurl',
+      },
+      settings: {
+        isPinned: true,
+        showChatbox: false,
+      },
+      tags: [
+        {
+          tagId: PUBLIC_TAG_ID,
+        },
+      ],
+    },
+  ],
+};
+
 export const FOLDER_WITH_HIDDEN_ITEMS = {
   items: [
     {
@@ -165,8 +228,70 @@ export const FOLDER_WITH_HIDDEN_ITEMS = {
       },
       tags: [
         {
-          tagId: '12345678-1234-1234-1234-123456789012',
-        }
+          tagId: HIDDEN_TAG_ID,
+        },
+      ],
+    },
+  ],
+};
+
+export const PUBLIC_FOLDER_WITH_HIDDEN_ITEMS = {
+  items: [
+    {
+      ...DEFAULT_FOLDER_ITEM,
+      id: 'ecafbd2a-5688-11eb-ae93-0242ac130008',
+      name: 'public parent folder with hidden child',
+      path: 'ecafbd2a_5688_11eb_ae93_0242ac130008',
+      extra: {
+        image: 'someimageurl',
+      },
+      settings: {
+        isPinned: false,
+        showChatbox: false,
+      },
+      tags: [
+        {
+          tagId: PUBLIC_TAG_ID,
+        },
+      ],
+    },
+    {
+      ...DEFAULT_FOLDER_ITEM,
+      id: 'fdf09f5a-5688-11eb-ae93-0242ac130009',
+      name: 'Visible',
+      path: 'ecafbd2a_5688_11eb_ae93_0242ac130008.fdf09f5a_5688_11eb_ae93_0242ac130009',
+      extra: {
+        image: 'someimageurl',
+      },
+      settings: {
+        isPinned: false,
+        showChatbox: false,
+      },
+      tags: [
+        {
+          tagId: PUBLIC_TAG_ID,
+        },
+      ],
+    },
+    {
+      ...DEFAULT_FOLDER_ITEM,
+      id: 'fdf09f5a-5688-11eb-ae93-0242ac130010',
+      name: 'Hidden',
+      path: 'ecafbd2a_5688_11eb_ae93_0242ac130008.fdf09f5a_5688_11eb_ae93_0242ac130010',
+      extra: {
+        image: 'someimageurl',
+      },
+      settings: {
+        isPinned: false,
+        showChatbox: false,
+      },
+      tags: [
+        {
+          tagId: HIDDEN_TAG_ID,
+        },
+        {
+          tagId: PUBLIC_TAG_ID,
+        },
       ],
     },
   ],
