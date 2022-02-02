@@ -5,10 +5,12 @@ import PropTypes from 'prop-types';
 import { ItemLoginAuthorization } from '@graasp/ui';
 import { ItemContextProvider } from '../context/ItemContext';
 import { useMutation, hooks } from '../../config/queryClient';
+import CookiesBanner from './CookiesBanner';
 import MainScreen from './MainScreen';
 
 const ItemScreen = () => (
   <ItemContextProvider>
+    <CookiesBanner />
     <MainScreen />
   </ItemContextProvider>
 );
