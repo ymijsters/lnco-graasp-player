@@ -34,7 +34,7 @@
     "uuid": "8.3.2"
   },
   "scripts": {
-    "pre-commit": "yarn prettier:check --staged && yarn lint",
+    "pre-commit": "yarn prettier:check && yarn lint",
     "post-commit": "git status",
     "start": "env-cmd -f ./.env.local react-scripts start",
     "start:test": "env-cmd -f ./.env.test react-scripts start",

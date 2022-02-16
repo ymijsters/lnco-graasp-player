@@ -15,11 +15,8 @@ import {
   buildFolderButtonId,
   FOLDER_NAME_TITLE_CLASS,
 } from '../../config/selectors';
-import {
-  API_HOST,
-  HIDDEN_ITEM_TAG_ID,
-  SCREEN_MAX_HEIGHT,
-} from '../../config/constants';
+import { API_HOST, SCREEN_MAX_HEIGHT } from '../../config/constants';
+import { isHidden } from '../../utils/item';
 
 const { useItem, useChildren, useFileContent, useCurrentMember, useItemTags } =
   hooks;
@@ -55,13 +52,12 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
     return <Loader />;
   }
 
-  const isHidden =
-    itemTags.filter(({ tagId }) => tagId === HIDDEN_ITEM_TAG_ID).size > 0;
-  if (isHidden && isChildren) {
+  const isItemHidden = isHidden(itemTags?.toJS());
+  if (isItemHidden && isChildren) {
     return null;
   }
 
-  if (isHidden) {
+  if (isItemHidden) {
     return <Alert severity="error">{t('You cannnot access this item')}</Alert>;
   }
 

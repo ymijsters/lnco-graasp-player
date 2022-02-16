@@ -17,6 +17,9 @@ import {
   mockGetItemTags,
   mockGetItemsTags,
   mockGetMemberBy,
+  mockGetPublicItem,
+  mockGetPublicChildren,
+  mockPublicDefaultDownloadFile,
 } from './server';
 
 Cypress.Commands.add(
@@ -38,17 +41,20 @@ Cypress.Commands.add(
       { items: cachedItems, currentMember },
       getItemError || getCurrentMemberError,
     );
+    mockGetPublicItem({ items: cachedItems });
 
-    mockGetItemTags(items);
+    mockGetItemTags(items, currentMember);
 
-    mockGetItemsTags(items);
+    mockGetItemsTags(items, currentMember);
 
-    mockGetChildren(cachedItems);
+    mockGetChildren(cachedItems, currentMember);
+    mockGetPublicChildren(cachedItems);
 
     mockGetMemberBy(cachedMembers, getMemberError);
 
     mockGetCurrentMember(currentMember, getCurrentMemberError);
 
-    mockDefaultDownloadFile(cachedItems);
+    mockDefaultDownloadFile({ items: cachedItems, currentMember });
+    mockPublicDefaultDownloadFile(cachedItems);
   },
 );
