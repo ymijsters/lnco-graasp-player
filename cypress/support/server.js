@@ -3,7 +3,7 @@ import { API_ROUTES } from '@graasp/query-client';
 import { getItemById, isChild } from '../../src/utils/item';
 import { MEMBERS } from '../fixtures/members';
 import { ID_FORMAT, parseStringToRegExp, EMAIL_FORMAT } from './utils';
-import { DEFAULT_GET } from '../../src/api/utils'; 
+import { DEFAULT_GET } from '../../src/api/utils';
 
 const {
   buildGetChildrenRoute,
@@ -12,9 +12,29 @@ const {
   buildGetItemTagsRoute,
   GET_CURRENT_MEMBER_ROUTE,
   buildDownloadFilesRoute,
+  GET_OWN_ITEMS_ROUTE,
 } = API_ROUTES;
 
 const API_HOST = Cypress.env('API_HOST');
+
+export const mockGetOwnItems = ({ items, currentMember }) => {
+  cy.intercept(
+    {
+      method: DEFAULT_GET.method,
+      url: `${API_HOST}/${GET_OWN_ITEMS_ROUTE}`,
+    },
+    ({ reply }) => {
+      if (!currentMember) {
+        return reply({ statusCode: StatusCodes.UNAUTHORIZED, body: null });
+      }
+      const own = items.filter(
+        ({ creator, path }) =>
+          creator === currentMember.id && !path.includes('.'),
+      );
+      return reply(own);
+    },
+  ).as('getOwnItems');
+};
 
 export const mockGetCurrentMember = (
   currentMember = MEMBERS.ANNA,
@@ -149,7 +169,9 @@ export const mockGetItemsTags = (items) => {
     ({ reply, url }) => {
       const ids = new URL(url).searchParams.getAll('id');
 
-      const result = items.filter(({ id }) => ids.includes(id)).map(item => item?.tags || []);
+      const result = items
+        .filter(({ id }) => ids.includes(id))
+        .map((item) => item?.tags || []);
       reply({
         statusCode: StatusCodes.OK,
         body: result,
