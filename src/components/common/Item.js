@@ -33,7 +33,7 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
   const classes = useStyles();
   const { data: item, isLoading, isError } = useItem(id);
   const { data: itemTags, isLoading: isTagsLoading } = useItemTags(id);
-  const { data: user, isLoading: isMemberLoading } = useCurrentMember();
+  const { data: member, isLoading: isMemberLoading } = useCurrentMember();
   // fetch children if item is folder
   const isFolder = Boolean(item?.get('type') === ITEM_TYPES.FOLDER);
   const { data: children, isLoading: isChildrenLoading } = useChildren(id, {
@@ -116,7 +116,8 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
           id={buildAppId(id)}
           item={item}
           apiHost={API_HOST} // todo: to change
-          user={user}
+          member={member}
+          permission="read" // todo: use graasp-constants
           requestApiAccessToken={Api.requestApiAccessToken}
         />
       );
