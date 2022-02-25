@@ -1,6 +1,13 @@
 import React from 'react';
 import { Container, makeStyles, Typography } from '@material-ui/core';
-import { Loader, FileItem, DocumentItem, LinkItem, AppItem } from '@graasp/ui';
+import {
+  Loader,
+  FileItem,
+  DocumentItem,
+  LinkItem,
+  AppItem,
+  TextEditor,
+} from '@graasp/ui';
 import Alert from '@material-ui/lab/Alert';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
@@ -76,9 +83,12 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
       return (
         <Container>
           {!showPinnedOnly && (
-            <Typography className={FOLDER_NAME_TITLE_CLASS} variant="h4">
-              {item.get('name')}
-            </Typography>
+            <>
+              <Typography className={FOLDER_NAME_TITLE_CLASS} variant="h4">
+                {item.get('name')}
+              </Typography>
+              <TextEditor value={item.get('description')} />
+            </>
           )}
 
           {children
