@@ -87,7 +87,7 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
               <Typography className={FOLDER_NAME_TITLE_CLASS} variant="h4">
                 {item.get('name')}
               </Typography>
-              <TextEditor value={item?.get('description')} />
+              <TextEditor value={item.get('description')} />
             </>
           )}
 
