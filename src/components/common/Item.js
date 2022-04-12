@@ -74,8 +74,14 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
 
   switch (item.get('type')) {
     case ITEM_TYPES.FOLDER:
-      // display only one level of a folder
-      if (isChildren) {
+    
+      // do not display children folders if they are not pinned
+      if (!item.get('settings')?.isPinned && isChildren) {
+        return null;
+      }
+
+      // only display children folders if they are pinned
+      if (item.get('settings')?.isPinned && isChildren) {
         return <FolderButton id={buildFolderButtonId(id)} item={item} />;
       }
 
@@ -84,7 +90,7 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
         <Container>
           {!showPinnedOnly && (
             <>
-              <Typography className={FOLDER_NAME_TITLE_CLASS} variant="h4">
+              <Typography className={FOLDER_NAME_TITLE_CLASS} variant="h5">
                 {item.get('name')}
               </Typography>
               <TextEditor value={item.get('description')} />

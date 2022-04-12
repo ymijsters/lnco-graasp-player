@@ -6,12 +6,14 @@
 
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
-import TreeView from '@material-ui/lab/TreeView';
+import TreeView from '@mui/lab/TreeView';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import TreeItem from '@material-ui/lab/TreeItem';
+import TreeItem from '@mui/lab/TreeItem';
 import PropTypes from 'prop-types';
 import CustomTreeItem from './CustomTreeItem';
+import CustomContentTree from './CustomContentTree';
+import { ITEM_TYPES } from '../../../enums';
 
 const DynamicTreeView = ({
   id,
@@ -30,17 +32,26 @@ const DynamicTreeView = ({
   // types based on TreeView types
   const onToggle = (_event, nodeIds) => setExpandedItems(nodeIds);
 
+  // show only folder items in the navigation tree
+  const itemsFiltered = items.filter((item) => item.type === ITEM_TYPES.FOLDER);
+
   return (
     <TreeView
       id={id}
-      defaultCollapseIcon={<ExpandMoreIcon />}
-      defaultExpandIcon={<ChevronRightIcon />}
       onNodeSelect={onSelect}
       onNodeToggle={onToggle}
       expanded={expandedItems}
+      aria-label="icon expansion"
+      defaultCollapseIcon={<ExpandMoreIcon />}
+      defaultExpandIcon={<ChevronRightIcon />}
+      defaultSelected={rootId}
     >
-      <TreeItem nodeId={rootId} label={rootLabel}>
-        {items.map(({ id: itemId }) => (
+      <TreeItem
+        ContentComponent={CustomContentTree}
+        nodeId={rootId}
+        label={rootLabel}
+      >
+        {itemsFiltered.map(({ id: itemId }) => (
           <CustomTreeItem
             key={itemId}
             itemId={itemId}

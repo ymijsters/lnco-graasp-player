@@ -4,7 +4,8 @@ import { I18nextProvider } from 'react-i18next';
 import ReduxToastr from 'react-redux-toastr';
 import { grey } from '@material-ui/core/colors';
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import { createTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import { GlobalStyles } from '@mui/material';
 import App from './App';
 import configureStore from '../store/configure';
 import i18nConfig from '../config/i18n';
@@ -15,7 +16,7 @@ import {
   ReactQueryDevtools,
 } from '../config/queryClient';
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     primary: {
       main: '#5050d2',
@@ -35,12 +36,15 @@ const theme = createMuiTheme({
   },
 });
 
+const globalStyles = <GlobalStyles styles={{ p: { fontSize: '1rem' } }} />;
+
 const { store } = configureStore();
 
 const Root = () => (
   <QueryClientProvider client={queryClient}>
     <I18nextProvider i18n={i18nConfig}>
       <Provider store={store}>
+        {globalStyles}
         <MuiThemeProvider theme={theme}>
           {SHOW_NOTIFICATIONS && <ReduxToastr />}
           <App />

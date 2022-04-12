@@ -6,12 +6,13 @@
 
 import React from 'react';
 import Skeleton from '@material-ui/lab/Skeleton';
-import TreeItem from '@material-ui/lab/TreeItem';
+import TreeItem from '@mui/lab/TreeItem';
 import PropTypes from 'prop-types';
 import { buildTreeItemClass } from '../../../config/selectors';
 import { ITEM_TYPES } from '../../../enums';
 import { hooks } from '../../../config/queryClient';
 import { isHidden } from '../../../utils/item';
+import CustomContentTree from './CustomContentTree';
 
 const { useItem, useItemTags, useItemsTags, useChildren } = hooks;
 
@@ -22,11 +23,9 @@ const CustomTreeItem = ({ itemId, expandedItems = [], selectedId }) => {
   const { data: tags, isLoading: isTagLoading } = useItemTags(itemId);
   const showItem =
     item && (!tags || tags.isEmpty() || (tags && !isHidden(tags.toJS())));
-  const isExpanded = expandedItems?.includes(itemId);
-
   const { data: children, isLoading: childrenIsLoading } = useChildren(itemId, {
     enabled: Boolean(
-      item && showItem && item.get('type') === ITEM_TYPES.FOLDER && isExpanded,
+      item && showItem && item.get('type') === ITEM_TYPES.FOLDER,
     ),
   });
   const { data: childrenTags, isLoading: isChildrenTagsLoading } = useItemsTags(
@@ -36,6 +35,7 @@ const CustomTreeItem = ({ itemId, expandedItems = [], selectedId }) => {
   if (isLoading || isTagLoading) {
     return (
       <TreeItem
+        ContentComponent={CustomContentTree}
         nodeId={`loading-${itemId}`}
         key={itemId}
         label={LoadingTreeItem}
@@ -51,7 +51,8 @@ const CustomTreeItem = ({ itemId, expandedItems = [], selectedId }) => {
       return LoadingTreeItem;
     }
     const filteredChildren = children?.filter(
-      (_child, idx) => !isHidden(childrenTags?.get(idx)),
+      (child, idx) =>
+        !isHidden(childrenTags?.get(idx)) && child.type === ITEM_TYPES.FOLDER,
     );
 
     if (!filteredChildren?.size) {
@@ -73,6 +74,7 @@ const CustomTreeItem = ({ itemId, expandedItems = [], selectedId }) => {
   // recursive display of children
   return (
     <TreeItem
+      ContentComponent={CustomContentTree}
       key={itemId}
       nodeId={itemId}
       label={content}
