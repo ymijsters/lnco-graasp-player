@@ -7,6 +7,7 @@ import {
   LinkItem,
   AppItem,
   TextEditor,
+  withCollapse,
 } from '@graasp/ui';
 import Alert from '@material-ui/lab/Alert';
 import { useTranslation } from 'react-i18next';
@@ -72,8 +73,10 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
     return <Alert severity="error">{t('An unexpected error occured.')}</Alert>;
   }
 
+  const showCollapse = item.get('settings')?.isExpandable;
+
   switch (item.get('type')) {
-    case ITEM_TYPES.FOLDER:
+    case ITEM_TYPES.FOLDER: {
       // do not display children folders if they are not pinned
       if (!item.get('settings')?.isPinned && isChildren) {
         return null;
@@ -105,11 +108,20 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
             ))}
         </Container>
       );
-    case ITEM_TYPES.LINK:
-      return <LinkItem item={item} height={SCREEN_MAX_HEIGHT} />;
+    }
+    case ITEM_TYPES.LINK: {
+      const linkItem = <LinkItem item={item} height={SCREEN_MAX_HEIGHT} />;
+
+      if (showCollapse) {
+        return withCollapse({
+          item,
+        })(linkItem);
+      }
+      return linkItem;
+    }
     case ITEM_TYPES.FILE:
     case ITEM_TYPES.S3_FILE: {
-      return (
+      const fileItem = (
         <FileItem
           id={buildFileId(id)}
           item={item}
@@ -117,16 +129,32 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
           maxHeight={SCREEN_MAX_HEIGHT}
         />
       );
+
+      if (showCollapse) {
+        return withCollapse({
+          item,
+        })(fileItem);
+      }
+      return fileItem;
     }
     case ITEM_TYPES.DOCUMENT: {
-      return <DocumentItem id={buildDocumentId(id)} item={item} readOnly />;
+      const documentItem = (
+        <DocumentItem id={buildDocumentId(id)} item={item} readOnly />
+      );
+
+      if (showCollapse) {
+        return withCollapse({
+          item,
+        })(documentItem);
+      }
+      return documentItem;
     }
     case ITEM_TYPES.APP: {
       if (isMemberLoading) {
         return <Loader />;
       }
 
-      return (
+      const appItem = (
         <AppItem
           id={buildAppId(id)}
           item={item}
@@ -136,6 +164,13 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
           requestApiAccessToken={Api.requestApiAccessToken}
         />
       );
+
+      if (showCollapse) {
+        return withCollapse({
+          item,
+        })(appItem);
+      }
+      return appItem;
     }
     default:
       console.error(`The type ${item?.get('type')} is not defined`);
