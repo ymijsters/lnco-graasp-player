@@ -1,16 +1,19 @@
-name: CDelivery pipeline for Graasp perform
+name: Continuous Delivery pipeline for Graasp perform
 
 # Controls when the action will run.
 on:
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+  # Triggers the workflow on repository-dispatch event
+  repository_dispatch:
+    types: [staging-deployment]
 
+# This workflow is made up of one job that calls the reusable workflow in graasp-deploy
 jobs:
   graasp-deploy-s3-workflow:
     name: Graasp Player
     uses: graasp/graasp-deploy/.github/workflows/cdelivery-s3.yml@main
     with:
       build-folder: 'build'
+      tag: ${{ github.event.client_payload.tag }}
     secrets:
       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
@@ -19,8 +22,6 @@ jobs:
       cloudfront-distribution: ${{ secrets.CLOUDFRONT_DISTRIBUTION_GRAASP_PERFORM_PROD }}
       api-host: ${{ secrets.REACT_APP_API_HOST_PROD }}
       port: ${{ secrets.PORT }}
-      show-notifications: true
+      show-notifications: ${{ secrets.SHOW_NOTIFICATIONS }}
       authentication-host: ${{ secrets.REACT_APP_AUTHENTICATION_HOST_PROD }}
       graasp-compose-host: ${{ secrets.REACT_APP_GRAASP_COMPOSE_HOST_PROD }}
-
-
