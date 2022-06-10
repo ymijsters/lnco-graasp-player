@@ -15,13 +15,13 @@ jobs:
       build-folder: 'build'
       tag: ${{ github.event.client_payload.tag }}
     secrets:
-      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
-      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
-      aws-region: ${{ secrets.AWS_REGION_PROD }}
-      aws-s3-bucket-name: ${{ secrets.AWS_S3_BUCKET_NAME_GRAASP_PERFORM_PROD }}
-      cloudfront-distribution: ${{ secrets.CLOUDFRONT_DISTRIBUTION_GRAASP_PERFORM_PROD }}
-      api-host: ${{ secrets.REACT_APP_API_HOST_PROD }}
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_STAGE }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_STAGE }}
+      aws-region: ${{ secrets.AWS_REGION_STAGE }}
+      aws-s3-bucket-name: ${{ secrets.AWS_S3_BUCKET_NAME_GRAASP_PERFORM_STAGE }}
+      cloudfront-distribution-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_GRAASP_PERFORM_STAGE }}
+      api-host: ${{ secrets.REACT_APP_API_HOST_STAGE }}
       port: ${{ secrets.PORT }}
       show-notifications: ${{ secrets.SHOW_NOTIFICATIONS }}
-      authentication-host: ${{ secrets.REACT_APP_AUTHENTICATION_HOST_PROD }}
-      graasp-compose-host: ${{ secrets.REACT_APP_GRAASP_COMPOSE_HOST_PROD }}
+      authentication-host: ${{ secrets.REACT_APP_AUTHENTICATION_HOST_STAGE }}
+      graasp-compose-host: ${{ secrets.REACT_APP_GRAASP_COMPOSE_HOST_STAGE }}
