@@ -1,0 +1,33 @@
+name: Deploy Graasp perform to development environment
+
+# Controls when the action will run.
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches: [main]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  graasp-deploy-s3-workflow:
+    name: Graasp Player
+    # Reference reusable workflow file. Using the commit SHA is the safest for stability and security
+    uses: graasp/graasp-deploy/.github/workflows/cintegration-s3.yml@5ad156f86b2de177a81546db2ddc252a2ace36ca
+    with:
+      build-folder: 'build'
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
+      aws-region: ${{ secrets.AWS_REGION_DEV }}
+      aws-s3-bucket-name: ${{ secrets.AWS_S3_BUCKET_NAME_GRAASP_PERFORM_DEV }}
+      cloudfront-distribution-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_GRAASP_PERFORM_DEV }}
+      api-host: ${{ secrets.REACT_APP_API_HOST_DEV }}
+      port: ${{ secrets.PORT }}
+      show-notifications: ${{ secrets.SHOW_NOTIFICATIONS }}
+      authentication-host: ${{ secrets.REACT_APP_AUTHENTICATION_HOST_DEV }}
+      graasp-compose-host: ${{ secrets.REACT_APP_GRAASP_COMPOSE_HOST_DEV }}
