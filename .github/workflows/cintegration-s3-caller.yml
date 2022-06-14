@@ -5,7 +5,7 @@ on:
   # Triggers the workflow on push events only for the main branch
   push:
     branches:
-    - main
+      - main
 
   # Triggers the workflow on closed pull request events only for the main branch
   pull_request:
@@ -22,7 +22,7 @@ jobs:
   graasp-deploy-s3-workflow:
     name: Graasp Player
     # Reference reusable workflow file. Using the commit SHA is the safest for stability and security
-    uses: graasp/graasp-deploy/.github/workflows/cintegration-s3.yml@3c806d07c981f62ba680173d6ba087fe21a98bd3
+    uses: graasp/graasp-deploy/.github/workflows/cintegration-s3.yml@e8d867feae69292a412f781299ade402e047b7a4
     with:
       build-folder: 'build'
     secrets:
