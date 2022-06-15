@@ -1,4 +1,4 @@
-name: Deploy Graasp perform to development environment
+name: Deploy to development environment
 
 # Control when the action will run.
 on:
@@ -7,17 +7,10 @@ on:
     branches:
       - main
 
-  # Triggers the workflow on closed pull request events only for the main branch
-  pull_request:
-    branches: [main]
-    types: [closed]
-
   # Allows to run the workflow manually from the Actions tab
   workflow_dispatch:
 
-env:
-  NODE_OPTIONS: '--max_old_space_size=4096'
-
+# This workflow is made up of one job that calls the reusable workflow in graasp-deploy
 jobs:
   graasp-deploy-s3-workflow:
     name: Graasp Player
