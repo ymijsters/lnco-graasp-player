@@ -22,6 +22,8 @@ jobs:
       cloudfront-distribution-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_GRAASP_PERFORM_STAGE }}
       api-host: ${{ secrets.REACT_APP_API_HOST_STAGE }}
       port: ${{ secrets.PORT }}
-      show-notifications: ${{ secrets.SHOW_NOTIFICATIONS }}
+      show-notifications: ${{ secrets.REACT_APP_SHOW_NOTIFICATIONS }}
       authentication-host: ${{ secrets.REACT_APP_AUTHENTICATION_HOST_STAGE }}
       graasp-compose-host: ${{ secrets.REACT_APP_GRAASP_COMPOSE_HOST_STAGE }}
+      graasp-explorer-host: ${{ secrets.REACT_APP_GRAASP_EXPLORE_HOST_STAGE }}
+      domain: ${{ secrets.REACT_APP_DOMAIN_STAGE }}
