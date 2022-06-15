@@ -1,4 +1,4 @@
-name: Deploy Graasp perform to development environment
+name: Deploy to development environment
 
 # Control when the action will run.
 on:
@@ -7,22 +7,15 @@ on:
     branches:
       - main
 
-  # Triggers the workflow on closed pull request events only for the main branch
-  pull_request:
-    branches: [main]
-    types: [closed]
-
   # Allows to run the workflow manually from the Actions tab
   workflow_dispatch:
 
-env:
-  NODE_OPTIONS: '--max_old_space_size=4096'
-
+# This workflow is made up of one job that calls the reusable workflow in graasp-deploy
 jobs:
   graasp-deploy-s3-workflow:
     name: Graasp Player
     # Reference reusable workflow file. Using the commit SHA is the safest for stability and security
-    uses: graasp/graasp-deploy/.github/workflows/cintegration-s3.yml@e8d867feae69292a412f781299ade402e047b7a4
+    uses: graasp/graasp-deploy/.github/workflows/cintegration-s3.yml@5049607f97ad484178fe228673f1802974af834f
     with:
       build-folder: 'build'
     secrets:
@@ -33,6 +26,8 @@ jobs:
       cloudfront-distribution-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_GRAASP_PERFORM_DEV }}
       api-host: ${{ secrets.REACT_APP_API_HOST_DEV }}
       port: ${{ secrets.PORT }}
-      show-notifications: ${{ secrets.SHOW_NOTIFICATIONS }}
+      show-notifications: ${{ secrets.REACT_APP_SHOW_NOTIFICATIONS }}
       authentication-host: ${{ secrets.REACT_APP_AUTHENTICATION_HOST_DEV }}
       graasp-compose-host: ${{ secrets.REACT_APP_GRAASP_COMPOSE_HOST_DEV }}
+      graasp-explorer-host: ${{ secrets.REACT_APP_GRAASP_EXPLORE_HOST_DEV }}
+      domain: ${{ secrets.REACT_APP_DOMAIN_DEV }}
