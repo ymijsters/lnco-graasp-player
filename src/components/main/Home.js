@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router';
 import HeaderRightContent from './HeaderRightContent';
 import CookiesBanner from './CookiesBanner';
 import { hooks } from '../../config/queryClient';
-import { buildTreeItemClass } from '../../config/selectors';
+import { buildTreeItemClass, OWN_ITEMS_GRID_ID } from '../../config/selectors';
 import ItemCard from '../common/ItemCard';
 import { buildMainPath } from '../../config/paths';
 import DynamicTreeView from '../common/Tree/Tree';
@@ -37,11 +37,12 @@ const Home = () => {
     useItemsTags(sharedItems?.map(({ id }) => id).toJS());
 
   const filtred = ownItems?.filter(
-    (_item, idx) => !isLoadingOwnTags && !isHidden(ownItemsTags.get(idx)),
+    (_item, idx) => !isLoadingOwnTags && !isHidden(ownItemsTags?.get(idx)),
   );
 
   const shared = sharedItems?.filter(
-    (_item, idx) => !isLoadingSharedTags && !isHidden(sharedItemsTags.get(idx)),
+    (_item, idx) =>
+      !isLoadingSharedTags && !isHidden(sharedItemsTags?.get(idx)),
   );
 
   const renderSharedItems = () => {
@@ -80,7 +81,7 @@ const Home = () => {
     return (
       <>
         <Typography variant="h4">{t('My Items')}</Typography>
-        <Grid container spacing={3} justify="center">
+        <Grid id={OWN_ITEMS_GRID_ID} container spacing={3} justify="center">
           {filtred.map((i) => (
             <Grid item lg={3} md={4} sm={6}>
               <ItemCard item={i} />
