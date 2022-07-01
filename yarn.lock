@@ -2157,7 +2157,7 @@ __metadata:
 
 "@graasp/ui@github:graasp/graasp-ui":
   version: 0.2.0
-  resolution: "@graasp/ui@https://github.com/graasp/graasp-ui.git#commit=a6d1845020858db0fbf3f5ff12b2810726a4e28f"
+  resolution: "@graasp/ui@https://github.com/graasp/graasp-ui.git#commit=d9bfcd0fecd1f59d983f7489e55c4bc849a9cbd5"
   dependencies:
     "@graasp/utils": "github:graasp/graasp-utils.git"
     clsx: 1.1.1
@@ -2182,7 +2182,12 @@ __metadata:
     react: ^16.13.1
     react-dom: 16.13.1
     react-router-dom: 6.2.2
-  checksum: b8d7de2da9498586537021db436c8362e63a0e27487185daaacbcc80354723d356f0bcc7a41f2da804c34e28901b77e8717c0e29b89274aecccda51191161847
+  peerDependenciesMeta:
+    ag-grid-community:
+      optional: true
+    ag-grid-react:
+      optional: true
+  checksum: d9dd7cc73d7649463a3754ead720a90d4559c54d64a5129db89f06f1f2503219e1df04a9142a54c272c2b2ab5ae3324f08df24d41ad620763ad21acf4ce7be84
   languageName: node
   linkType: hard
 
@@ -4279,26 +4284,6 @@ __metadata:
     loader-utils: ^2.0.0
     regex-parser: ^2.2.11
   checksum: 5ceabea85219fcafed06f7d1aafb37dc761c6435e4ded2a8c6b01c69844250aa94ef65a4d07210dc7566c2d8b4c9ba8897518db596a550461eed26fbeb76b96f
-  languageName: node
-  linkType: hard
-
-"ag-grid-community@npm:27.3.0":
-  version: 27.3.0
-  resolution: "ag-grid-community@npm:27.3.0"
-  checksum: 3041c188239c50b875d45f82e4de1adfc7170c7338d0c18e504bc4d57bf71906bf291aaee0c59149ad65900e7308268ed5db32ad7f5f2368ef8e9e6b2c156a02
-  languageName: node
-  linkType: hard
-
-"ag-grid-react@npm:27.3.0":
-  version: 27.3.0
-  resolution: "ag-grid-react@npm:27.3.0"
-  dependencies:
-    prop-types: ^15.8.1
-  peerDependencies:
-    ag-grid-community: ~27.3.0
-    react: ^16.3.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.3.0 || ^17.0.0 || ^18.0.0
-  checksum: 9e4b7dd3649fb9ff2e4f0c63d273c7e76b076c5329812e775e43a0bf367b315e34968874d041001f0f29976160aa4dc62626c60ce4e6fd4f6d4d00f468a54810
   languageName: node
   linkType: hard
 
@@ -10325,8 +10310,6 @@ __metadata:
     "@testing-library/jest-dom": 5.16.1
     "@testing-library/react": 12.1.2
     "@testing-library/user-event": 13.5.0
-    ag-grid-community: 27.3.0
-    ag-grid-react: 27.3.0
     clsx: 1.1.1
     concurrently: 7.0.0
     cypress: 9.5.2
