@@ -10,13 +10,18 @@ import {
   AppItem,
   DocumentItem,
   FileItem,
+  H5PItem,
   LinkItem,
   Loader,
   TextEditor,
   withCollapse,
 } from '@graasp/ui';
 
-import { API_HOST, SCREEN_MAX_HEIGHT } from '../../config/constants';
+import {
+  API_HOST,
+  H5P_INTEGRATION_URL,
+  SCREEN_MAX_HEIGHT,
+} from '../../config/constants';
 import { hooks } from '../../config/queryClient';
 import {
   FOLDER_NAME_TITLE_CLASS,
@@ -182,6 +187,24 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
       }
       return appItem;
     }
+
+    case ITEM_TYPES.H5P: {
+      const contentId = item.get('extra')?.h5p?.contentId;
+      if (!contentId) {
+        return (
+          <Alert severity="error">{t('An unexpected error occured.')}</Alert>
+        );
+      }
+
+      return (
+        <H5PItem
+          itemId={id}
+          contentId={contentId}
+          integrationUrl={H5P_INTEGRATION_URL}
+        />
+      );
+    }
+
     default:
       console.error(`The type ${item?.type} is not defined`);
       return null;

@@ -7,10 +7,11 @@
 // commands please read more here:
 // https://on.cypress.io/custom-commands
 // ***********************************************
+import { COOKIE_KEYS } from '@graasp/sdk';
 
-import { COOKIE_KEYS } from '@graasp/utils';
 import { CURRENT_USER, MEMBERS } from '../fixtures/members';
 import {
+  mockAuthPage,
   mockDefaultDownloadFile,
   mockGetChildren,
   mockGetCurrentMember,
@@ -18,13 +19,12 @@ import {
   mockGetItemTags,
   mockGetItemsTags,
   mockGetMemberBy,
-  mockGetPublicItem,
+  mockGetMembers,
   mockGetPublicChildren,
+  mockGetPublicItem,
+  mockProfilePage,
   mockPublicDefaultDownloadFile,
   mockSignOut,
-  mockGetMembers,
-  mockProfilePage,
-  mockAuthPage,
 } from './server';
 
 Cypress.Commands.add(

@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 import { useLocation } from 'react-router';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
+import { saveUrlForRedirection } from '@graasp/sdk';
 import { Loader, withAuthorization } from '@graasp/ui';
-import { saveUrlForRedirection } from '@graasp/utils';
 
 import { DOMAIN, SIGN_IN_PATH } from '../config/constants';
 import { HOME_PATH, buildMainPath } from '../config/paths';
