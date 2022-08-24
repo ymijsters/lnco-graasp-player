@@ -3,9 +3,9 @@
   The main goal is to add the ability to filter the item based on their tags. The Tree
   check for each element in the tree if it should be displayed (no hidden tag).
   This feature should be ported to graasp-ui. */
+import { Record } from 'immutable';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Record } from 'immutable';
 
 import Skeleton from '@material-ui/lab/Skeleton';
 
@@ -22,7 +22,10 @@ const { useItem, useItemTags, useItemsTags, useChildren } = hooks;
 const LoadingTreeItem = <Skeleton variant="text" />;
 
 const CustomTreeItem = ({ itemProp, expandedItems = [], selectedId }) => {
-  const itemId = (itemProp.type === ITEM_TYPES.SHORTCUT && itemProp.extra?.shortcut?.target) ? itemProp.extra?.shortcut?.target : itemProp.id;
+  const itemId =
+    itemProp.type === ITEM_TYPES.SHORTCUT && itemProp.extra?.shortcut?.target
+      ? itemProp.extra?.shortcut?.target
+      : itemProp.id;
 
   const { data: item, isLoading, isError } = useItem(itemId);
   const { data: tags, isLoading: isTagLoading } = useItemTags(itemId);
@@ -55,7 +58,8 @@ const CustomTreeItem = ({ itemProp, expandedItems = [], selectedId }) => {
     }
     const filteredChildren = children?.filter(
       (child, idx) =>
-        !isHidden(childrenTags?.get(idx)) && ([ITEM_TYPES.FOLDER, ITEM_TYPES.SHORTCUT].includes(child.type)),
+        !isHidden(childrenTags?.get(idx)) &&
+        [ITEM_TYPES.FOLDER, ITEM_TYPES.SHORTCUT].includes(child.type),
     );
 
     if (!filteredChildren?.size) {
@@ -76,7 +80,7 @@ const CustomTreeItem = ({ itemProp, expandedItems = [], selectedId }) => {
 
   if (item.type !== ITEM_TYPES.FOLDER) {
     return null;
-  };
+  }
 
   // recursive display of children
   return (
