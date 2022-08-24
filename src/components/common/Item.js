@@ -205,6 +205,13 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
       );
     }
 
+    case ITEM_TYPES.SHORTCUT: {
+      if (item.extra?.shortcut?.target) {
+        return <Item isChildren id={item.extra?.shortcut?.target} />;
+      };
+      return null;
+    }
+
     default:
       console.error(`The type ${item?.type} is not defined`);
       return null;

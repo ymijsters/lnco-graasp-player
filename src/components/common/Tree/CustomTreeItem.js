@@ -5,6 +5,7 @@
   This feature should be ported to graasp-ui. */
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Record } from 'immutable';
 
 import Skeleton from '@material-ui/lab/Skeleton';
 
@@ -20,7 +21,9 @@ const { useItem, useItemTags, useItemsTags, useChildren } = hooks;
 
 const LoadingTreeItem = <Skeleton variant="text" />;
 
-const CustomTreeItem = ({ itemId, expandedItems = [], selectedId }) => {
+const CustomTreeItem = ({ itemProp, expandedItems = [], selectedId }) => {
+  const itemId = (itemProp.type === ITEM_TYPES.SHORTCUT && itemProp.extra?.shortcut?.target) ? itemProp.extra?.shortcut?.target : itemProp.id;
+
   const { data: item, isLoading, isError } = useItem(itemId);
   const { data: tags, isLoading: isTagLoading } = useItemTags(itemId);
   const showItem =
@@ -52,24 +55,28 @@ const CustomTreeItem = ({ itemId, expandedItems = [], selectedId }) => {
     }
     const filteredChildren = children?.filter(
       (child, idx) =>
-        !isHidden(childrenTags?.get(idx)) && child.type === ITEM_TYPES.FOLDER,
+        !isHidden(childrenTags?.get(idx)) && ([ITEM_TYPES.FOLDER, ITEM_TYPES.SHORTCUT].includes(child.type)),
     );
 
     if (!filteredChildren?.size) {
       return null;
     }
 
-    return filteredChildren.map(({ id: childId }) => (
+    return filteredChildren.map((childItem) => (
       <CustomTreeItem
-        key={childId}
-        itemId={childId}
+        key={childItem.id}
         expandedItems={expandedItems}
         selectedId={selectedId}
+        itemProp={childItem}
       />
     ));
   };
 
   const content = childrenIsLoading ? LoadingTreeItem : item.name;
+
+  if (item.type !== ITEM_TYPES.FOLDER) {
+    return null;
+  };
 
   // recursive display of children
   return (
@@ -86,9 +93,9 @@ const CustomTreeItem = ({ itemId, expandedItems = [], selectedId }) => {
 };
 
 CustomTreeItem.propTypes = {
-  itemId: PropTypes.string.isRequired,
   expandedItems: PropTypes.arrayOf(PropTypes.string).isRequired,
   selectedId: PropTypes.string.isRequired,
+  itemProp: PropTypes.instanceOf(Record),
 };
 
 export default CustomTreeItem;

@@ -34,7 +34,7 @@ const DynamicTreeView = ({
   const onToggle = (_event, nodeIds) => setExpandedItems(nodeIds);
 
   // show only folder items in the navigation tree
-  const itemsFiltered = items.filter((item) => item.type === ITEM_TYPES.FOLDER);
+  const itemsFiltered = items.filter((item) => [ITEM_TYPES.FOLDER, ITEM_TYPES.SHORTCUT].includes(item.type));
 
   return (
     <TreeView
@@ -52,12 +52,12 @@ const DynamicTreeView = ({
         nodeId={rootId}
         label={rootLabel}
       >
-        {itemsFiltered.map(({ id: itemId }) => (
+        {itemsFiltered.map((item) => (
           <CustomTreeItem
-            key={itemId}
-            itemId={itemId}
+            key={item.id}
             expandedItems={expandedItems}
             selectedId={selectedId}
+            itemProp={item}
           />
         ))}
       </TreeItem>
