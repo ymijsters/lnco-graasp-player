@@ -12,7 +12,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TreeItem from '@mui/lab/TreeItem';
 import TreeView from '@mui/lab/TreeView';
 
-import { ITEM_TYPES } from '../../../enums';
+import { GRAASP_MENU_ITEMS } from '../../../config/constants';
 import CustomContentTree from './CustomContentTree';
 import CustomTreeItem from './CustomTreeItem';
 
@@ -35,7 +35,7 @@ const DynamicTreeView = ({
 
   // show only folder items in the navigation tree
   const itemsFiltered = items.filter((item) =>
-    [ITEM_TYPES.FOLDER, ITEM_TYPES.SHORTCUT].includes(item.type),
+  GRAASP_MENU_ITEMS.includes(item.type),
   );
 
   return (

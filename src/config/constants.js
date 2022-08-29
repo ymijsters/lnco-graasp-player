@@ -1,4 +1,5 @@
 import { buildSignInPath } from '@graasp/sdk';
+import { ITEM_TYPES } from '../enums';
 
 import env from '../env.json';
 
@@ -106,3 +107,5 @@ export const HOST_MAP = {
 };
 
 export const GRAASP_LOGO_HEADER_HEIGHT = 40;
+
+export const GRAASP_MENU_ITEMS = [ITEM_TYPES.FOLDER, ITEM_TYPES.SHORTCUT];

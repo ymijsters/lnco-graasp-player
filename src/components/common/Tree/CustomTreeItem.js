@@ -16,6 +16,7 @@ import { buildTreeItemClass } from '../../../config/selectors';
 import { ITEM_TYPES } from '../../../enums';
 import { isHidden } from '../../../utils/item';
 import CustomContentTree from './CustomContentTree';
+import { GRAASP_MENU_ITEMS } from '../../../config/constants';
 
 const { useItem, useItemTags, useItemsTags, useChildren } = hooks;
 
@@ -52,6 +53,10 @@ const CustomTreeItem = ({ itemProp, expandedItems = [], selectedId }) => {
     return null;
   }
 
+  if (item.type !== ITEM_TYPES.FOLDER) {
+    return null;
+  }
+
   const renderChildrenItems = () => {
     if (childrenIsLoading || isChildrenTagsLoading) {
       return LoadingTreeItem;
@@ -59,7 +64,7 @@ const CustomTreeItem = ({ itemProp, expandedItems = [], selectedId }) => {
     const filteredChildren = children?.filter(
       (child, idx) =>
         !isHidden(childrenTags?.get(idx)) &&
-        [ITEM_TYPES.FOLDER, ITEM_TYPES.SHORTCUT].includes(child.type),
+        GRAASP_MENU_ITEMS.includes(child.type),
     );
 
     if (!filteredChildren?.size) {
@@ -77,10 +82,6 @@ const CustomTreeItem = ({ itemProp, expandedItems = [], selectedId }) => {
   };
 
   const content = childrenIsLoading ? LoadingTreeItem : item.name;
-
-  if (item.type !== ITEM_TYPES.FOLDER) {
-    return null;
-  }
 
   // recursive display of children
   return (

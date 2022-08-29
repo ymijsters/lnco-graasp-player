@@ -209,7 +209,9 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
       if (item.extra?.shortcut?.target) {
         return <Item isChildren id={item.extra?.shortcut?.target} />;
       }
-      return null;
+      return (
+        <Alert severity="error">{t('An unexpected error occured.')}</Alert>
+      );
     }
 
     default:
