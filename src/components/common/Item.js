@@ -44,7 +44,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Item = ({ id, isChildren, showPinnedOnly }) => {
+const Item = ({
+  id,
+  isChildren,
+  showPinnedOnly,
+  isShortcut,
+  isShortcutPinned,
+}) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const { data: item, isLoading, isError } = useItem(id);
@@ -87,14 +93,30 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
 
   switch (item.type) {
     case ITEM_TYPES.FOLDER: {
-      // do not display children folders if they are not pinned
-      if (!item.settings?.isPinned && isChildren) {
-        return null;
-      }
+      if (isChildren) {
+        const folderButton = (
+          <FolderButton id={buildFolderButtonId(id)} item={item} />
+        );
 
-      // only display children folders if they are pinned
-      if (item.settings?.isPinned && isChildren) {
-        return <FolderButton id={buildFolderButtonId(id)} item={item} />;
+        // display children shortcut pinned folders
+        if (isShortcut && isShortcutPinned) {
+          return folderButton;
+        }
+
+        // do not display shortcut folders if they are not pinned
+        if (isShortcut && !isShortcutPinned) {
+          return null;
+        }
+
+        // do not display children folders if they are not pinned
+        if (!item.settings?.isPinned) {
+          return null;
+        }
+
+        // only display children folders if they are pinned
+        if (item.settings?.isPinned) {
+          return folderButton;
+        }
       }
 
       // render each children recursively
@@ -207,7 +229,14 @@ const Item = ({ id, isChildren, showPinnedOnly }) => {
 
     case ITEM_TYPES.SHORTCUT: {
       if (item.extra?.shortcut?.target) {
-        return <Item isChildren id={item.extra?.shortcut?.target} />;
+        return (
+          <Item
+            isChildren
+            isShortcut
+            id={item.extra?.shortcut?.target}
+            isShortcutPinned={item.settings?.isPinned}
+          />
+        );
       }
       return (
         <Alert severity="error">{t('An unexpected error occured.')}</Alert>
@@ -224,6 +253,8 @@ Item.propTypes = {
   id: PropTypes.string.isRequired,
   isChildren: PropTypes.bool,
   showPinnedOnly: PropTypes.bool,
+  isShortcut: PropTypes.bool,
+  isShortcutPinned: PropTypes.bool,
 };
 
 Item.defaultProps = {

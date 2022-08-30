@@ -1,6 +1,6 @@
 import { buildSignInPath } from '@graasp/sdk';
-import { ITEM_TYPES } from '../enums';
 
+import { ITEM_TYPES } from '../enums';
 import env from '../env.json';
 
 const {

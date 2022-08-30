@@ -11,12 +11,12 @@ import Skeleton from '@material-ui/lab/Skeleton';
 
 import TreeItem from '@mui/lab/TreeItem';
 
+import { GRAASP_MENU_ITEMS } from '../../../config/constants';
 import { hooks } from '../../../config/queryClient';
 import { buildTreeItemClass } from '../../../config/selectors';
 import { ITEM_TYPES } from '../../../enums';
 import { isHidden } from '../../../utils/item';
 import CustomContentTree from './CustomContentTree';
-import { GRAASP_MENU_ITEMS } from '../../../config/constants';
 
 const { useItem, useItemTags, useItemsTags, useChildren } = hooks;
 

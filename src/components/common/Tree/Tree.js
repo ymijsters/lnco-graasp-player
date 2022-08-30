@@ -35,7 +35,7 @@ const DynamicTreeView = ({
 
   // show only folder items in the navigation tree
   const itemsFiltered = items.filter((item) =>
-  GRAASP_MENU_ITEMS.includes(item.type),
+    GRAASP_MENU_ITEMS.includes(item.type),
   );
 
   return (
