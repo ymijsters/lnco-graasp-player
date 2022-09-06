@@ -1,36 +1,34 @@
-# This workflow triggers a new workflow inside the graasp-deploy repository. It passes a json 
-# with the repository name and the latest tag pushed from the caller repository. 
-name: Push new tag to graasp-deploy repository
+name: Deploy to development environment
 
-# Controls when the action will run
+# Control when the action will run.
 on:
-  # Allow the workflow to be manually triggered
+  # Triggers the workflow on push events only for the main branch
+  push:
+    branches:
+      - main
+
+  # Allows to run the workflow manually from the Actions tab
   workflow_dispatch:
-    # Inputs the workflow accepts.
-    inputs:
-      release-type:
-        # Description to be shown in the UI instead of 'stack'
-        description: 'Select a release type'
-        # Default value if no value is explicitly provided
-        # Input does not have to be provided for the workflow to run
-        type: choice
-        options: 
-        - first
-        - patch        
-        - minor        
-        - major
-        default: patch
-        required: true
 
 # This workflow is made up of one job that calls the reusable workflow in graasp-deploy
 jobs:
-  graasp-deploy-update-staging-version-workflow:
-    # Replace with repository name
+  graasp-deploy-s3-workflow:
     name: Graasp Player
-    # Replace 'main' with the hash of a commit, so it points to an specific version of the reusable workflow that is used
     # Reference reusable workflow file. Using the commit SHA is the safest for stability and security
-    uses: graasp/graasp-deploy/.github/workflows/update-staging-version.yml@2c1fbb283ea5db70258237bb0fe0fd1a09064861
+    uses: graasp/graasp-deploy/.github/workflows/cintegration-s3.yml@1a7c4c74273be6fd1c56eb6c5a8fb4af2d211b86
     with:
-      release-type: ${{ inputs.release-type }}
+      build-folder: 'build'
     secrets:
-      token: ${{ secrets.REPO_ACCESS_TOKEN }}
+      api-host: ${{ secrets.REACT_APP_API_HOST_DEV }}
+      authentication-host: ${{ secrets.REACT_APP_AUTHENTICATION_HOST_DEV }}
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
+      aws-region: ${{ secrets.AWS_REGION_DEV }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
+      aws-s3-bucket-name: ${{ secrets.AWS_S3_BUCKET_NAME_GRAASP_PERFORM_DEV }}
+      cloudfront-distribution-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_GRAASP_PERFORM_DEV }}
+      domain: ${{ secrets.REACT_APP_DOMAIN_DEV }}
+      graasp-compose-host: ${{ secrets.BUILDER_CLIENT_HOST_DEV }}
+      graasp-explorer-host: ${{ secrets.EXPLORER_CLIENT_HOST_DEV }}
+      h5p-integration-url: ${{ secrets.H5P_INTEGRATION_URL_DEV }}
+      port: ${{ secrets.PORT }}
+      show-notifications: ${{ secrets.REACT_APP_SHOW_NOTIFICATIONS }}
