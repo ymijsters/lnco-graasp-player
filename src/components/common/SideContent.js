@@ -5,7 +5,16 @@ import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
-import { Box, Paper, Slide, Tooltip } from '@material-ui/core';
+import {
+  Box,
+  Divider,
+  Drawer,
+  Paper,
+  Slide,
+  Toolbar,
+  Tooltip,
+  Typography,
+} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -32,34 +41,42 @@ const useStyles = makeStyles((theme) => ({
   iconButton: {
     float: 'right',
   },
-  root: {
-    display: 'flex',
-  },
+  // root: {
+  //   display: 'flex',
+  // },
   drawer: {
     width: DRAWER_WIDTH,
     flexShrink: 0,
   },
+  drawerPaper: {
+    width: DRAWER_WIDTH,
+    padding: theme.spacing(1),
+  },
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
-    padding: theme.spacing(0, 1),
     // necessary for content to be below app bar
-    justifyContent: 'flex-start',
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-end',
   },
   content: {
+    // display: 'flex',
+    // flexDirection: 'column',
+    position: 'relative',
     flexGrow: 1,
     padding: theme.spacing(3),
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    marginRight: 0,
   },
   contentShift: {
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    marginRight: 0,
+    marginRight: DRAWER_WIDTH,
   },
 }));
 
@@ -77,8 +94,8 @@ const SideContent = ({ children, item }) => {
   const parents = getParentsIdsFromPath(item.path || item.id);
   const parentsIds = parents.slice(
     parents.indexOf(rootId),
-    /* When splitting the path, it returns the current element in the array. 
-    However because we use the item components, if the item is not a folder it will be rendered 
+    /* When splitting the path, it returns the current element in the array.
+    However because we use the item components, if the item is not a folder it will be rendered
     pinned or not. Because we just loop over the parents to get their pinned items.
     If the item is a folder, we can keep it in the path to show the items that are pinned in it */
     isFolder ? parents.length : -1,
@@ -155,29 +172,27 @@ const SideContent = ({ children, item }) => {
     if (!settings?.showChatbox) return null;
 
     return (
-      <Paper square>
-        <Slide
-          anchor="right"
-          direction="left"
-          in={isChatboxMenuOpen}
-          mountOnEnter
-          unmountOnExit
-          minHeight={window.innerHeight - HEADER_HEIGHT}
-        >
-          <Box className={classes.drawer}>
-            <div className={classes.drawerHeader}>
-              <IconButton id={PANNEL_CLOSE_BUTTON_ID} onClick={toggleChatOpen}>
-                {theme.direction === 'rtl' ? (
-                  <ChevronLeftIcon />
-                ) : (
-                  <ChevronRightIcon />
-                )}
-              </IconButton>
-            </div>
-            <Chatbox item={item} />
-          </Box>
-        </Slide>
-      </Paper>
+      <Drawer
+        anchor="right"
+        variant="persistent"
+        open={isChatboxMenuOpen}
+        className={classes.drawer}
+        classes={{ paper: classes.drawerPaper }}
+      >
+        <Toolbar />
+        <div className={classes.drawerHeader}>
+          <Typography variant="h6">{t('Comments')}</Typography>
+          <IconButton id={PANNEL_CLOSE_BUTTON_ID} onClick={toggleChatOpen}>
+            {theme.direction === 'rtl' ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
+          </IconButton>
+        </div>
+        <Divider />
+        <Chatbox item={item} />
+      </Drawer>
     );
   };
 
@@ -220,24 +235,25 @@ const SideContent = ({ children, item }) => {
   };
 
   return (
-    <div className={classes.root}>
-      <main
-        className={clsx(classes.content, {
-          [classes.contentShift]: isChatboxMenuOpen || isPinnedMenuOpen,
-        })}
-      >
-        {displayChatButton()}
-
-        {displayPinButton()}
-
-        <BuilderButton id={item.id} />
-
-        {children}
-      </main>
-
+    <div>
       {displayChatbox()}
-
       {displayPinnedItems()}
+      <div className={classes.root}>
+        <main
+          className={clsx(classes.content, {
+            // todo: why is pinned true by default ? when there is no pins this makes no sense...
+            [classes.contentShift]: isChatboxMenuOpen || isPinnedMenuOpen,
+          })}
+        >
+          {displayChatButton()}
+
+          {displayPinButton()}
+
+          <BuilderButton id={item.id} />
+
+          {children}
+        </main>
+      </div>
     </div>
   );
 };

@@ -14,14 +14,16 @@ import { hooks, useMutation } from '../../config/queryClient';
 import { ITEM_CHATBOX_ID } from '../../config/selectors';
 import { CurrentMemberContext } from '../context/CurrentMemberContext';
 
-const { useItemChat, useMembers } = hooks;
+const { useItemChat, useMembers, useAvatar, useItemMemberships } = hooks;
 
 const Chatbox = ({ item }) => {
   const { t } = useTranslation();
   const { data: chat, isLoading: isChatLoading } = useItemChat(item.id);
-  const { data: members, isLoading: isMembersLoading } = useMembers([
-    ...new Set(chat?.messages.map(({ creator }) => creator)),
-  ]);
+  const { data: itemPermissions, isLoading: isLoadingItemPermissions } =
+    useItemMemberships(item.id);
+  const { data: members, isLoading: isMembersLoading } = useMembers(
+    itemPermissions?.map((m) => m.memberId)?.toArray() || [],
+  );
   const { data: currentMember, isLoadingCurrentMember } =
     useContext(CurrentMemberContext);
   const { mutate: sendMessage } = useMutation(
@@ -33,26 +35,14 @@ const Chatbox = ({ item }) => {
   const { mutate: deleteMessage } = useMutation(
     MUTATION_KEYS.DELETE_ITEM_CHAT_MESSAGE,
   );
-  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
-
-  useEffect(
-    () => {
-      const handleResize = () => {
-        setWindowHeight(window.innerHeight);
-      };
-      window.addEventListener('resize', handleResize);
-
-      // cleanup eventListener
-      return () => {
-        window.removeEventListener('resize', handleResize);
-      };
-    },
-    // run on first render only
-    [],
-  );
 
   const renderChatbox = () => {
-    if (isChatLoading || isLoadingCurrentMember || isMembersLoading) {
+    if (
+      isChatLoading ||
+      isLoadingCurrentMember ||
+      isMembersLoading ||
+      isLoadingItemPermissions
+    ) {
       return <Loader />;
     }
 
@@ -64,21 +54,16 @@ const Chatbox = ({ item }) => {
         members={members}
         currentMember={currentMember}
         chatId={item.id}
-        messages={List(messages)}
-        height={windowHeight - HEADER_HEIGHT * 2}
+        messages={chat?.messages}
         sendMessageFunction={sendMessage}
         editMessageFunction={editMessage}
         deleteMessageFunction={deleteMessage}
+        useAvatarHook={useAvatar}
       />
     );
   };
 
-  return (
-    <>
-      <Typography variant="h5">{t('Comments')}</Typography>
-      {renderChatbox()}
-    </>
-  );
+  return <>{renderChatbox()}</>;
 };
 
 Chatbox.propTypes = {
