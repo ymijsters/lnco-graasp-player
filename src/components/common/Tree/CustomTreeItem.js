@@ -17,6 +17,7 @@ import { buildTreeItemClass } from '../../../config/selectors';
 import { ITEM_TYPES } from '../../../enums';
 import { isHidden } from '../../../utils/item';
 import CustomContentTree from './CustomContentTree';
+import CustomTreeShortcutItem from './CustomTreeShortcutItem';
 
 const { useItem, useItemTags, useItemsTags, useChildren } = hooks;
 
@@ -33,7 +34,12 @@ const CustomTreeItem = ({ itemProp, expandedItems = [], selectedId }) => {
   const showItem =
     item && (!tags || tags.isEmpty() || (tags && !isHidden(tags.toJS())));
   const { data: children, isLoading: childrenIsLoading } = useChildren(itemId, {
-    enabled: Boolean(item && showItem && item.type === ITEM_TYPES.FOLDER),
+    enabled: Boolean(
+      item &&
+        showItem &&
+        item.type === ITEM_TYPES.FOLDER &&
+        itemProp.type === ITEM_TYPES.FOLDER,
+    ),
   });
   const { data: childrenTags, isLoading: isChildrenTagsLoading } = useItemsTags(
     children?.map((child) => child.id).toJS(),
@@ -82,6 +88,11 @@ const CustomTreeItem = ({ itemProp, expandedItems = [], selectedId }) => {
   };
 
   const content = childrenIsLoading ? LoadingTreeItem : item.name;
+
+  // render CustomTreeShortcutItem when original item is a shortcut
+  if (itemProp.type === ITEM_TYPES.SHORTCUT) {
+    return <CustomTreeShortcutItem itemId={itemId} content={content} />;
+  }
 
   // recursive display of children
   return (

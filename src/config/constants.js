@@ -8,6 +8,7 @@ const {
   SHOW_NOTIFICATIONS: ENV_SHOW_NOTIFICATIONS,
   AUTHENTICATION_HOST: ENV_AUTHENTICATION_HOST,
   GRAASP_COMPOSE_HOST: ENV_GRAASP_COMPOSE_HOST,
+  GRAASP_PERFORM_HOST: ENV_GRAASP_PERFORM_HOST,
   GRAASP_EXPLORE_HOST: ENV_GRAASP_EXPLORE_HOST,
   H5P_INTEGRATION_URL: ENV_H5P_INTEGRATION_URL,
   NODE_ENV: ENV_NODE_ENV,
@@ -58,6 +59,11 @@ export const GRAASP_EXPLORE_HOST =
   process.env.REACT_APP_GRAASP_EXPLORE_HOST ||
   'http://localhost:3005';
 
+export const GRAASP_PERFORM_HOST =
+  ENV_GRAASP_PERFORM_HOST ||
+  process.env.REACT_APP_GRAASP_PERFORM_HOST ||
+  'http://localhost:3112';
+
 export const H5P_INTEGRATION_URL =
   ENV_H5P_INTEGRATION_URL ||
   process.env.REACT_APP_H5P_INTEGRATION_URL ||
@@ -75,6 +81,9 @@ export const SCREEN_MAX_HEIGHT = window.innerHeight * 0.8;
 
 export const buildGraaspComposeItemRoute = (id) =>
   `${GRAASP_COMPOSE_HOST}/items/${id}`;
+
+export const buildGraaspPerformItemRoute = (id) =>
+  `${GRAASP_PERFORM_HOST}/${id}`;
 
 export const ITEM_CARD_MAX_LENGTH = 18;
 export const HEADER_HEIGHT = 64;
