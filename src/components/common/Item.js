@@ -205,7 +205,7 @@ const Item = ({ id, isChildren, showPinnedOnly, itemType, isCollapsible }) => {
     }
     case ITEM_TYPES.LINK: {
       const linkItem = (
-        <LinkItem item={item} height={SCREEN_MAX_HEIGHT} isResizable />
+        <LinkItem item={item} height={SCREEN_MAX_HEIGHT} member={member} isResizable />
       );
 
       if (showCollapse) {
