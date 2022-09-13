@@ -52,7 +52,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Item = ({ id, isChildren, showPinnedOnly, itemType, isCollapsible }) => {
+
+const Item = ({
+  id,
+  isChildren,
+  showPinnedOnly,
+  itemType,
+  isCollapsible,
+  isShortcut,
+  isShortcutPinned,
+}) => {
   const { ref, inView } = useInView();
   const { t } = useTranslation();
   const classes = useStyles();
@@ -131,14 +140,30 @@ const Item = ({ id, isChildren, showPinnedOnly, itemType, isCollapsible }) => {
 
   switch (item.type) {
     case ITEM_TYPES.FOLDER: {
-      // do not display children folders if they are not pinned
-      if (!item.settings?.isPinned && isChildren) {
-        return null;
-      }
+      if (isChildren) {
+        const folderButton = (
+          <FolderButton id={buildFolderButtonId(id)} item={item} />
+        );
 
-      // only display children folders if they are pinned
-      if (item.settings?.isPinned && isChildren) {
-        return <FolderButton id={buildFolderButtonId(id)} item={item} />;
+        // display children shortcut pinned folders
+        if (isShortcut && isShortcutPinned) {
+          return folderButton;
+        }
+
+        // do not display shortcut folders if they are not pinned
+        if (isShortcut && !isShortcutPinned) {
+          return null;
+        }
+
+        // do not display children folders if they are not pinned
+        if (!item.settings?.isPinned) {
+          return null;
+        }
+
+        // only display children folders if they are pinned
+        if (item.settings?.isPinned) {
+          return folderButton;
+        }
       }
 
       const showLoadMoreButton =
@@ -291,6 +316,22 @@ const Item = ({ id, isChildren, showPinnedOnly, itemType, isCollapsible }) => {
       );
     }
 
+    case ITEM_TYPES.SHORTCUT: {
+      if (item.extra?.shortcut?.target) {
+        return (
+          <Item
+            isChildren
+            isShortcut
+            id={item.extra?.shortcut?.target}
+            isShortcutPinned={item.settings?.isPinned}
+          />
+        );
+      }
+      return (
+        <Alert severity="error">{t('An unexpected error occured.')}</Alert>
+      );
+    }
+
     default:
       console.error(`The type ${item?.type} is not defined`);
       return null;
@@ -301,6 +342,8 @@ Item.propTypes = {
   id: PropTypes.string.isRequired,
   isChildren: PropTypes.bool,
   showPinnedOnly: PropTypes.bool,
+  isShortcut: PropTypes.bool,
+  isShortcutPinned: PropTypes.bool,
   itemType: PropTypes.string,
   isCollapsible: PropTypes.bool,
 };
