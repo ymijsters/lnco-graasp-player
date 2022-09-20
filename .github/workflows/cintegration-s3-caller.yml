@@ -10,15 +10,18 @@ on:
     # Inputs the workflow accepts.
     inputs:
       test-execution:
-        type: boolean
-        default: true
-        description: 'Execute test job (Default: yes)'
+        description: 'Execute test job (Default: true)'
+        type: choice
+        options: 
+        - yes
+        - no
+        default: yes
 # This workflow is made up of one job that calls the reusable workflow in graasp-deploy
 jobs:
   graasp-deploy-s3-workflow:
     name: Graasp Player
     # Reference reusable workflow file. Using the commit SHA is the safest for stability and security
-    uses: graasp/graasp-deploy/.github/workflows/cintegration-s3.yml@44398dceef93d91a4125a2b3e432a3c60ba204bc
+    uses: graasp/graasp-deploy/.github/workflows/cintegration-s3.yml@5a5170f5c0c085f5a84141daac89e242616163ae
     with:
       build-folder: 'build'
       graasp-compose-host-test: 'http://localhost:3111'
