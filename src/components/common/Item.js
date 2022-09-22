@@ -52,7 +52,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 const Item = ({
   id,
   isChildren,
@@ -71,7 +70,11 @@ const Item = ({
     useContext(CurrentMemberContext);
   // fetch children if item is folder
   const isFolder = Boolean(item?.type === ITEM_TYPES.FOLDER);
-  const { data: children, isLoading: isChildrenLoading } = useChildren(id, {
+  const {
+    data: children,
+    isLoading: isChildrenLoading,
+    isError: isChildrenError,
+  } = useChildren(id, {
     enabled: isFolder,
     getUpdates: isFolder,
   });
@@ -107,9 +110,9 @@ const Item = ({
   }, [inView, children]);
 
   if (
-    isLoading || 
-    isTagsLoading || 
-    isChildrenLoading || 
+    isLoading ||
+    isTagsLoading ||
+    isChildrenLoading ||
     isChildrenPaginatedLoading
   ) {
     return (
@@ -132,7 +135,13 @@ const Item = ({
     return <Alert severity="error">{t('You cannnot access this item')}</Alert>;
   }
 
-  if (isError || !item || isFileError || isChildrenPaginatedError) {
+  if (
+    isError ||
+    !item ||
+    isFileError ||
+    isChildrenError ||
+    isChildrenPaginatedError
+  ) {
     return <Alert severity="error">{t('An unexpected error occured.')}</Alert>;
   }
 
