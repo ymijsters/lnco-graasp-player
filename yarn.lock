@@ -2266,6 +2266,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@graasp/sdk@github:graasp/graasp-sdk#46/SavePermanentlyWithresizeHeightInACookie":
+  version: 0.1.0
+  resolution: "@graasp/sdk@https://github.com/graasp/graasp-sdk.git#commit=52bc0587fae8750b4a3cee0adbcf62754cf4542b"
+  dependencies:
+    "@fastify/secure-session": 5.2.0
+    aws-sdk: 2.1111.0
+    fastify: ^3.29.1
+    fluent-json-schema: 3.1.0
+    immutable: 4.1.0
+    js-cookie: 3.0.1
+    qs: 6.11.0
+    slonik: 28.1.1
+    uuid: 8.3.2
+  checksum: 186a89840a5d5436b06ea9f207c616f417093525fd33cf103033e34b0d5ec74a52369051d959d37c2bbcc75763ca16b108d747b78fc94f46487e14325334ed04
+  languageName: node
+  linkType: hard
+
 "@graasp/sdk@github:graasp/graasp-sdk, @graasp/sdk@github:graasp/graasp-sdk.git":
   version: 0.1.0
   resolution: "@graasp/sdk@https://github.com/graasp/graasp-sdk.git#commit=4fa31e8d473b13bfa0bad3e10da9e7b9ca4f20d5"
@@ -2330,9 +2347,9 @@ __metadata:
 
 "@graasp/ui@github:graasp/graasp-ui#164/SavePermanentlyWithresizeHeightInACookie":
   version: 0.2.0
-  resolution: "@graasp/ui@https://github.com/graasp/graasp-ui.git#commit=03a47c636792279f4e96b782c0c0886c6b4c9b57"
+  resolution: "@graasp/ui@https://github.com/graasp/graasp-ui.git#commit=45f4a3ed7bf6f316bc835e657aae06fcaddd1b88"
   dependencies:
-    "@graasp/sdk": "github:graasp/graasp-sdk.git"
+    "@graasp/sdk": "github:graasp/graasp-sdk#46/SavePermanentlyWithresizeHeightInACookie"
     clsx: 1.1.1
     http-status-codes: 2.2.0
     immutable: 4.1.0
@@ -2361,7 +2378,7 @@ __metadata:
       optional: true
     ag-grid-react:
       optional: true
-  checksum: 251df67ce62ac5b806a38e69bcaf10eb56f13154e17b4e9e4f10701cea6c7fe26dba09b27460b18a7d094bd8621220b669ab2d661aeceb3dcadbdfa7c0692a5e
+  checksum: 250b03db623d37a8f5da0ff57e1b12bf946cf6f9f559c73be82aaa2b38d19b8b74323684b3cc8587d896024e1d101871653c3d26b4bc820cd8989b6ce621f7a6
   languageName: node
   linkType: hard
 
@@ -10703,7 +10720,7 @@ __metadata:
     "@emotion/styled": 11.8.1
     "@graasp/chatbox": "github:graasp/graasp-chatbox"
     "@graasp/query-client": "github:graasp/graasp-query-client"
-    "@graasp/sdk": "github:graasp/graasp-sdk"
+    "@graasp/sdk": "github:graasp/graasp-sdk#46/SavePermanentlyWithresizeHeightInACookie"
     "@graasp/ui": "github:graasp/graasp-ui#164/SavePermanentlyWithresizeHeightInACookie"
     "@graasp/websockets": "github:graasp/graasp-websockets"
     "@material-ui/core": 4.12.3
