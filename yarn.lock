@@ -2268,7 +2268,7 @@ __metadata:
 
 "@graasp/sdk@github:graasp/graasp-sdk#46/SavePermanentlyWithresizeHeightInACookie":
   version: 0.1.0
-  resolution: "@graasp/sdk@https://github.com/graasp/graasp-sdk.git#commit=52bc0587fae8750b4a3cee0adbcf62754cf4542b"
+  resolution: "@graasp/sdk@https://github.com/graasp/graasp-sdk.git#commit=2c17e271dfd65aa1736138acb62500ce1ca1e83c"
   dependencies:
     "@fastify/secure-session": 5.2.0
     aws-sdk: 2.1111.0
@@ -2279,7 +2279,7 @@ __metadata:
     qs: 6.11.0
     slonik: 28.1.1
     uuid: 8.3.2
-  checksum: 186a89840a5d5436b06ea9f207c616f417093525fd33cf103033e34b0d5ec74a52369051d959d37c2bbcc75763ca16b108d747b78fc94f46487e14325334ed04
+  checksum: d26a8eaff4345411d245ad302482b83bb52073e48152c22f86f3ef7fecee097d68d225eae13b98faffd3ffaa0dd0d14eba82feb743f376870e93328ecfa9d9a5
   languageName: node
   linkType: hard
 
@@ -2347,13 +2347,12 @@ __metadata:
 
 "@graasp/ui@github:graasp/graasp-ui#164/SavePermanentlyWithresizeHeightInACookie":
   version: 0.2.0
-  resolution: "@graasp/ui@https://github.com/graasp/graasp-ui.git#commit=45f4a3ed7bf6f316bc835e657aae06fcaddd1b88"
+  resolution: "@graasp/ui@https://github.com/graasp/graasp-ui.git#commit=e7621b36884fbe4255dcd8b3ae8ffc8ddfa11f9d"
   dependencies:
     "@graasp/sdk": "github:graasp/graasp-sdk#46/SavePermanentlyWithresizeHeightInACookie"
     clsx: 1.1.1
     http-status-codes: 2.2.0
     immutable: 4.1.0
-    js-cookie: 3.0.1
     katex: 0.15.3
     lodash.truncate: 4.4.2
     qs: 6.10.3
@@ -2378,7 +2377,7 @@ __metadata:
       optional: true
     ag-grid-react:
       optional: true
-  checksum: 250b03db623d37a8f5da0ff57e1b12bf946cf6f9f559c73be82aaa2b38d19b8b74323684b3cc8587d896024e1d101871653c3d26b4bc820cd8989b6ce621f7a6
+  checksum: ac207f5aef428d67bc214c0171d00a6dc976923a864498a7349ecd578c7ce3b564cad3b8a669fcab561ee2c356f92fee164d68f80f3b7e03f101128d96565fa8
   languageName: node
   linkType: hard
 
