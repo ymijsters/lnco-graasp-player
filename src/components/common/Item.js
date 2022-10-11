@@ -50,6 +50,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
   },
+  wrappingContainer: {
+    padding: 0,
+  },
 }));
 
 const Item = ({
@@ -128,11 +131,11 @@ const Item = ({
   }
 
   if (isItemHidden) {
-    return <Alert severity="error">{t('You cannnot access this item')}</Alert>;
+    return <Alert severity="error">{t('You cannot access this item')}</Alert>;
   }
 
   if (isError || !item || isFileError || isChildrenPaginatedError) {
-    return <Alert severity="error">{t('An unexpected error occured.')}</Alert>;
+    return <Alert severity="error">{t('An unexpected error occurred.')}</Alert>;
   }
 
   const showCollapse = item.settings?.isCollapsible;
@@ -180,7 +183,7 @@ const Item = ({
 
       // render each children recursively
       return (
-        <Container>
+        <Container top="top" className={classes.wrappingContainer}>
           {!showPinnedOnly && (
             <>
               <Typography className={FOLDER_NAME_TITLE_CLASS} variant="h5">
@@ -308,7 +311,7 @@ const Item = ({
       const contentId = item.get('extra')?.h5p?.contentId;
       if (!contentId) {
         return (
-          <Alert severity="error">{t('An unexpected error occured.')}</Alert>
+          <Alert severity="error">{t('An unexpected error occurred.')}</Alert>
         );
       }
 
@@ -333,7 +336,7 @@ const Item = ({
         );
       }
       return (
-        <Alert severity="error">{t('An unexpected error occured.')}</Alert>
+        <Alert severity="error">{t('An unexpected error occurred.')}</Alert>
       );
     }
 

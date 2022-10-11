@@ -5,16 +5,7 @@ import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
-import {
-  Box,
-  Divider,
-  Drawer,
-  Paper,
-  Slide,
-  Toolbar,
-  Tooltip,
-  Typography,
-} from '@material-ui/core';
+import { Box, Tooltip } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -22,13 +13,11 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ForumIcon from '@material-ui/icons/Forum';
 import PushPinIcon from '@material-ui/icons/PushPin';
 
-import { DRAWER_WIDTH, HEADER_HEIGHT } from '../../config/constants';
+import { DRAWER_WIDTH } from '../../config/constants';
 import { hooks } from '../../config/queryClient';
 import {
   ITEM_CHATBOX_BUTTON_ID,
   ITEM_PINNED_BUTTON_ID,
-  ITEM_PINNED_ID,
-  PANNEL_CLOSE_BUTTON_ID,
 } from '../../config/selectors';
 import { ITEM_TYPES } from '../../enums';
 import { getParentsIdsFromPath } from '../../utils/item';
@@ -36,14 +25,15 @@ import { LayoutContext } from '../context/LayoutContext';
 import BuilderButton from './BuilderButton';
 import Chatbox from './Chatbox';
 import Item from './Item';
+import SideDrawer from './SideDrawer';
 
 const useStyles = makeStyles((theme) => ({
   iconButton: {
     float: 'right',
   },
-  // root: {
-  //   display: 'flex',
-  // },
+  root: {
+    display: 'flex',
+  },
   drawer: {
     width: DRAWER_WIDTH,
     flexShrink: 0,
@@ -51,13 +41,16 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: DRAWER_WIDTH,
     padding: theme.spacing(1),
+    // // necessary for content to be below app bar
+    // ...theme.mixins.toolbar,
   },
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
     justifyContent: 'flex-end',
+  },
+  pinnedContainer: {
+    overflow: 'scroll',
   },
   content: {
     // display: 'flex',
@@ -72,6 +65,8 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 0,
   },
   contentShift: {
+    // // necessary for content to be below app bar
+    // ...theme.mixins.toolbar,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
@@ -88,9 +83,9 @@ const SideContent = ({ children, item }) => {
   const { rootId } = useParams();
 
   /* This removes the parents that are higher than the perform root element
-  Ex: if we are in item 6 and the root is 3, when spliting the path we get [ 1, 2, 3, 4, 5, 6 ].
+  Ex: if we are in item 6 and the root is 3, when splitting the path we get [ 1, 2, 3, 4, 5, 6 ].
   However the student cannot go higher than element 3, so we remove the element before 3, this
-  give us [ 3, 4, 5, 6], which is the visible range of the student. */
+  gives us [ 3, 4, 5, 6], which is the visible range of the student. */
   const parents = getParentsIdsFromPath(item.path || item.id);
   const parentsIds = parents.slice(
     parents.indexOf(rootId),
@@ -108,7 +103,7 @@ const SideContent = ({ children, item }) => {
 
   let pinnedCount = 0;
   child?.forEach((elt) => {
-    pinnedCount += elt?.filter(({ settings: s }) => s.isPinned).size;
+    pinnedCount += elt?.filter(({ settings: s }) => s?.isPinned).size;
   });
 
   const {
@@ -172,27 +167,13 @@ const SideContent = ({ children, item }) => {
     if (!settings?.showChatbox) return null;
 
     return (
-      <Drawer
-        anchor="right"
-        variant="persistent"
+      <SideDrawer
+        title={t('Chat')}
+        onClose={toggleChatOpen}
         open={isChatboxMenuOpen}
-        className={classes.drawer}
-        classes={{ paper: classes.drawerPaper }}
       >
-        <Toolbar />
-        <div className={classes.drawerHeader}>
-          <Typography variant="h6">{t('Comments')}</Typography>
-          <IconButton id={PANNEL_CLOSE_BUTTON_ID} onClick={toggleChatOpen}>
-            {theme.direction === 'rtl' ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
-        </div>
-        <Divider />
         <Chatbox item={item} />
-      </Drawer>
+      </SideDrawer>
     );
   };
 
@@ -200,37 +181,18 @@ const SideContent = ({ children, item }) => {
     if (!pinnedCount) return null;
 
     return (
-      <Paper square>
-        <Slide
-          anchor="right"
-          direction="left"
-          in={isPinnedMenuOpen}
-          mountOnEnter
-          unmountOnExit
-          minHeight={window.innerHeight - HEADER_HEIGHT}
-          id={ITEM_PINNED_ID}
-        >
-          <Box className={classes.drawer}>
-            <div className={classes.drawerHeader}>
-              <IconButton
-                id={PANNEL_CLOSE_BUTTON_ID}
-                onClick={togglePinnedOpen}
-              >
-                {theme.direction === 'rtl' ? (
-                  <ChevronLeftIcon />
-                ) : (
-                  <ChevronRightIcon />
-                )}
-              </IconButton>
-            </div>
-
-            {/* show parents pinned items */}
-            {parentsIds.map((i) => (
-              <Item id={i} showPinnedOnly />
-            ))}
-          </Box>
-        </Slide>
-      </Paper>
+      <SideDrawer
+        title={t('Pinned items')}
+        onClose={togglePinnedOpen}
+        open={isPinnedMenuOpen}
+      >
+        {/* show parents pinned items */}
+        <Box className={classes.pinnedContainer}>
+          {parentsIds.map((i) => (
+            <Item key={i} id={i} showPinnedOnly />
+          ))}
+        </Box>
+      </SideDrawer>
     );
   };
 
@@ -242,7 +204,8 @@ const SideContent = ({ children, item }) => {
         <main
           className={clsx(classes.content, {
             // todo: why is pinned true by default ? when there is no pins this makes no sense...
-            [classes.contentShift]: isChatboxMenuOpen || isPinnedMenuOpen,
+            [classes.contentShift]:
+              isChatboxMenuOpen || (isPinnedMenuOpen && pinnedCount > 0),
           })}
         >
           {displayChatButton()}
