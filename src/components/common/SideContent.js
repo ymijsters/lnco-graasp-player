@@ -18,6 +18,7 @@ import { hooks } from '../../config/queryClient';
 import {
   ITEM_CHATBOX_BUTTON_ID,
   ITEM_PINNED_BUTTON_ID,
+  ITEM_PINNED_ID,
 } from '../../config/selectors';
 import { ITEM_TYPES } from '../../enums';
 import { getParentsIdsFromPath } from '../../utils/item';
@@ -187,7 +188,7 @@ const SideContent = ({ children, item }) => {
         open={isPinnedMenuOpen}
       >
         {/* show parents pinned items */}
-        <Box className={classes.pinnedContainer}>
+        <Box className={classes.pinnedContainer} id={ITEM_PINNED_ID}>
           {parentsIds.map((i) => (
             <Item key={i} id={i} showPinnedOnly />
           ))}
