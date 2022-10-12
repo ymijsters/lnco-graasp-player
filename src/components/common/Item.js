@@ -183,7 +183,7 @@ const Item = ({
 
       // render each children recursively
       return (
-        <Container top="top" className={classes.wrappingContainer}>
+        <Container className={classes.wrappingContainer}>
           {!showPinnedOnly && (
             <>
               <Typography className={FOLDER_NAME_TITLE_CLASS} variant="h5">
