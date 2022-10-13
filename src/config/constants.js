@@ -110,5 +110,6 @@ export const HOST_MAP = {
 };
 
 export const GRAASP_LOGO_HEADER_HEIGHT = 40;
+export const FLOATING_BUTTON_Z_INDEX = 10;
 
 export const GRAASP_MENU_ITEMS = [ITEM_TYPES.FOLDER, ITEM_TYPES.SHORTCUT];

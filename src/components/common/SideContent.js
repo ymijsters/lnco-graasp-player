@@ -11,7 +11,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import ForumIcon from '@material-ui/icons/Forum';
 import PushPinIcon from '@material-ui/icons/PushPin';
 
-import { DRAWER_WIDTH } from '../../config/constants';
+import { DRAWER_WIDTH, FLOATING_BUTTON_Z_INDEX } from '../../config/constants';
 import { hooks } from '../../config/queryClient';
 import {
   ITEM_CHATBOX_BUTTON_ID,
@@ -29,6 +29,7 @@ import SideDrawer from './SideDrawer';
 const useStyles = makeStyles((theme) => ({
   iconButton: {
     float: 'right',
+    zIndex: FLOATING_BUTTON_Z_INDEX,
   },
   root: {
     display: 'flex',

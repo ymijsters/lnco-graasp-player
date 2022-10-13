@@ -5,11 +5,19 @@ import {
   PANNEL_CLOSE_BUTTON_ID,
 } from '../../src/config/selectors';
 import { LOAD_CHATBOX_PAUSE } from '../fixtures/constants';
+import { GRAASP_DOCUMENT_ITEM_WITH_CHAT_BOX } from '../fixtures/documents';
 import { ITEM_WITHOUT_CHAT_BOX, ITEM_WITH_CHAT_BOX } from '../fixtures/items';
+import { expectDocumentViewScreenLayout } from '../support/integrationUtils';
 
 describe('Chatbox', () => {
   beforeEach(() => {
-    cy.setUpApi({ items: [ITEM_WITH_CHAT_BOX, ITEM_WITHOUT_CHAT_BOX] });
+    cy.setUpApi({
+      items: [
+        ITEM_WITH_CHAT_BOX,
+        ITEM_WITHOUT_CHAT_BOX,
+        GRAASP_DOCUMENT_ITEM_WITH_CHAT_BOX,
+      ],
+    });
   });
 
   it('Chatbox button should toggle chatbox visibility', () => {
@@ -45,5 +53,16 @@ describe('Chatbox', () => {
 
     cy.get(`#${ITEM_CHATBOX_BUTTON_ID}`).should('not.exist');
     cy.get(`#${ITEM_CHATBOX_ID}`).should('not.exist');
+  });
+
+  it('Chatbox button is clickable on document', () => {
+    cy.visit(
+      buildMainPath({
+        rootId: GRAASP_DOCUMENT_ITEM_WITH_CHAT_BOX.id,
+        id: null,
+      }),
+    );
+    expectDocumentViewScreenLayout(GRAASP_DOCUMENT_ITEM_WITH_CHAT_BOX);
+    cy.get(`#${ITEM_CHATBOX_BUTTON_ID}`).should('be.visible').click();
   });
 });
