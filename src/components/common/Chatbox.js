@@ -1,15 +1,12 @@
-import { List, Record } from 'immutable';
+import { Record } from 'immutable';
 import PropTypes from 'prop-types';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { Typography } from '@material-ui/core';
 
 import GraaspChatbox from '@graasp/chatbox';
 import { MUTATION_KEYS } from '@graasp/query-client';
 import { Loader } from '@graasp/ui';
 
-import { HEADER_HEIGHT } from '../../config/constants';
 import { hooks, useMutation } from '../../config/queryClient';
 import { ITEM_CHATBOX_ID } from '../../config/selectors';
 import { CurrentMemberContext } from '../context/CurrentMemberContext';
@@ -36,34 +33,30 @@ const Chatbox = ({ item }) => {
     MUTATION_KEYS.DELETE_ITEM_CHAT_MESSAGE,
   );
 
-  const renderChatbox = () => {
-    if (
-      isChatLoading ||
-      isLoadingCurrentMember ||
-      isMembersLoading ||
-      isLoadingItemPermissions
-    ) {
-      return <Loader />;
-    }
+  if (
+    isChatLoading ||
+    isLoadingCurrentMember ||
+    isMembersLoading ||
+    isLoadingItemPermissions
+  ) {
+    return <Loader />;
+  }
 
-    const messages = chat?.messages ?? [];
+  const messages = chat?.messages ?? [];
 
-    return (
-      <GraaspChatbox
-        id={ITEM_CHATBOX_ID}
-        members={members}
-        currentMember={currentMember}
-        chatId={item.id}
-        messages={chat?.messages}
-        sendMessageFunction={sendMessage}
-        editMessageFunction={editMessage}
-        deleteMessageFunction={deleteMessage}
-        useAvatarHook={useAvatar}
-      />
-    );
-  };
-
-  return <>{renderChatbox()}</>;
+  return (
+    <GraaspChatbox
+      id={ITEM_CHATBOX_ID}
+      members={members}
+      currentMember={currentMember}
+      chatId={item.id}
+      messages={chat?.messages}
+      sendMessageFunction={sendMessage}
+      editMessageFunction={editMessage}
+      deleteMessageFunction={deleteMessage}
+      useAvatarHook={useAvatar}
+    />
+  );
 };
 
 Chatbox.propTypes = {

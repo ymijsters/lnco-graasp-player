@@ -212,10 +212,10 @@ const Item = ({
           {showPinnedOnly && (
             <>
               {children
-                .filter(
+                ?.filter(
                   (i) => showPinnedOnly === (i.settings?.isPinned || false),
                 )
-                .map((thisItem) => (
+                ?.map((thisItem) => (
                   <Container key={thisItem.id} className={classes.container}>
                     <Item
                       isChildren

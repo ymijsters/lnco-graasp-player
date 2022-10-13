@@ -8,8 +8,6 @@ import { useParams } from 'react-router';
 import { Box, Tooltip } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ForumIcon from '@material-ui/icons/Forum';
 import PushPinIcon from '@material-ui/icons/PushPin';
 
@@ -42,8 +40,6 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: DRAWER_WIDTH,
     padding: theme.spacing(1),
-    // // necessary for content to be below app bar
-    // ...theme.mixins.toolbar,
   },
   drawerHeader: {
     display: 'flex',
@@ -54,8 +50,6 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'scroll',
   },
   content: {
-    // display: 'flex',
-    // flexDirection: 'column',
     position: 'relative',
     flexGrow: 1,
     padding: theme.spacing(3),

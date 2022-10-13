@@ -18,6 +18,11 @@
       "presets": ["@babel/preset-react"]
     }
   },
+  "settings": {
+    "react": {
+      "version": "17"
+    }
+  },
   "rules": {
     "react/jsx-filename-extension": [
       1,
