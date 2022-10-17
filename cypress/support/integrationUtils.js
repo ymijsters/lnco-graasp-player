@@ -1,19 +1,20 @@
 import qs from 'qs';
+
 import {
   MAIN_MENU_ID,
-  buildFileId,
-  buildDocumentId,
   buildAppId,
+  buildDocumentId,
+  buildFileId,
   buildTreeItemClass,
 } from '../../src/config/selectors';
 import { ITEM_TYPES, MIME_TYPES } from '../../src/enums';
+import { getDirectParentId } from '../../src/utils/item';
 import {
   getDocumentExtra,
   getEmbeddedLinkExtra,
   getFileExtra,
   getS3FileExtra,
 } from '../../src/utils/itemExtra';
-import { getDirectParentId } from '../../src/utils/item';
 import { LOAD_FOLDER_CONTENT_PAUSE } from './constants';
 
 export const expectLinkViewScreenLayout = ({ id, extra }) => {
@@ -30,7 +31,6 @@ export const expectLinkViewScreenLayout = ({ id, extra }) => {
   } else {
     cy.get(`iframe#${id}`).should('have.attr', 'src', url);
   }
-
 };
 
 export const expectAppViewScreenLayout = ({ id, extra }) => {
@@ -44,7 +44,6 @@ export const expectAppViewScreenLayout = ({ id, extra }) => {
   )}`;
 
   cy.get(`iframe#${buildAppId(id)}`).should('have.attr', 'src', appUrl);
-
 };
 
 export const expectFileViewScreenLayout = ({ id, extra }) => {
@@ -61,7 +60,6 @@ export const expectFileViewScreenLayout = ({ id, extra }) => {
     selector = `embed#${buildFileId(id)}`;
   }
   cy.get(selector).should('exist');
-
 };
 
 export const expectDocumentViewScreenLayout = ({ id, extra }) => {
@@ -71,9 +69,9 @@ export const expectDocumentViewScreenLayout = ({ id, extra }) => {
 };
 
 export const expectFolderButtonLayout = ({ name }) => {
-    // mainmenu
-    const menu = cy.get(`#${MAIN_MENU_ID}`);
-    menu.get(`#${MAIN_MENU_ID}`).contains(name);
+  // mainmenu
+  const menu = cy.get(`#${MAIN_MENU_ID}`);
+  menu.get(`#${MAIN_MENU_ID}`).contains(name);
 };
 
 export const expectFolderLayout = ({ rootId, items }) => {
