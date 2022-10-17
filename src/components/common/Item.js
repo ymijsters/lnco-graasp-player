@@ -50,9 +50,20 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
   },
+  wrappingContainer: {
+    padding: 0,
+  },
 }));
 
-const Item = ({ id, isChildren, showPinnedOnly, itemType, isCollapsible }) => {
+const Item = ({
+  id,
+  isChildren,
+  showPinnedOnly,
+  itemType,
+  isCollapsible,
+  isShortcut,
+  isShortcutPinned,
+}) => {
   const { ref, inView } = useInView();
   const { t } = useTranslation();
   const classes = useStyles();
@@ -98,9 +109,9 @@ const Item = ({ id, isChildren, showPinnedOnly, itemType, isCollapsible }) => {
   }, [inView, children]);
 
   if (
-    isLoading || 
-    isTagsLoading || 
-    isChildrenLoading || 
+    isLoading ||
+    isTagsLoading ||
+    isChildrenLoading ||
     isChildrenPaginatedLoading
   ) {
     return (
@@ -120,25 +131,41 @@ const Item = ({ id, isChildren, showPinnedOnly, itemType, isCollapsible }) => {
   }
 
   if (isItemHidden) {
-    return <Alert severity="error">{t('You cannnot access this item')}</Alert>;
+    return <Alert severity="error">{t('You cannot access this item')}</Alert>;
   }
 
   if (isError || !item || isFileError || isChildrenPaginatedError) {
-    return <Alert severity="error">{t('An unexpected error occured.')}</Alert>;
+    return <Alert severity="error">{t('An unexpected error occurred.')}</Alert>;
   }
 
   const showCollapse = item.settings?.isCollapsible;
 
   switch (item.type) {
     case ITEM_TYPES.FOLDER: {
-      // do not display children folders if they are not pinned
-      if (!item.settings?.isPinned && isChildren) {
-        return null;
-      }
+      if (isChildren) {
+        const folderButton = (
+          <FolderButton id={buildFolderButtonId(id)} item={item} />
+        );
 
-      // only display children folders if they are pinned
-      if (item.settings?.isPinned && isChildren) {
-        return <FolderButton id={buildFolderButtonId(id)} item={item} />;
+        // display children shortcut pinned folders
+        if (isShortcut && isShortcutPinned) {
+          return folderButton;
+        }
+
+        // do not display shortcut folders if they are not pinned
+        if (isShortcut && !isShortcutPinned) {
+          return null;
+        }
+
+        // do not display children folders if they are not pinned
+        if (!item.settings?.isPinned) {
+          return null;
+        }
+
+        // only display children folders if they are pinned
+        if (item.settings?.isPinned) {
+          return folderButton;
+        }
       }
 
       const showLoadMoreButton =
@@ -156,7 +183,7 @@ const Item = ({ id, isChildren, showPinnedOnly, itemType, isCollapsible }) => {
 
       // render each children recursively
       return (
-        <Container>
+        <Container className={classes.wrappingContainer}>
           {!showPinnedOnly && (
             <>
               <Typography className={FOLDER_NAME_TITLE_CLASS} variant="h5">
@@ -185,10 +212,10 @@ const Item = ({ id, isChildren, showPinnedOnly, itemType, isCollapsible }) => {
           {showPinnedOnly && (
             <>
               {children
-                .filter(
+                ?.filter(
                   (i) => showPinnedOnly === (i.settings?.isPinned || false),
                 )
-                .map((thisItem) => (
+                ?.map((thisItem) => (
                   <Container key={thisItem.id} className={classes.container}>
                     <Item
                       isChildren
@@ -205,7 +232,14 @@ const Item = ({ id, isChildren, showPinnedOnly, itemType, isCollapsible }) => {
     }
     case ITEM_TYPES.LINK: {
       const linkItem = (
-        <LinkItem item={item} height={SCREEN_MAX_HEIGHT} member={member} isResizable />
+        <LinkItem
+          item={item}
+          height={SCREEN_MAX_HEIGHT}
+          member={member}
+          isResizable
+          showButton={item.settings?.showLinkButton}
+          showIframe={item.settings?.showLinkIframe}
+        />
       );
 
       if (showCollapse) {
@@ -278,7 +312,7 @@ const Item = ({ id, isChildren, showPinnedOnly, itemType, isCollapsible }) => {
       const contentId = item.get('extra')?.h5p?.contentId;
       if (!contentId) {
         return (
-          <Alert severity="error">{t('An unexpected error occured.')}</Alert>
+          <Alert severity="error">{t('An unexpected error occurred.')}</Alert>
         );
       }
 
@@ -288,6 +322,22 @@ const Item = ({ id, isChildren, showPinnedOnly, itemType, isCollapsible }) => {
           contentId={contentId}
           integrationUrl={H5P_INTEGRATION_URL}
         />
+      );
+    }
+
+    case ITEM_TYPES.SHORTCUT: {
+      if (item.extra?.shortcut?.target) {
+        return (
+          <Item
+            isChildren
+            isShortcut
+            id={item.extra?.shortcut?.target}
+            isShortcutPinned={item.settings?.isPinned}
+          />
+        );
+      }
+      return (
+        <Alert severity="error">{t('An unexpected error occurred.')}</Alert>
       );
     }
 
@@ -301,6 +351,8 @@ Item.propTypes = {
   id: PropTypes.string.isRequired,
   isChildren: PropTypes.bool,
   showPinnedOnly: PropTypes.bool,
+  isShortcut: PropTypes.bool,
+  isShortcutPinned: PropTypes.bool,
   itemType: PropTypes.string,
   isCollapsible: PropTypes.bool,
 };
