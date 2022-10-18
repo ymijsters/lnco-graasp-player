@@ -235,6 +235,7 @@ const Item = ({
         <LinkItem
           item={item}
           height={SCREEN_MAX_HEIGHT}
+          member={member}
           isResizable
           showButton={item.settings?.showLinkButton}
           showIframe={item.settings?.showLinkIframe}
