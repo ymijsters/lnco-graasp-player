@@ -1,4 +1,5 @@
 export const MAIN_MENU_ID = 'mainMenu';
+export const TREE_VIEW_ID = 'treeView';
 export const buildFileId = (id) => `file-${id}`;
 export const buildDocumentId = (id) => `document-${id}`;
 export const buildAppId = (id) => `app-${id}`;
