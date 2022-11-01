@@ -32,7 +32,7 @@ const BuilderButton = ({ id }) => {
 
   const onClickComposeView = () => {
     const url = buildItemLinkForBuilder({
-      host: GRAASP_COMPOSE_HOST,
+      origin: GRAASP_COMPOSE_HOST,
       itemId: id,
     });
     redirect(url, {

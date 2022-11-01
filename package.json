@@ -110,5 +110,8 @@
       "src/serviceWorker.js"
     ]
   },
+  "resolutions": {
+    "@graasp/sdk": "github:graasp/graasp-sdk"
+  },
   "packageManager": "yarn@3.2.4"
 }
