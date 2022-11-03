@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.1.8 (2022-11-03)
+
+
+### Bug Fixes
+
+* change page title for GA ([#146](https://github.com/graasp/graasp-player/issues/146)) ([0b08115](https://github.com/graasp/graasp-player/commit/0b081151e36a584bb364c65b7e8b7a08cfea14d0))
+
 ### 0.1.7 (2022-10-21)
 
 ### 0.1.6 (2022-10-20)
