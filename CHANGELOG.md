@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.1.9 (2022-11-14)
+
+
+### Features
+
+* update workflows ([#152](https://github.com/graasp/graasp-player/issues/152)) ([f7942bd](https://github.com/graasp/graasp-player/commit/f7942bda97130775abd0be4c135caba41e542aac))
+
 ### 0.1.8 (2022-11-03)
 
 
