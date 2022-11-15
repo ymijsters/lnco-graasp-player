@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
-import { Alert } from '@material-ui/lab';
+import { Alert } from '@mui/material';
 
 import { MainMenu as GraaspMainMenu } from '@graasp/ui';
 
@@ -46,6 +46,8 @@ const MainMenu = () => {
 
   return (
     <GraaspMainMenu id={MAIN_MENU_ID}>
+      {/* todo: add styles to tree */}
+      <div style={{ height: 10 }} />
       <DynamicTreeView
         id={TREE_VIEW_ID}
         rootLabel={rootItem.name}
