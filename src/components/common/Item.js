@@ -3,8 +3,7 @@ import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useInView } from 'react-intersection-observer';
 
-import { Alert, Skeleton } from '@mui/material';
-import { Container, Typography } from '@mui/material';
+import { Alert, Container, Skeleton, Typography } from '@mui/material';
 
 import { Api } from '@graasp/query-client';
 import {
@@ -21,6 +20,7 @@ import {
 
 import {
   API_HOST,
+  DEFAULT_RESIZABLE_SETTING,
   H5P_INTEGRATION_URL,
   SCREEN_MAX_HEIGHT,
 } from '../../config/constants';
@@ -296,7 +296,7 @@ const Item = ({
           permission="read" // todo: use graasp-constants
           requestApiAccessToken={Api.requestApiAccessToken}
           height={SCREEN_MAX_HEIGHT}
-          isResizable
+          isResizable={item.settings?.isResizable || DEFAULT_RESIZABLE_SETTING}
         />
       );
 
