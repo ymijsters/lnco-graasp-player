@@ -2316,7 +2316,7 @@ __metadata:
 
 "@graasp/query-client@github:graasp/graasp-query-client":
   version: 0.1.0
-  resolution: "@graasp/query-client@https://github.com/graasp/graasp-query-client.git#commit=ee8d8a872f1b569068825d36b2737efe57da24f2"
+  resolution: "@graasp/query-client@https://github.com/graasp/graasp-query-client.git#commit=a20ef7df4108d26bfcf09c2da2e6e168706cbd4e"
   dependencies:
     "@graasp/sdk": "github:graasp/graasp-sdk"
     "@graasp/translations": "github:graasp/graasp-translations.git"
@@ -2330,7 +2330,7 @@ __metadata:
     uuid: 8.3.2
   peerDependencies:
     react: ^17.0.0
-  checksum: ad4a2399d8e7f6c01009e7330d4bb9c54bb88aabd75ced5c65cc8dd71fe368114e7ef810e2c502b75e00618ba0216f84051406cebd8da2f100f9c4edea00952b
+  checksum: e81ea32c292e225c9472ad7d69dc6ad7f30a6a61b6a4cd7be66e2cdfb3db6583f0e14efa2f2cfb32c7dad8ddd668ed77fb5213b9517e1c7c1ee5ed1f62a6a2fb
   languageName: node
   linkType: hard
 
@@ -2371,7 +2371,7 @@ __metadata:
 
 "@graasp/ui@github:graasp/graasp-ui":
   version: 0.4.0
-  resolution: "@graasp/ui@https://github.com/graasp/graasp-ui.git#commit=dea454d93ab4605a77265e184e98c4be3a4718a4"
+  resolution: "@graasp/ui@https://github.com/graasp/graasp-ui.git#commit=5811ea5fdcd51116f6f6b7022fa4423a4e489a94"
   dependencies:
     "@graasp/sdk": "github:graasp/graasp-sdk.git"
     clsx: 1.1.1
@@ -2404,7 +2404,7 @@ __metadata:
       optional: true
     ag-grid-react:
       optional: true
-  checksum: 88d3b7832e174a4534df35400dd99eaaceea62a53ecccb4c81885a892ec4c6b648f80db373468b3dc8bef5b52cbec57200a06a2ec5beb94028699f31e4f8579a
+  checksum: eb3946911a547421604e94a84ebf486a09c03768d7a758002e86dbc684d64e1536f9fb76d4f99b2d5be0ac9af06c8e4134688e6d21ea3a8081be250da0e0bb2c
   languageName: node
   linkType: hard
 
@@ -10344,7 +10344,7 @@ __metadata:
     "@graasp/chatbox": "github:graasp/graasp-chatbox#v1"
     "@graasp/query-client": "github:graasp/graasp-query-client"
     "@graasp/sdk": "github:graasp/graasp-sdk"
-    "@graasp/ui": "github:graasp/graasp-ui#v0"
+    "@graasp/ui": "github:graasp/graasp-ui"
     "@graasp/websockets": "github:graasp/graasp-websockets"
     "@mui/icons-material": 5.10.9
     "@mui/lab": 5.0.0-alpha.107
