@@ -5,25 +5,26 @@ import React from 'react';
 import { useTreeItem } from '@mui/lab/TreeItem';
 import Typography from '@mui/material/Typography';
 
+// eslint-disable-next-line react/display-name
 const CustomContentTree = React.forwardRef((props, ref) => {
   const {
-    classes,
-    className,
     label,
     nodeId,
     icon: iconProp,
     expansionIcon,
     displayIcon,
+    className,
+    classes,
   } = props;
 
   const {
+    handleExpansion,
+    handleSelection,
+    preventSelection,
     disabled,
     expanded,
     selected,
     focused,
-    handleExpansion,
-    handleSelection,
-    preventSelection,
   } = useTreeItem(nodeId);
 
   const icon = iconProp || expansionIcon || displayIcon;
@@ -40,7 +41,15 @@ const CustomContentTree = React.forwardRef((props, ref) => {
     handleSelection(event);
   };
 
+  const iconComponent = (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+    <div onClick={handleExpansionClick} className={classes.iconContainer}>
+      {icon}
+    </div>
+  );
+
   return (
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div
       className={clsx(className, classes.root, {
         [classes.expanded]: expanded,
@@ -51,9 +60,7 @@ const CustomContentTree = React.forwardRef((props, ref) => {
       onMouseDown={handleMouseDown}
       ref={ref}
     >
-      <div onClick={handleExpansionClick} className={classes.iconContainer}>
-        {icon}
-      </div>
+      {iconComponent}
       <Typography
         onClick={handleSelectionClick}
         component="div"
@@ -66,7 +73,15 @@ const CustomContentTree = React.forwardRef((props, ref) => {
 });
 
 CustomContentTree.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.shape({
+    root: PropTypes.string.isRequired,
+    expanded: PropTypes.string.isRequired,
+    selected: PropTypes.string.isRequired,
+    focused: PropTypes.string.isRequired,
+    disabled: PropTypes.string.isRequired,
+    iconContainer: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+  }).isRequired,
   className: PropTypes.string.isRequired,
   displayIcon: PropTypes.node.isRequired,
   expansionIcon: PropTypes.node.isRequired,
