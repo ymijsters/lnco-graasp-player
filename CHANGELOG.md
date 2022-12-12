@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.1.13 (2022-12-12)
+
+
+### Features
+
+* move to ts, add icons in mainmenu ([#163](https://github.com/graasp/graasp-player/issues/163)) ([f6b921a](https://github.com/graasp/graasp-player/commit/f6b921a0484b2aef4bd609dd644a80e66e135f8e))
+
 ### 0.1.12 (2022-11-21)
 
 ### 0.1.11 (2022-11-18)
