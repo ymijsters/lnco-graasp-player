@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 
 import { Alert, Skeleton, Typography } from '@mui/material';
 
@@ -13,6 +13,7 @@ import MainMenu from '../common/MainMenu';
 import SideContent from '../common/SideContent';
 import { ItemContext } from '../context/ItemContext';
 import { LayoutContextProvider } from '../context/LayoutContext';
+import HeaderNavigation from './HeaderNavigation';
 import HeaderRightContent from './HeaderRightContent';
 
 const MainScreen = () => {
@@ -21,7 +22,7 @@ const MainScreen = () => {
   const mainId = focusedItemId || rootId;
   const { data: item, isLoading, isError } = hooks.useItem(mainId);
   const { t } = useTranslation();
-  const [leftContent, setLeftContent] = useState('');
+  const [topItemName, setTopItemName] = useState('');
   const [isFirstItem, setIsFirstItem] = useState(true);
 
   if (isLoading) {
@@ -33,7 +34,7 @@ const MainScreen = () => {
   }
 
   if (isFirstItem) {
-    setLeftContent(item.name);
+    setTopItemName(item.name);
     setIsFirstItem(false);
   }
 
@@ -49,7 +50,9 @@ const MainScreen = () => {
     <Main
       open={Boolean(rootId)}
       sidebar={rootId && <MainMenu />}
-      headerLeftContent={leftContent}
+      headerLeftContent={
+        <HeaderNavigation rootId={rootId} topItemName={topItemName} />
+      }
       headerRightContent={<HeaderRightContent id={mainId} />}
     >
       <LayoutContextProvider>

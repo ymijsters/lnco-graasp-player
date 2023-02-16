@@ -14,6 +14,7 @@ import { isHidden } from '../../utils/item';
 import ItemCard from '../common/ItemCard';
 import DynamicTreeView from '../common/Tree/Tree';
 import CookiesBanner from './CookiesBanner';
+import HeaderNavigation from './HeaderNavigation';
 import HeaderRightContent from './HeaderRightContent';
 
 const { useOwnItems, useSharedItems, useItemsTags } = hooks;
@@ -164,7 +165,7 @@ const Home = () => {
     <Main
       open
       sidebar={sidebar}
-      headerLeftContent={t('Graasp Player')}
+      headerLeftContent={<HeaderNavigation />}
       headerRightContent={<HeaderRightContent />}
     >
       <CookiesBanner />
