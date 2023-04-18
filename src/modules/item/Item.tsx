@@ -4,7 +4,7 @@ import { useInView } from 'react-intersection-observer';
 import { Alert, Box, Container, Skeleton, Typography } from '@mui/material';
 
 import { Api } from '@graasp/query-client';
-import { ItemType } from '@graasp/sdk';
+import { Context, ItemType, PermissionLevel } from '@graasp/sdk';
 import { FAILURE_MESSAGES, PLAYER } from '@graasp/translations';
 import {
   AppItem,
@@ -16,13 +16,11 @@ import {
   ItemSkeleton,
   LinkItem,
   TextEditor,
-  withCollapse,
 } from '@graasp/ui';
 
 import { List } from 'immutable';
 
 import {
-  APP_CONTEXT,
   DEFAULT_RESIZABLE_SETTING,
   PDF_VIEWER_LINK,
   SCREEN_MAX_HEIGHT,
@@ -55,7 +53,6 @@ type Props = {
   id?: string;
   isChildren?: boolean;
   showPinnedOnly?: boolean;
-  isCollapsible?: boolean;
   isShortcut?: boolean;
   isShortcutPinned?: boolean;
 };
@@ -64,7 +61,6 @@ const Item = ({
   id = '',
   isChildren = false,
   showPinnedOnly = false,
-  isCollapsible = false,
   isShortcut = false,
   isShortcutPinned = false,
 }: Props): JSX.Element | null => {
@@ -73,8 +69,12 @@ const Item = ({
   const { t: translateMessage } = useMessagesTranslation();
   const { data: item, isLoading, isError } = useItem(id);
   const { data: itemTags, isLoading: isTagsLoading } = useItemTags(id);
-  const { query: { data: member, isLoading: isMemberLoading } = {} } =
-    useCurrentMemberContext();
+  const {
+    data: member,
+    isLoading: isLoadingMember,
+    isError: isErrorMember,
+    isSuccess: isSuccessMember,
+  } = useCurrentMemberContext();
   // fetch children if item is folder
   const isFolder = Boolean(item?.type === ItemType.FOLDER);
   const {
@@ -134,13 +134,13 @@ const Item = ({
     isChildrenLoading ||
     isChildrenPaginatedLoading ||
     isFileContentLoading ||
-    etherpadQuery?.isLoading
+    etherpadQuery?.isLoading ||
+    isLoadingMember
   ) {
     return (
       <ItemSkeleton
-        itemType={item?.type as ItemType}
+        itemType={item?.type ?? ItemType.FOLDER}
         isChildren={isChildren}
-        isCollapsible={isCollapsible}
         screenMaxHeight={SCREEN_MAX_HEIGHT}
       />
     );
@@ -166,7 +166,8 @@ const Item = ({
     isFileError ||
     isChildrenError ||
     isChildrenPaginatedError ||
-    etherpadQuery?.isError
+    etherpadQuery?.isError ||
+    isErrorMember
   ) {
     return (
       <Alert severity="error">
@@ -237,11 +238,7 @@ const Item = ({
                       marginTop={(theme) => theme.spacing(1)}
                       marginBottom={(theme) => theme.spacing(1)}
                     >
-                      <Item
-                        isChildren
-                        id={thisItem.id}
-                        isCollapsible={thisItem.settings?.isCollapsible}
-                      />
+                      <Item isChildren id={thisItem.id} />
                     </Box>
                   ))}
                 </>
@@ -259,11 +256,7 @@ const Item = ({
                 )
                 ?.map((thisItem) => (
                   <Container key={thisItem.id}>
-                    <Item
-                      isChildren
-                      id={thisItem.id}
-                      isCollapsible={thisItem.settings?.isCollapsible}
-                    />
+                    <Item isChildren id={thisItem.id} />
                   </Container>
                 ))}
             </>
@@ -280,14 +273,10 @@ const Item = ({
           isResizable
           showButton={item.settings?.showLinkButton}
           showIframe={item.settings?.showLinkIframe}
+          showCollapse={showCollapse}
         />
       );
 
-      if (showCollapse) {
-        return withCollapse({
-          item,
-        })(linkItem);
-      }
       return linkItem;
     }
     case ItemType.LOCAL_FILE:
@@ -303,27 +292,21 @@ const Item = ({
         />
       );
 
-      if (showCollapse) {
-        return withCollapse({
-          item,
-        })(fileItem);
-      }
       return fileItem;
     }
     case ItemType.DOCUMENT: {
       const documentItem = (
-        <DocumentItem id={buildDocumentId(id)} item={item} />
+        <DocumentItem
+          id={buildDocumentId(id)}
+          item={item}
+          showCollapse={showCollapse}
+        />
       );
 
-      if (showCollapse) {
-        return withCollapse({
-          item,
-        })(documentItem);
-      }
       return documentItem;
     }
     case ItemType.APP: {
-      if (isMemberLoading) {
+      if (isLoadingMember) {
         return (
           <Skeleton
             variant="rectangular"
@@ -332,27 +315,30 @@ const Item = ({
           />
         );
       }
-
-      const appItem = (
-        <AppItem
-          id={buildAppId(id)}
-          item={item}
-          apiHost={API_HOST} // todo: to change
-          member={member}
-          permission="read" // todo: use graasp-constants
-          requestApiAccessToken={Api.requestApiAccessToken}
-          height={SCREEN_MAX_HEIGHT}
-          isResizable={item.settings?.isResizable || DEFAULT_RESIZABLE_SETTING}
-          context={APP_CONTEXT}
-        />
+      if (isSuccessMember)
+        return (
+          <AppItem
+            id={buildAppId(id)}
+            item={item}
+            apiHost={API_HOST} // todo: to change
+            member={member}
+            permission={PermissionLevel.Read}
+            requestApiAccessToken={(payload) =>
+              Api.requestApiAccessToken(payload, { API_HOST })
+            }
+            height={SCREEN_MAX_HEIGHT}
+            isResizable={
+              item.settings?.isResizable || DEFAULT_RESIZABLE_SETTING
+            }
+            context={Context.PLAYER}
+            showCollapse={showCollapse}
+          />
+        );
+      return (
+        <Alert severity="error">
+          {translateMessage(FAILURE_MESSAGES.UNEXPECTED_ERROR)}
+        </Alert>
       );
-
-      if (showCollapse) {
-        return withCollapse({
-          item,
-        })(appItem);
-      }
-      return appItem;
     }
 
     case ItemType.H5P: {
@@ -368,8 +354,10 @@ const Item = ({
       return (
         <H5PItem
           itemId={id}
+          itemName={item.name}
           contentId={contentId}
           integrationUrl={H5P_INTEGRATION_URL}
+          showCollapse={showCollapse}
         />
       );
     }
