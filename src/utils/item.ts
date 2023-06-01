@@ -1,9 +1,7 @@
-import { ItemType } from '@graasp/sdk';
+import { ItemTagType, ItemType } from '@graasp/sdk';
 import { ItemRecord, ItemTagRecord } from '@graasp/sdk/frontend';
 
 import { List, isList } from 'immutable';
-
-import { HIDDEN_ITEM_TAG_ID } from '@/config/env';
 
 /**
  * @deprecated
@@ -69,9 +67,20 @@ export const buildPath = ({
 export const isError = (error?: { statusCode: number }): boolean =>
   Boolean(error?.statusCode);
 
+/**
+ * Check that an item is hidden (or one of his parents)
+ * @param item Item to check for
+ * @param tags a list of item tags
+ * @param options an object that may contain the `exactPath` option. In case that option is enabled (true)
+ * the paths are checked for equality instead of simply ancestry (default)
+ * @returns
+ */
 export const isHidden = (
+  item: ItemRecord,
   tags?: List<ItemTagRecord> | { statusCode: number },
+  option?: { exactPath: boolean },
 ): boolean => {
+  // if there are not tags then the item is not hidden
   if (!tags) {
     return false;
   }
@@ -80,10 +89,14 @@ export const isHidden = (
     return false;
   }
   if (isList(tags)) {
-    return Boolean(
-      tags?.filter(({ tagId }) => tagId === HIDDEN_ITEM_TAG_ID)?.size,
-    );
+    const hiddenTags = tags?.filter(({ type }) => type === ItemTagType.Hidden);
+    if (option?.exactPath) {
+      return hiddenTags?.some((t) => item.path === t.item.path);
+    }
+    // check if some item start with the path of the parent
+    return hiddenTags?.some((t) => item.path.startsWith(t.item.path));
   }
+  // fallback to not hidden
   return false;
 };
 

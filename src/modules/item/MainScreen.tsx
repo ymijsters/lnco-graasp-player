@@ -51,15 +51,15 @@ const MainScreen = (): JSX.Element => {
   return (
     <Main
       open={Boolean(rootId)}
-      context={Context.PLAYER}
-      sidebar={rootId ? <ItemNavigation /> : undefined}
+      context={Context.Player}
+      sidebar={<ItemNavigation />}
       headerLeftContent={
         <HeaderNavigation rootId={rootId} topItemName={topItemName} />
       }
       headerRightContent={<HeaderRightContent />}
     >
       <LayoutContextProvider>
-        <SideContent item={item}>{content}</SideContent>
+        <SideContent item={item} content={content} />
       </LayoutContextProvider>
     </Main>
   );

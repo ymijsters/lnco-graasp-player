@@ -1,4 +1,11 @@
-import { DiscriminatedItem, ItemType } from '@graasp/sdk';
+import {
+  ItemTagType,
+  ItemType,
+  PermissionLevel,
+  buildPathFromIds,
+} from '@graasp/sdk';
+
+import { v4 } from 'uuid';
 
 import {
   GRAASP_DOCUMENT_ITEM_HIDDEN,
@@ -6,16 +13,9 @@ import {
   GRAASP_DOCUMENT_ITEM_PUBLIC_VISIBLE,
   GRAASP_DOCUMENT_ITEM_VISIBLE,
 } from './documents';
-import { CURRENT_USER } from './members';
-
-const PUBLIC_TAG_ID = Cypress.env('PUBLIC_TAG_ID');
-
-export type MockItem = DiscriminatedItem & {
-  // for testing
-  filepath?: string;
-  memberships?: { memberId: string }[];
-  tags?: { tagId: string }[];
-};
+import { CURRENT_USER, MEMBERS } from './members';
+import { MockItem } from './mockTypes';
+import { mockItemTag } from './tags';
 
 export const DEFAULT_FOLDER_ITEM: MockItem = {
   description: '',
@@ -27,17 +27,18 @@ export const DEFAULT_FOLDER_ITEM: MockItem = {
       childrenOrder: [],
     },
   },
-  creator: CURRENT_USER.id,
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
+  creator: CURRENT_USER,
+  createdAt: new Date(),
+  updatedAt: new Date(),
   type: ItemType.FOLDER,
   settings: {
     isPinned: false,
     showChatbox: false,
   },
+  memberships: [{ memberId: MEMBERS.BOB.id, permission: PermissionLevel.Read }],
 };
 
-export const ITEM_WITH_CHAT_BOX = {
+export const ITEM_WITH_CHAT_BOX: MockItem = {
   ...DEFAULT_FOLDER_ITEM,
   id: 'ecafbd2a-5688-11eb-ae93-0242ac130002',
   name: 'parent folder',
@@ -48,7 +49,7 @@ export const ITEM_WITH_CHAT_BOX = {
   },
 };
 
-export const ITEM_WITHOUT_CHAT_BOX = {
+export const ITEM_WITHOUT_CHAT_BOX: MockItem = {
   ...DEFAULT_FOLDER_ITEM,
   id: 'fdf09f5a-5688-11eb-ae93-0242ac130003',
   name: 'child folder',
@@ -93,6 +94,16 @@ export const FOLDER_WITH_SUBFOLDER_ITEM: { items: MockItem[] } = {
       path: 'ecafbd2a_5688_11eb_ae93_0242ac130002.fdf09f5a_5688_11eb_ae93_0242ac130004',
       settings: {
         isPinned: false,
+        showChatbox: false,
+      },
+    },
+    {
+      ...DEFAULT_FOLDER_ITEM,
+      id: 'fdf09f5a-5688-11eb-ae93-0242ac130005',
+      name: 'child of child folder',
+      path: 'ecafbd2a_5688_11eb_ae93_0242ac130002.fdf09f5a_5688_11eb_ae93_0242ac130003.fdf09f5a_5688_11eb_ae93_0242ac130005',
+      settings: {
+        isPinned: true,
         showChatbox: false,
       },
     },
@@ -154,11 +165,7 @@ export const PUBLIC_FOLDER_WITH_PINNED_ITEMS: { items: MockItem[] } = {
         isPinned: false,
         showChatbox: false,
       },
-      tags: [
-        {
-          tagId: PUBLIC_TAG_ID,
-        },
-      ],
+      tags: [mockItemTag({ type: ItemTagType.Public })],
     },
     {
       ...DEFAULT_FOLDER_ITEM,
@@ -178,11 +185,7 @@ export const PUBLIC_FOLDER_WITH_PINNED_ITEMS: { items: MockItem[] } = {
           icons: [],
         },
       },
-      tags: [
-        {
-          tagId: PUBLIC_TAG_ID,
-        },
-      ],
+      tags: [mockItemTag({ type: ItemTagType.Public })],
     },
     {
       ...DEFAULT_FOLDER_ITEM,
@@ -193,11 +196,7 @@ export const PUBLIC_FOLDER_WITH_PINNED_ITEMS: { items: MockItem[] } = {
         isPinned: true,
         showChatbox: false,
       },
-      tags: [
-        {
-          tagId: PUBLIC_TAG_ID,
-        },
-      ],
+      tags: [mockItemTag({ type: ItemTagType.Public })],
     },
   ],
 };
@@ -216,28 +215,32 @@ export const FOLDER_WITH_HIDDEN_ITEMS: { items: MockItem[] } = {
     },
     GRAASP_DOCUMENT_ITEM_VISIBLE,
     GRAASP_DOCUMENT_ITEM_HIDDEN,
+    {
+      ...DEFAULT_FOLDER_ITEM,
+      id: 'ecafbd2a-5688-11eb-ae93-0242ac130012',
+      name: 'hidden folder',
+      path: 'ecafbd2a_5688_11eb_ae93_0242ac130008.ecafbd2a-5688-11eb-ae93-0242ac130012',
+      settings: {
+        isPinned: false,
+        showChatbox: false,
+      },
+      tags: [mockItemTag({ type: ItemTagType.Hidden })],
+    },
   ],
 };
 
-export const PUBLIC_FOLDER_WITH_HIDDEN_ITEMS = {
+export const PUBLIC_FOLDER_WITH_HIDDEN_ITEMS: { items: MockItem[] } = {
   items: [
     {
       ...DEFAULT_FOLDER_ITEM,
       id: 'ecafbd2a-5688-11eb-ae93-0242ac130008',
       name: 'public parent folder with hidden child',
       path: 'ecafbd2a_5688_11eb_ae93_0242ac130008',
-      extra: {
-        image: 'someimageurl',
-      },
       settings: {
         isPinned: false,
         showChatbox: false,
       },
-      tags: [
-        {
-          tagId: PUBLIC_TAG_ID,
-        },
-      ],
+      tags: [mockItemTag({ type: ItemTagType.Public })],
     },
     GRAASP_DOCUMENT_ITEM_PUBLIC_VISIBLE,
     GRAASP_DOCUMENT_ITEM_PUBLIC_HIDDEN,
@@ -259,17 +262,99 @@ export const SHORTCUT = {
   },
 };
 
-export const FOLDER_FIXTURE = {
-  ...DEFAULT_FOLDER_ITEM,
-  id: 'gcefbd2a-5688-11eb-ae92-0242ac130002',
-  name: 'folder',
-  path: 'gcefbd2a_5688_11eb_ae92_0242ac130002',
-  type: ItemType.FOLDER,
-  extra: {
-    image: 'someimageurl',
-  },
-  settings: {
-    isPinned: false,
-    showChatbox: false,
-  },
+export const generateLotsOfFoldersOnHome = ({
+  folderCount,
+  creator = DEFAULT_FOLDER_ITEM.creator,
+  memberships = DEFAULT_FOLDER_ITEM.memberships,
+}: {
+  folderCount: number;
+  creator?: MockItem['creator'];
+  memberships?: MockItem['memberships'];
+}): MockItem[] =>
+  Array.from(Array(folderCount)).map(() => {
+    const itemId = v4();
+    return {
+      ...DEFAULT_FOLDER_ITEM,
+      id: itemId,
+      name: itemId,
+      path: buildPathFromIds(itemId),
+      type: ItemType.FOLDER,
+      settings: {
+        isPinned: false,
+        showChatbox: false,
+      },
+      memberships,
+      creator,
+    };
+  });
+
+export const HOME_FOLDERS: { items: MockItem[] } = {
+  items: [
+    {
+      ...DEFAULT_FOLDER_ITEM,
+      id: 'gcefbd2a-5688-11eb-ae92-0242ac130002',
+      name: 'folder',
+      path: 'gcefbd2a_5688_11eb_ae92_0242ac130002',
+      type: ItemType.FOLDER,
+      settings: {
+        isPinned: false,
+        showChatbox: false,
+      },
+    },
+    {
+      ...DEFAULT_FOLDER_ITEM,
+      id: 'gcefbd2a-5688-11eb-ae92-0242ac130002',
+      name: 'folder',
+      path: 'gcefbd2a_5688_11eb_ae92_0242ac130002',
+      type: ItemType.FOLDER,
+      settings: {
+        isPinned: false,
+        showChatbox: false,
+      },
+    },
+    {
+      ...DEFAULT_FOLDER_ITEM,
+      id: 'gcefbd2a-5688-11eb-ae92-0242ac130002',
+      name: 'folder',
+      path: 'gcefbd2a_5688_11eb_ae92_0242ac130002',
+      type: ItemType.FOLDER,
+      settings: {
+        isPinned: false,
+        showChatbox: false,
+      },
+    },
+    {
+      ...DEFAULT_FOLDER_ITEM,
+      id: 'gcefbd2a-5688-11eb-ae92-0242ac130002',
+      name: 'folder',
+      path: 'gcefbd2a_5688_11eb_ae92_0242ac130002',
+      type: ItemType.FOLDER,
+      settings: {
+        isPinned: false,
+        showChatbox: false,
+      },
+    },
+    {
+      ...DEFAULT_FOLDER_ITEM,
+      id: 'gcefbd2a-5688-11eb-ae92-0242ac130002',
+      name: 'folder',
+      path: 'gcefbd2a_5688_11eb_ae92_0242ac130002',
+      type: ItemType.FOLDER,
+      settings: {
+        isPinned: false,
+        showChatbox: false,
+      },
+    },
+    {
+      ...DEFAULT_FOLDER_ITEM,
+      id: 'gcefbd2a-5688-11eb-ae92-0242ac130002',
+      name: 'folder',
+      path: 'gcefbd2a_5688_11eb_ae92_0242ac130002',
+      type: ItemType.FOLDER,
+      settings: {
+        isPinned: false,
+        showChatbox: false,
+      },
+    },
+  ],
 };

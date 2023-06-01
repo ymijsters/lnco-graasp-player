@@ -15,7 +15,7 @@ const {
   API_HOST,
   DOMAIN,
   // todo: improve types
-  notifier: notifier as (e: unknown) => void,
+  notifier,
   enableWebsocket: true,
   defaultQueryOptions: {
     keepPreviousData: true,

@@ -1,5 +1,17 @@
 import { API_ROUTES } from '@graasp/query-client';
-import { Member, PermissionLevel, isChildOf } from '@graasp/sdk';
+import {
+  ChatMessage,
+  DiscriminatedItem,
+  ItemTag,
+  ItemTagType,
+  Member,
+  PermissionLevel,
+  PermissionLevelCompare,
+  ResultOf,
+  isChildOf,
+  isDescendantOf,
+  isRootItem,
+} from '@graasp/sdk';
 
 import { StatusCodes } from 'http-status-codes';
 import * as qs from 'qs';
@@ -9,8 +21,8 @@ import {
   buildAppItemLinkForTest,
   buildGetAppData,
 } from '../fixtures/apps';
-import { MockItem } from '../fixtures/items';
 import { MEMBERS } from '../fixtures/members';
+import { MockItem, MockItemTag } from '../fixtures/mockTypes';
 import {
   DEFAULT_DELETE,
   DEFAULT_GET,
@@ -18,6 +30,7 @@ import {
   DEFAULT_POST,
   EMAIL_FORMAT,
   ID_FORMAT,
+  getChatMessagesById,
   getItemById,
   parseStringToRegExp,
 } from './utils';
@@ -27,51 +40,82 @@ export const MEMBER_PROFILE_PATH = `${Cypress.env(
 )}/profile`;
 
 const {
-  buildGetItemRoute,
-  buildGetMembersBy,
-  buildGetItemTagsRoute,
-  GET_CURRENT_MEMBER_ROUTE,
   buildDownloadFilesRoute,
-  GET_OWN_ITEMS_ROUTE,
-  buildGetPublicItemRoute,
-  buildPublicDownloadFilesRoute,
-  SIGN_OUT_ROUTE,
-  buildGetMembersRoute,
+  buildGetItemChatRoute,
+  buildGetItemLoginSchemaRoute,
   buildGetItemMembershipsForItemsRoute,
+  buildGetItemRoute,
+  buildGetItemTagsRoute,
+  buildGetMembersBy,
+  buildGetMembersRoute,
+  GET_CURRENT_MEMBER_ROUTE,
+  GET_OWN_ITEMS_ROUTE,
+  SHARED_ITEM_WITH_ROUTE,
+  SIGN_OUT_ROUTE,
 } = API_ROUTES;
 
 const API_HOST = Cypress.env('API_HOST');
-
-const PUBLIC_TAG_ID = Cypress.env('PUBLIC_TAG_ID');
 
 export const isError = (error?: { statusCode: number }): boolean =>
   Boolean(error?.statusCode);
 
 const checkMemberHasAccess = ({
   item,
+  items,
   member,
 }: {
   item: MockItem;
+  items: MockItem[];
   member: Member;
 }) => {
   // mock membership
-  const creator = item?.creator;
-  const haveMembership =
-    creator === member.id ||
-    item.memberships?.find(({ memberId }) => memberId === member.id);
+  const { creator } = item;
+  const haveWriteMembership =
+    creator?.id === member.id ||
+    items.find(
+      (i) =>
+        item.path.startsWith(i.path) &&
+        i.memberships?.find(
+          ({ memberId, permission }) =>
+            memberId === member.id &&
+            PermissionLevelCompare.gte(permission, PermissionLevel.Write),
+        ),
+    );
+  const haveReadMembership =
+    items.find(
+      (i) =>
+        item.path.startsWith(i.path) &&
+        i.memberships?.find(
+          ({ memberId, permission }) =>
+            memberId === member.id &&
+            PermissionLevelCompare.lt(permission, PermissionLevel.Write),
+        ),
+    ) ?? false;
 
-  if (haveMembership) {
+  const isHidden =
+    items.find(
+      (i) =>
+        item.path.startsWith(i.path) &&
+        i?.tags?.find(({ type }) => type === ItemTagType.Hidden),
+    ) ?? false;
+  const isPublic =
+    items.find(
+      (i) =>
+        item.path.startsWith(i.path) &&
+        i?.tags?.find(({ type }) => type === ItemTagType.Public),
+    ) ?? false;
+  // user is more than a reader so he can access the item
+  if (isHidden && haveWriteMembership) {
+    return undefined;
+  }
+  if (!isHidden && (haveWriteMembership || haveReadMembership)) {
+    return undefined;
+  }
+  // item is public and not hidden
+  if (!isHidden && isPublic) {
     return undefined;
   }
   return { statusCode: StatusCodes.FORBIDDEN };
-};
-
-const checkIsPublic = (item: MockItem): { statusCode: number } | undefined => {
-  const isPublic = item?.tags?.find(({ tagId }) => tagId === PUBLIC_TAG_ID);
-  if (!isPublic) {
-    return { statusCode: StatusCodes.UNAUTHORIZED };
-  }
-  return undefined;
 };
 
 export const mockGetOwnItems = ({
@@ -92,11 +136,37 @@ export const mockGetOwnItems = ({
       }
       const own = items.filter(
         ({ creator, path }) =>
-          creator === currentMember.id && !path.includes('.'),
+          creator?.id === currentMember.id && !path.includes('.'),
       );
       return reply(own);
     },
   ).as('getOwnItems');
+};
+
+export const mockGetSharedItems = ({
+  items,
+  currentMember,
+}: {
+  items: MockItem[];
+  currentMember: Member;
+}): void => {
+  cy.intercept(
+    {
+      method: DEFAULT_GET.method,
+      url: `${API_HOST}/${SHARED_ITEM_WITH_ROUTE}`,
+    },
+    ({ reply }) => {
+      if (!currentMember) {
+        return reply({ statusCode: StatusCodes.UNAUTHORIZED, body: null });
+      }
+      const shared = items.filter(
+        ({ memberships, path }) =>
+          memberships?.find((m) => m.memberId === currentMember.id) &&
+          isRootItem({ path }),
+      );
+      return reply(shared);
+    },
+  ).as('getSharedItems');
 };
 
 export const mockGetCurrentMember = (
@@ -139,7 +209,11 @@ export const mockGetItem = (
         });
       }
 
-      const error = checkMemberHasAccess({ item, member: currentMember });
+      const error = checkMemberHasAccess({
+        item,
+        items,
+        member: currentMember,
+      });
       if (isError(error)) {
         return reply(error);
       }
@@ -150,6 +224,28 @@ export const mockGetItem = (
       });
     },
   ).as('getItem');
+};
+
+export const mockGetItemChat = ({
+  chatMessages,
+}: {
+  chatMessages: ChatMessage[];
+}): void => {
+  cy.intercept(
+    {
+      method: DEFAULT_GET.method,
+      url: new RegExp(`${API_HOST}/${buildGetItemChatRoute(ID_FORMAT)}$`),
+    },
+    ({ url, reply }) => {
+      const itemId = url.slice(API_HOST.length).split('/')[2];
+      const itemChat = getChatMessagesById(chatMessages, itemId);
+
+      return reply({
+        body: itemChat,
+        statusCode: StatusCodes.OK,
+      });
+    },
+  ).as('getItemChat');
 };
 
 export const mockGetItemMembershipsForItem = (
@@ -175,7 +271,7 @@ export const mockGetItemMembershipsForItem = (
           // if the current member is the creator, it has membership
           // otherwise it should return an error
           const defaultMembership =
-            creator === currentMember?.id
+            creator?.id === currentMember?.id
               ? [
                   {
                     permission: PermissionLevel.Admin,
@@ -201,39 +297,6 @@ export const mockGetItemMembershipsForItem = (
   ).as('getItemMemberships');
 };
 
-export const mockGetPublicItem = (
-  { items }: { items: MockItem[] },
-  shouldThrowError?: boolean,
-): void => {
-  cy.intercept(
-    {
-      method: DEFAULT_GET.method,
-      url: new RegExp(`${API_HOST}/${buildGetPublicItemRoute(ID_FORMAT)}$`),
-    },
-    ({ url, reply }) => {
-      const itemId = url.slice(API_HOST.length).split('/')[3];
-      const item = getItemById(items, itemId);
-
-      // item does not exist in db
-      if (!item || shouldThrowError) {
-        return reply({
-          statusCode: StatusCodes.NOT_FOUND,
-        });
-      }
-
-      const error = checkIsPublic(item);
-      if (isError(error)) {
-        return reply(error);
-      }
-
-      return reply({
-        body: item,
-        statusCode: StatusCodes.OK,
-      });
-    },
-  ).as('getPublicItem');
-};
-
 export const mockGetChildren = (items: MockItem[], member: Member): void => {
   cy.intercept(
     {
@@ -251,27 +314,30 @@ export const mockGetChildren = (items: MockItem[], member: Member): void => {
         });
       }
 
-      const error = checkMemberHasAccess({ item, member });
+      const error = checkMemberHasAccess({ item, items, member });
       if (isError(error)) {
         return reply(error);
       }
-      const children = items.filter((newItem) =>
-        isChildOf(newItem.path, item.path),
+      const children = items.filter(
+        (newItem) =>
+          isChildOf(newItem.path, item.path) &&
+          checkMemberHasAccess({ item: newItem, items, member }) === undefined,
       );
       return reply(children);
     },
   ).as('getChildren');
 };
 
-export const mockGetPublicChildren = (items: MockItem[]): void => {
+export const mockGetDescendants = (items: MockItem[], member: Member): void => {
   cy.intercept(
     {
       method: DEFAULT_GET.method,
-      url: new RegExp(`${API_HOST}/p/items/${ID_FORMAT}/children`),
+      url: new RegExp(`${API_HOST}/items/${ID_FORMAT}/descendants`),
     },
     ({ url, reply }) => {
-      const id = url.slice(API_HOST.length).split('/')[3];
+      const id = url.slice(API_HOST.length).split('/')[2];
       const item = items.find(({ id: thisId }) => id === thisId);
+
       // item does not exist in db
       if (!item) {
         return reply({
@@ -279,17 +345,18 @@ export const mockGetPublicChildren = (items: MockItem[]): void => {
         });
       }
 
-      const error = checkIsPublic(item);
+      const error = checkMemberHasAccess({ item, items, member });
       if (isError(error)) {
         return reply(error);
       }
-
-      const children = items.filter((testItem) =>
-        isChildOf(testItem.path, item.path),
+      const descendants = items.filter(
+        (newItem) =>
+          isDescendantOf(newItem.path, item.path) &&
+          checkMemberHasAccess({ item: newItem, items, member }) === undefined,
       );
-      return reply(children);
+      return reply(descendants);
     },
-  ).as('getPublicChildren');
+  ).as('getDescendants');
 };
 
 export const mockGetMemberBy = (
@@ -334,7 +401,6 @@ export const mockDefaultDownloadFile = (
       const id = url.slice(API_HOST.length).split('/')[2];
       const item = items.find(({ id: thisId }) => id === thisId);
       const { replyUrl } = qs.parse(url.slice(url.indexOf('?') + 1));
-
       // item does not exist in db
       if (!item) {
         return reply({
@@ -342,63 +408,24 @@ export const mockDefaultDownloadFile = (
         });
       }
 
-      const error = checkMemberHasAccess({ item, member: currentMember });
+      const error = checkMemberHasAccess({
+        item,
+        items,
+        member: currentMember,
+      });
       if (isError(error)) {
         return reply(error);
       }
 
       // either return the file url or the fixture data
       // info: we don't test fixture data anymore since the frontend uses url only
-      if (replyUrl) {
-        return reply({ url: item.filepath });
+      if (replyUrl && item.filepath) {
+        return reply(item.filepath);
       }
 
-      return reply({ fixture: item.filepath });
+      return reply({ fixture: item.filefixture });
     },
   ).as('downloadFile');
-};
-
-export const mockPublicDefaultDownloadFile = (
-  items: MockItem[],
-  shouldThrowError?: boolean,
-): void => {
-  cy.intercept(
-    {
-      method: DEFAULT_GET.method,
-      url: new RegExp(
-        `${API_HOST}/${buildPublicDownloadFilesRoute(ID_FORMAT)}`,
-      ),
-    },
-    ({ reply, url }) => {
-      if (shouldThrowError) {
-        return reply({ statusCode: StatusCodes.BAD_REQUEST });
-      }
-
-      const id = url.slice(API_HOST.length).split('/')[3];
-      const item = items.find(({ id: thisId }) => id === thisId);
-      const { replyUrl } = qs.parse(url.slice(url.indexOf('?') + 1));
-
-      // item does not exist in db
-      if (!item) {
-        return reply({
-          statusCode: StatusCodes.NOT_FOUND,
-        });
-      }
-
-      const error = checkIsPublic(item);
-      if (isError(error)) {
-        return reply(error);
-      }
-
-      // either return the file url or the fixture data
-      // info: we don't test fixture data anymore since the frontend uses url only
-      if (replyUrl) {
-        return reply({ url: item.filepath });
-      }
-
-      return reply({ fixture: item.filepath });
-    },
-  ).as('publicDownloadFile');
 };
 
 export const mockGetItemTags = (items: MockItem[], member: Member): void => {
@@ -418,12 +445,23 @@ export const mockGetItemTags = (items: MockItem[], member: Member): void => {
         });
       }
 
-      const error = checkMemberHasAccess({ item, member });
+      const error = checkMemberHasAccess({ item, items, member });
       if (isError(error)) {
         return reply(error);
       }
 
-      const result = item?.tags || [];
+      const itemTags = items
+        .filter((i) => item.path.startsWith(i.path) && Boolean(i.tags))
+        .map(
+          (i) =>
+            i.tags?.map((t) => ({
+              ...t,
+              item: i as DiscriminatedItem,
+            })) as ItemTag[],
+        );
+      const result =
+        itemTags.reduce<MockItemTag[]>((acc, tags) => [...acc, ...tags], []) ||
+        [];
       return reply(result);
     },
   ).as('getItemTags');
@@ -440,17 +478,52 @@ export const mockGetItemsTags = (items: MockItem[], member: Member): void => {
 
       const result = items
         .filter(({ id }) => ids.includes(id))
-        .map((item) => {
-          const error = checkMemberHasAccess({ item, member });
+        .reduce(
+          (acc, item) => {
+            const error = checkMemberHasAccess({ item, items, member });
 
-          return isError(error) ? error : item?.tags ?? [];
-        });
+            return isError(error)
+              ? { ...acc, error: [...acc.errors, error] }
+              : {
+                  ...acc,
+                  data: {
+                    ...acc.data,
+                    [item.id]: item.tags?.map((t) => ({ item, ...t })) ?? [],
+                  },
+                };
+          },
+          { data: {}, errors: [] } as ResultOf<ItemTag[]>,
+        );
       reply({
         statusCode: StatusCodes.OK,
         body: result,
       });
     },
   ).as('getItemsTags');
+};
+
+export const mockGetLoginSchemaType = (
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  items: MockItem[],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  member: Member,
+): void => {
+  cy.intercept(
+    {
+      method: DEFAULT_GET.method,
+      url: new RegExp(`${API_HOST}/${buildGetItemLoginSchemaRoute(ID_FORMAT)}`),
+    },
+    ({ reply, url }) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const itemId = url.slice(API_HOST.length).split('/')[2];
+
+      // todo: add response for itemLoginSchemaType
+
+      reply({
+        statusCode: StatusCodes.OK,
+      });
+    },
+  ).as('getLoginSchemaType');
 };
 
 export const redirectionReply = {
