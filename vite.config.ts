@@ -19,6 +19,10 @@ export default ({ mode }: { mode: string }): UserConfigExport => {
         ignored: ['**/coverage/**'],
       },
     },
+    preview: {
+      port: parseInt(process.env.VITE_PORT, 10),
+      strictPort: true,
+    },
     build: {
       outDir: 'build',
     },
@@ -33,6 +37,7 @@ export default ({ mode }: { mode: string }): UserConfigExport => {
         exclude: ['node_modules', 'test/'],
         extension: ['.js', '.ts', '.tsx'],
         requireEnv: false,
+        forceBuildInstrument: mode === 'test',
         checkProd: true,
       }),
       ...(mode === 'dev'
