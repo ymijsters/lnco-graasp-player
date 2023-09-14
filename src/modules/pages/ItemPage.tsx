@@ -1,8 +1,8 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import { ItemLoginAuthorization } from '@graasp/ui';
+import { ItemLoginAuthorization, useShortenURLParams } from '@graasp/ui';
 
-import { HOME_PATH } from '@/config/paths';
+import { HOME_PATH, ROOT_ID_PATH } from '@/config/paths';
 import { hooks, mutations } from '@/config/queryClient';
 import { ItemContextProvider } from '@/contexts/ItemContext';
 import PlayerCookiesBanner from '@/modules/cookies/PlayerCookiesBanner';
@@ -28,7 +28,9 @@ const { usePostItemLogin, useSignOut } = mutations;
 const ItemPage = (): JSX.Element | null => {
   const { mutate: signOut } = useSignOut();
   const { mutate: itemLoginSignIn } = usePostItemLogin();
-  const { rootId } = useParams();
+
+  const rootId = useShortenURLParams(ROOT_ID_PATH);
+
   const navigate = useNavigate();
 
   const ForbiddenContent = <ItemForbiddenScreen />;

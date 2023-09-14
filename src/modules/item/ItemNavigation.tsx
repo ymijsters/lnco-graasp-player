@@ -1,13 +1,12 @@
-import { useParams } from 'react-router';
-
 import { Alert } from '@mui/material';
 
 import { FAILURE_MESSAGES } from '@graasp/translations';
-import { MainMenu } from '@graasp/ui';
+import { MainMenu, useShortenURLParams } from '@graasp/ui';
 
 import { List } from 'immutable';
 
 import { useMessagesTranslation } from '@/config/i18n';
+import { ROOT_ID_PATH } from '@/config/paths';
 import { hooks } from '@/config/queryClient';
 import { MAIN_MENU_ID, TREE_VIEW_ID } from '@/config/selectors';
 import { useItemContext } from '@/contexts/ItemContext';
@@ -16,7 +15,8 @@ import DynamicTreeView from '@/modules/tree/DynamicTreeView';
 const { useItem } = hooks;
 
 const ItemNavigation = (): JSX.Element | null => {
-  const { rootId } = useParams();
+  const rootId = useShortenURLParams(ROOT_ID_PATH);
+
   const { t: translateMessage } = useMessagesTranslation();
   const { setFocusedItemId, focusedItemId } = useItemContext();
 
