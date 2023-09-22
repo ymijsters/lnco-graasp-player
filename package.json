@@ -1,6 +1,6 @@
 {
   "name": "graasp-player",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "author": "Graasp",
   "contributors": [
@@ -35,8 +35,8 @@
     "@emotion/react": "11.11.1",
     "@emotion/styled": "11.11.0",
     "@graasp/chatbox": "2.0.1",
-    "@graasp/query-client": "1.4.3",
-    "@graasp/sdk": "1.2.1",
+    "@graasp/query-client": "1.7.0",
+    "@graasp/sdk": "1.4.0",
     "@graasp/translations": "1.18.3",
     "@graasp/ui": "3.5.0",
     "@mui/icons-material": "5.14.6",
