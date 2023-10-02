@@ -1,3 +1,5 @@
 export const HOME_PATH = '/';
-export const buildMainPath = ({ rootId = ':rootId' } = {}): string =>
+export const ROOT_ID_PATH = 'rootId';
+export const buildMainPath = ({ rootId = `:${ROOT_ID_PATH}` } = {}): string =>
   `/${rootId}`;
+

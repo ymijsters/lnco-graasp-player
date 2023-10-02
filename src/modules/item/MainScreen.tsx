@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 
 import { Alert, Skeleton, Typography } from '@mui/material';
 
 import { Context } from '@graasp/sdk';
-import { Main } from '@graasp/ui';
+import { Main, useShortenURLParams } from '@graasp/ui';
 
+import { ROOT_ID_PATH } from '@/config/paths';
 import { hooks } from '@/config/queryClient';
 import { useItemContext } from '@/contexts/ItemContext';
 import { LayoutContextProvider } from '@/contexts/LayoutContext';
@@ -18,7 +18,8 @@ import Item from './Item';
 import ItemNavigation from './ItemNavigation';
 
 const MainScreen = (): JSX.Element => {
-  const { rootId } = useParams();
+  const rootId = useShortenURLParams(ROOT_ID_PATH);
+
   const { focusedItemId } = useItemContext();
   const mainId = focusedItemId || rootId;
   const { data: item, isLoading, isError } = hooks.useItem(mainId);
