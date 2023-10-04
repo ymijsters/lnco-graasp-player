@@ -6,7 +6,6 @@ import { hasAcceptedCookies } from '@graasp/sdk';
 import '@graasp/ui/dist/bundle.css';
 
 import * as Sentry from '@sentry/react';
-import { BrowserTracing } from '@sentry/tracing';
 
 import { APP_VERSION, GA_MEASUREMENT_ID, SENTRY_DSN } from '@/config/env';
 import { SENTRY_ENVIRONMENT, SENTRY_TRACE_SAMPLE_RATE } from '@/config/sentry';
@@ -16,7 +15,7 @@ import Root from './Root';
 
 Sentry.init({
   dsn: SENTRY_DSN,
-  integrations: [new BrowserTracing()],
+  integrations: [new Sentry.BrowserTracing()],
   environment: SENTRY_ENVIRONMENT,
   release: `${pkg.name}@${APP_VERSION}`,
 
