@@ -34,17 +34,16 @@
     "@emotion/cache": "11.11.0",
     "@emotion/react": "11.11.1",
     "@emotion/styled": "11.11.0",
-    "@graasp/chatbox": "2.0.1",
-    "@graasp/query-client": "1.11.0",
-    "@graasp/sdk": "1.8.0",
-    "@graasp/translations": "1.19.2",
-    "@graasp/ui": "3.5.4",
+    "@graasp/chatbox": "3.0.0",
+    "@graasp/query-client": "2.0.1",
+    "@graasp/sdk": "2.0.0",
+    "@graasp/translations": "1.19.4",
+    "@graasp/ui": "4.0.0",
     "@mui/icons-material": "5.14.15",
     "@mui/lab": "5.0.0-alpha.150",
     "@mui/material": "5.14.15",
     "@sentry/react": "7.74.1",
     "i18next": "23.5.1",
-    "immutable": "4.3.4",
     "lodash.truncate": "4.4.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -94,8 +93,7 @@
     "vite-plugin-istanbul": "5.0.0"
   },
   "resolutions": {
-    "i18next": "23.5.1",
-    "immutable": "4.3.4"
+    "i18next": "23.5.1"
   },
   "packageManager": "yarn@3.6.4"
 }
