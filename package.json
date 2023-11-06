@@ -36,7 +36,7 @@
     "@emotion/styled": "11.11.0",
     "@graasp/chatbox": "3.0.0",
     "@graasp/query-client": "2.0.1",
-    "@graasp/sdk": "2.0.0",
+    "@graasp/sdk": "2.0.1",
     "@graasp/translations": "1.19.4",
     "@graasp/ui": "4.0.0",
     "@mui/icons-material": "5.14.16",
@@ -93,7 +93,8 @@
     "vite-plugin-istanbul": "5.0.0"
   },
   "resolutions": {
-    "i18next": "23.5.1"
+    "i18next": "23.5.1",
+    "@graasp/sdk": "2.0.1"
   },
   "packageManager": "yarn@3.6.4"
 }
