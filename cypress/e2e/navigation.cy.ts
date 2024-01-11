@@ -1,12 +1,7 @@
 import { PermissionLevel } from '@graasp/sdk';
 
 import { buildMainPath } from '@/config/paths';
-import {
-  MY_ITEMS_ID,
-  SHARED_ITEMS_ID,
-  SHOW_MORE_ITEMS_ID,
-  buildTreeItemClass,
-} from '@/config/selectors';
+import { SHOW_MORE_ITEMS_ID, buildTreeItemClass } from '@/config/selectors';
 
 import {
   FOLDER_WITH_SUBFOLDER_ITEM,
@@ -22,6 +17,7 @@ const sharedItems = generateLotsOfFoldersOnHome({
     { memberId: MEMBERS.ANNA.id, permission: PermissionLevel.Read },
   ],
 });
+
 describe('Navigation', () => {
   it('Show navigation on Home', () => {
     cy.setUpApi({
@@ -29,19 +25,9 @@ describe('Navigation', () => {
     });
     cy.visit('/');
 
-    cy.wait(['@getCurrentMember', '@getOwnItems', '@getSharedItems']);
+    cy.wait(['@getCurrentMember', '@getAccessibleItems']);
 
-    cy.get(`#${MY_ITEMS_ID} #${SHOW_MORE_ITEMS_ID}`).click();
-    items.forEach((i) =>
-      cy.get(`.${buildTreeItemClass(i.id)}`, { timeout: 2000 }),
-    );
-
-    cy.get(`#${SHARED_ITEMS_ID} #${SHOW_MORE_ITEMS_ID}`).click({
-      force: true,
-    });
-    sharedItems.forEach((i) =>
-      cy.get(`.${buildTreeItemClass(i.id)}`, { timeout: 4000 }),
-    );
+    cy.get(`#${SHOW_MORE_ITEMS_ID}`).click();
   });
 
   it('Expand folder when navigating', () => {

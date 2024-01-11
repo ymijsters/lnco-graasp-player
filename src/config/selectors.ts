@@ -4,7 +4,6 @@ export const MAIN_MENU_ID = 'mainMenu';
 export const TREE_VIEW_ID = 'treeView';
 export const SHOW_MORE_ITEMS_ID = 'showMoreItems';
 export const HOME_NAVIGATION_STACK_ID = 'homeNavigation';
-export const SHARED_ITEMS_ID = 'sharedItems';
 export const MY_ITEMS_ID = 'myItems';
 export const buildFileId = (id: string): string => `file-${id}`;
 export const buildDocumentId = (id: string): string => `document-${id}`;
@@ -27,7 +26,8 @@ export const buildCollapsibleId = (id: string): string =>
 
 export const BUILDER_EDIT_BUTTON_ID = 'builderEditButton';
 
-export const PANEL_CLOSE_BUTTON_SELECTOR = '[data-testid="ChevronRightIcon"]';
+export const CHATBOX_DRAWER_ID = 'chatboxDrawer';
+export const PANEL_CLOSE_BUTTON_SELECTOR = `#${CHATBOX_DRAWER_ID} [data-testid="ChevronRightIcon"]`;
 
 export const buildFolderButtonId = (id: string): string => `folderButton-${id}`;
 export const buildTreeItemClass = (id: string): string => `buildTreeItem-${id}`;
