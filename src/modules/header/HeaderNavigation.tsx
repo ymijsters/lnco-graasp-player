@@ -1,6 +1,12 @@
 import { Link } from 'react-router-dom';
 
-import { Box, Typography, styled } from '@mui/material';
+import {
+  Stack,
+  Typography,
+  styled,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 
 import {
   GraaspLogo,
@@ -45,7 +51,8 @@ export const HeaderNavigation = ({
   topItemName = '',
 }: HeaderNavigationProps): JSX.Element => {
   const getNavigationEvents = usePlatformNavigation(platformsHostsMap, rootId);
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const platformProps = {
     [Platform.Builder]: {
       id: APP_NAVIGATION_PLATFORM_SWITCH_BUTTON_IDS[Platform.Builder],
@@ -65,12 +72,14 @@ export const HeaderNavigation = ({
     },
   };
   return (
-    <Box display="flex" ml={2}>
+    <Stack direction="row" alignItems="center" spacing={2}>
       <StyledLink to="/">
         <GraaspLogo height={GRAASP_LOGO_HEADER_HEIGHT} sx={{ fill: 'white' }} />
-        <Typography variant="h6" color="inherit" mr={2} ml={1}>
-          {APP_NAME}
-        </Typography>
+        {!isMobile && (
+          <Typography variant="h6" color="inherit" ml={1}>
+            {APP_NAME}
+          </Typography>
+        )}
       </StyledLink>
       <PlatformSwitch
         id={APP_NAVIGATION_PLATFORM_SWITCH_ID}
@@ -78,10 +87,8 @@ export const HeaderNavigation = ({
         platformsProps={platformProps}
         disabledColor="#999"
       />
-      <Box display="flex" sx={{ alignItems: 'center', ml: 3 }}>
-        <Typography>{topItemName}</Typography>
-      </Box>
-    </Box>
+      {!isMobile && <Typography>{topItemName}</Typography>}
+    </Stack>
   );
 };
 
