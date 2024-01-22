@@ -1,5 +1,11 @@
-import { useLocation } from 'react-router';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { useEffect } from 'react';
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useSearchParams,
+} from 'react-router-dom';
 
 import { saveUrlForRedirection } from '@graasp/sdk';
 import { CustomInitialLoader, withAuthorization } from '@graasp/ui';
@@ -12,8 +18,21 @@ import HomePage from '@/modules/pages/HomePage';
 import ItemPage from '@/modules/pages/ItemPage';
 
 export const App = (): JSX.Element => {
-  const { pathname } = useLocation();
+  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { data: currentMember, isLoading } = useCurrentMemberContext();
+
+  useEffect(
+    () => {
+      if (searchParams.get('_gl'))
+        // remove cross domain tracking query params
+        console.info('Removing cross site tracking params');
+      searchParams.delete('_gl');
+      setSearchParams(searchParams);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [searchParams],
+  );
 
   if (isLoading) {
     return <CustomInitialLoader />;
@@ -24,7 +43,7 @@ export const App = (): JSX.Element => {
     redirectionLink: SIGN_IN_PATH,
     onRedirect: () => {
       // save current url for later redirection after sign in
-      saveUrlForRedirection(pathname, DOMAIN);
+      saveUrlForRedirection(location.pathname, DOMAIN);
     },
   };
   const HomePageWithAuthorization = withAuthorization(HomePage, props);
