@@ -44,10 +44,14 @@ export const expectLinkViewScreenLayout = ({
 
   if (!html) {
     if (settings?.showLinkButton ?? DEFAULT_LINK_SHOW_BUTTON) {
-      cy.get('[data-testid="OpenInNewIcon"]').should('be.visible');
+      cy.get('[data-testid="OpenInNewIcon"]')
+        .scrollIntoView()
+        .should('be.visible');
     } else {
       // button should not be shown when the setting is false
-      cy.get('[data-testid="OpenInNewIcon"]').should('not.exist');
+      cy.get('[data-testid="OpenInNewIcon"]')
+        .scrollIntoView()
+        .should('not.exist');
     }
   }
 };
@@ -138,7 +142,8 @@ export const expectFolderLayout = ({
     .filter(({ type }) => type === ItemType.FOLDER)
     .forEach(({ id }) => {
       // click in mainmenu
-      cy.get(`.${buildTreeItemClass(id)}`).click();
+      // there are two because of th two menus
+      cy.get(`.${buildTreeItemClass(id)}:visible`).click();
 
       expectFolderLayout({ rootId: id, items });
     });

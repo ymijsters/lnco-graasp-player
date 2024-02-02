@@ -8,5 +8,9 @@
   "LOAD_MORE": "Load more",
   "HIDDEN_WRAPPER_TOOLTIP": "This element is hidden, you can see it because you have admin or write access, users with read access won't see it",
   "SHOW_MORE": "Show More...",
-  "RECENT_ITEMS_TITLE": "Most Recent Items"
+  "RECENT_ITEMS_TITLE": "Most Recent Items",
+  "DRAWER_ARIAL_LABEL": "Open drawer",
+  "ERROR_FETCHING_ITEM": "There was an error fetching the requested item",
+  "ERROR_ACCESSING_ITEM": "You cannot access this item",
+  "ERROR_ACCESSING_ITEM_HELPER": "Your current account does not have the rights to access this item."
 }
