@@ -6,13 +6,14 @@ import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 
-import { DiscriminatedItem, ItemType, Triggers } from '@graasp/sdk';
-import { ItemIcon } from '@graasp/ui';
+import { DiscriminatedItem, Triggers, formatDate } from '@graasp/sdk';
 
+import { usePlayerTranslation } from '@/config/i18n';
 import { mutations } from '@/config/queryClient';
 
 import { buildMainPath } from '../../config/paths';
 import { HIDDEN_STYLE } from './HiddenWrapper';
+import ItemThumbnail from './ItemThumbnail';
 
 type Props = {
   item: DiscriminatedItem;
@@ -20,38 +21,36 @@ type Props = {
 };
 
 const SimpleCard = ({ item, isHidden = false }: Props): JSX.Element => {
+  const { i18n } = usePlayerTranslation();
   const link = buildMainPath({ rootId: item.id });
-  const extra =
-    item.type === ItemType.LOCAL_FILE || item.type === ItemType.S3_FILE
-      ? item.extra
-      : undefined;
 
   const { mutate: triggerAction } = mutations.usePostItemAction();
   const handleCardClick = () => {
     // trigger player Action for item view
     triggerAction({ itemId: item.id, payload: { type: Triggers.ItemView } });
   };
+
   return (
     <Card style={isHidden ? HIDDEN_STYLE : undefined}>
       <CardActionArea component={Link} to={link} onClick={handleCardClick}>
         <CardContent>
-          <Stack direction="row" alignItems="center">
-            <ItemIcon
-              type={item.type}
-              extra={extra}
-              alt={item.name}
-              sx={{ mr: 1 }}
-            />
-            <Typography
-              variant="h5"
-              component="h2"
-              alignItems="center"
-              textOverflow="ellipsis"
-              overflow="hidden"
-              noWrap
-            >
-              {item.name}
-            </Typography>
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <ItemThumbnail item={item} />
+            <Stack minWidth={0}>
+              <Typography
+                variant="h5"
+                component="h2"
+                alignItems="center"
+                textOverflow="ellipsis"
+                overflow="hidden"
+                noWrap
+              >
+                {item.name}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {formatDate(item.updatedAt, { locale: i18n.language })}
+              </Typography>
+            </Stack>
           </Stack>
         </CardContent>
       </CardActionArea>
