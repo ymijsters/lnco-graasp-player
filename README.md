@@ -1,4 +1,5 @@
 # Graasp Player
+[![gitlocalized ](https://gitlocalize.com/repo/9233/whole_project/badge.svg)](https://gitlocalize.com/repo/9233?utm_source=badge)
 
 ## Installation
 
