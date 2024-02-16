@@ -7,7 +7,6 @@ import { Api } from '@graasp/query-client';
 import {
   AppItemType,
   Context,
-  DEFAULT_LANG,
   DiscriminatedItem,
   DocumentItemType,
   EmbeddedLinkItemType,
@@ -20,7 +19,7 @@ import {
   ShortcutItemType,
   Triggers,
 } from '@graasp/sdk';
-import { FAILURE_MESSAGES } from '@graasp/translations';
+import { DEFAULT_LANG, FAILURE_MESSAGES } from '@graasp/translations';
 import {
   AppItem,
   Button,
