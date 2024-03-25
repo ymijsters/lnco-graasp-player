@@ -1,23 +1,49 @@
 import { useEffect } from 'react';
 import {
+  Link,
   Navigate,
   Route,
   Routes,
   useLocation,
+  useParams,
   useSearchParams,
 } from 'react-router-dom';
+
+import { Alert, Button, Stack, Typography } from '@mui/material';
 
 import { saveUrlForRedirection } from '@graasp/sdk';
 import { CustomInitialLoader, withAuthorization } from '@graasp/ui';
 
 import { SIGN_IN_PATH } from '@/config/constants';
 import { DOMAIN } from '@/config/env';
-import { HOME_PATH, buildMainPath } from '@/config/paths';
+import { HOME_PATH, buildContentPagePath, buildMainPath } from '@/config/paths';
 import { useCurrentMemberContext } from '@/contexts/CurrentMemberContext';
 import HomePage from '@/modules/pages/HomePage';
 import ItemPage from '@/modules/pages/ItemPage';
 
+import { usePlayerTranslation } from './config/i18n';
+import { PLAYER } from './langs/constants';
 import PageWrapper from './modules/layout/PageWrapper';
+
+const RedirectToRootContentPage = () => {
+  const { rootId } = useParams();
+  const { t } = usePlayerTranslation();
+  if (rootId) {
+    return (
+      <Navigate to={buildContentPagePath({ rootId, itemId: rootId })} replace />
+    );
+  }
+  return (
+    <Alert>
+      <Stack>
+        <Typography>{t(PLAYER.ITEM_ID_NOT_VALID)}</Typography>
+        <Button component={Link} to="/">
+          {t(PLAYER.GO_TO_HOME)}
+        </Button>
+      </Stack>
+    </Alert>
+  );
+};
 
 export const App = (): JSX.Element => {
   const location = useLocation();
@@ -55,7 +81,10 @@ export const App = (): JSX.Element => {
   return (
     <Routes>
       <Route element={<PageWrapper fullscreen={fullscreen} />}>
-        <Route path={buildMainPath()} element={<ItemPage />} />
+        <Route path={buildMainPath()}>
+          <Route index element={<RedirectToRootContentPage />} />
+          <Route path=":itemId" element={<ItemPage />} />
+        </Route>
         <Route path={HOME_PATH} element={<HomePageWithAuthorization />} />
         <Route path="*" element={<Navigate to={HOME_PATH} />} />
       </Route>

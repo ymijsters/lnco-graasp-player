@@ -60,7 +60,7 @@ import { useCurrentMemberContext } from '@/contexts/CurrentMemberContext';
 import { PLAYER } from '@/langs/constants';
 import { isHidden, paginationContentFilter } from '@/utils/item';
 
-import NavigationButton from './NavigationButton';
+import NavigationIsland from '../navigationIsland/NavigationIsland';
 import PinnedFolderItem from './PinnedFolderItem';
 
 const {
@@ -231,7 +231,7 @@ const AppContent = ({ item }: { item: AppItemType }): JSX.Element => {
         contextPayload={{
           apiHost: API_HOST,
           settings: item.settings,
-          lang: item.settings?.lang || member?.extra?.lang || DEFAULT_LANG,
+          lang: item.lang || member?.extra?.lang || DEFAULT_LANG,
           permission: PermissionLevel.Read,
           context: Context.Player,
           memberId: member?.id,
@@ -490,9 +490,7 @@ const Item = ({
               </Fragment>
             ))}
             {showLoadMoreButton}
-            {!hasNextPage && !isFetchingNextPage && (
-              <NavigationButton item={item} />
-            )}
+            <NavigationIsland />
           </>
         )}
 
@@ -509,7 +507,12 @@ const Item = ({
   }
 
   // executed when item is a single child that is not a folder
-  return <ItemContentWrapper item={item} />;
+  return (
+    <>
+      <ItemContentWrapper item={item} />
+      <NavigationIsland />
+    </>
+  );
 };
 
 export default Item;
