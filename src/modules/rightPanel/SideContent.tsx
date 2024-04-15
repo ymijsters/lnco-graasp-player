@@ -12,6 +12,7 @@ import {
   ItemType,
   getIdsFromPath,
 } from '@graasp/sdk';
+import { useMobileView } from '@graasp/ui';
 
 import { usePlayerTranslation } from '@/config/i18n';
 import { hooks } from '@/config/queryClient';
@@ -27,7 +28,6 @@ import {
   ITEM_PINNED_ID,
 } from '../../config/selectors';
 import SideDrawer from './SideDrawer';
-import { useMobileView } from '@graasp/ui';
 
 const StyledMain = styled('div', {
   shouldForwardProp: (propName) => propName !== 'isShifted',

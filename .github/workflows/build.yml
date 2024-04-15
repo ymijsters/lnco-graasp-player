@@ -25,9 +25,8 @@ jobs:
         with:
           cypress: false
 
-      # type check
-      - name: Type-check code
-        run: tsc --noEmit
+      - name: Lint and type-check code
+        run: yarn check
 
       - name: Build App
         run: yarn build
