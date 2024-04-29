@@ -152,7 +152,7 @@ const SideContent = ({ content, item }: Props): JSX.Element | null => {
       <div id={CHATBOX_DRAWER_ID}>
         <SideDrawer
           title={t(PLAYER.ITEM_CHATBOX_TITLE, {
-            name: item.name,
+            name: item.displayName,
           })}
           onClose={toggleChatbox}
           open={isChatboxOpen}
@@ -173,7 +173,7 @@ const SideContent = ({ content, item }: Props): JSX.Element | null => {
         open={isPinnedOpen}
       >
         {/* show parents pinned items */}
-        <Stack id={ITEM_PINNED_ID} spacing={2} mt={1}>
+        <Stack id={ITEM_PINNED_ID} gap={2} mt={1}>
           {parentsIds.map((i) => (
             <Item key={i} id={i} showPinnedOnly />
           ))}

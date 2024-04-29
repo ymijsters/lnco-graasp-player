@@ -1,14 +1,7 @@
 import { Fragment, useCallback, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-import {
-  Alert,
-  Box,
-  Container,
-  Skeleton,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Alert, Box, Container, Divider, Skeleton, Stack } from '@mui/material';
 
 import { Api } from '@graasp/query-client';
 import {
@@ -33,6 +26,7 @@ import {
   Button,
   EtherpadItem,
   FileItem,
+  FolderCard,
   H5PItem,
   ItemSkeleton,
   LinkItem,
@@ -48,21 +42,22 @@ import {
 } from '@/config/constants';
 import { API_HOST, H5P_INTEGRATION_URL } from '@/config/env';
 import { useMessagesTranslation, usePlayerTranslation } from '@/config/i18n';
+import { buildMainPath } from '@/config/paths';
 import { axios, hooks, mutations } from '@/config/queryClient';
 import {
-  FOLDER_NAME_TITLE_CLASS,
   buildAppId,
   buildCollapsibleId,
   buildDocumentId,
   buildFileId,
   buildFolderButtonId,
+  buildLinkItemId,
 } from '@/config/selectors';
 import { useCurrentMemberContext } from '@/contexts/CurrentMemberContext';
 import { PLAYER } from '@/langs/constants';
 import { isHidden, paginationContentFilter } from '@/utils/item';
 
 import NavigationIsland from '../navigationIsland/NavigationIsland';
-import FolderCard from './FolderCard';
+import SectionHeader from './SectionHeader';
 
 const {
   useEtherpad,
@@ -183,16 +178,18 @@ const LinkContent = ({ item }: { item: LinkItemType }): JSX.Element => {
     });
   };
   const linkItem = (
-    <LinkItem
-      item={item}
-      height={SCREEN_MAX_HEIGHT}
-      memberId={member?.id}
-      isResizable
-      showButton={item.settings?.showLinkButton}
-      showIframe={item.settings?.showLinkIframe}
-      showCollapse={item.settings?.isCollapsible}
-      onClick={handleLinkClick}
-    />
+    <Box id={buildLinkItemId(item.id)}>
+      <LinkItem
+        item={item}
+        height={SCREEN_MAX_HEIGHT}
+        memberId={member?.id}
+        isResizable
+        showButton={item.settings?.showLinkButton}
+        showIframe={item.settings?.showLinkIframe}
+        showCollapse={item.settings?.isCollapsible}
+        onClick={handleLinkClick}
+      />
+    </Box>
   );
 
   return linkItem;
@@ -202,7 +199,8 @@ const DocumentContent = ({ item }: { item: DocumentItemType }): JSX.Element => {
   const documentItem = (
     <DocumentItem
       id={buildDocumentId(item.id)}
-      item={item}
+      showTitle
+      item={{ ...item, name: item.displayName }}
       showCollapse={item.settings?.isCollapsible}
     />
   );
@@ -269,7 +267,7 @@ const H5PContent = ({ item }: { item: H5PItemType }): JSX.Element => {
   return (
     <H5PItem
       itemId={item.id}
-      itemName={item.name}
+      itemName={item.displayName}
       contentId={contentId}
       integrationUrl={H5P_INTEGRATION_URL}
       showCollapse={item.settings?.isCollapsible}
@@ -302,7 +300,28 @@ const ItemContent = ({ item }: ItemContentProps) => {
   switch (item.type) {
     case ItemType.FOLDER: {
       const folderButton = (
-        <FolderCard id={buildFolderButtonId(item.id)} item={item} replaceRoot />
+        <FolderCard
+          id={buildFolderButtonId(item.id)}
+          name={item.name}
+          description={
+            <Box
+              sx={{
+                height: '1lh',
+                display: '-webkit-box',
+                overflow: 'hidden',
+                // number of lines to show
+                WebkitLineClamp: 1,
+                WebkitBoxOrient: 'vertical',
+                '& > p': {
+                  margin: 0,
+                },
+              }}
+            >
+              <TextDisplay content={item.description ?? ''} />
+            </Box>
+          }
+          to={buildMainPath({ rootId: item.id })}
+        />
       );
       return folderButton;
 
@@ -434,26 +453,30 @@ const FolderContent = ({
   }
   // render each children recursively
   return (
-    <Box pb={7}>
-      <Stack direction="column">
-        <Typography className={FOLDER_NAME_TITLE_CLASS} variant="h5">
-          {item.name}
-        </Typography>
-        <TextDisplay content={item.description ?? ''} />
-      </Stack>
+    <>
+      <Stack
+        direction="column"
+        pb={7}
+        spacing={2}
+        maxWidth="1000px"
+        margin="auto"
+      >
+        <SectionHeader item={item} />
+        <Divider flexItem />
 
-      {childrenPaginated?.pages?.map((page) => (
-        <Fragment key={page.pageNumber}>
-          {page.data.map((thisItem) => (
-            <Box key={thisItem.id} textAlign="center" mt={1} mb={1}>
-              <ItemContentWrapper item={thisItem} />
-            </Box>
+        <Stack direction="column" spacing={2}>
+          {childrenPaginated?.pages?.map((page) => (
+            <Fragment key={page.pageNumber}>
+              {page.data.map((thisItem) => (
+                <ItemContentWrapper key={thisItem.id} item={thisItem} />
+              ))}
+            </Fragment>
           ))}
-        </Fragment>
-      ))}
-      {showLoadMoreButton}
+        </Stack>
+        {showLoadMoreButton}
+      </Stack>
       <NavigationIsland />
-    </Box>
+    </>
   );
 };
 

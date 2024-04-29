@@ -8,6 +8,7 @@ export const MY_ITEMS_ID = 'myItems';
 export const buildFileId = (id: string): string => `file-${id}`;
 export const buildDocumentId = (id: string): string => `document-${id}`;
 export const buildAppId = (id: string): string => `app-${id}`;
+export const buildLinkItemId = (id: string): string => `link-${id}`;
 export const FOLDER_NAME_TITLE_CLASS = `folderNameTitle`;
 
 export const ITEM_FULLSCREEN_BUTTON_ID = 'itemFullscreenButton';
@@ -47,7 +48,7 @@ export const HEADER_MEMBER_MENU_SIGN_OUT_BUTTON_ID =
 export const buildMemberMenuItemId = (id: string): string =>
   `memberMenuItem-${id}`;
 export const OWN_ITEMS_GRID_ID = 'ownItemsGrid';
-export const buildMemberAvatarClass = (id?: string): string =>
+export const buildMemberAvatarId = (id?: string): string =>
   `memberAvatar-${id}`;
 
 export const HOME_PAGE_PAGINATION_ID = 'homePagePagination';
