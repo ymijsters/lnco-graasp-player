@@ -29,6 +29,7 @@
     "cypress:open": "env-cmd -f ./.env.test cypress open",
     "cypress": "yarn test",
     "test": "yarn build:test && concurrently -k -s first \"yarn preview:test\" \"yarn cypress:run\"",
+    "test:unit": "yarn vitest",
     "cypress:run": "env-cmd -f ./.env.test cypress run --browser chrome"
   },
   "dependencies": {
@@ -101,7 +102,8 @@
     "typescript": "5.4.5",
     "vite": "5.2.11",
     "vite-plugin-checker": "^0.6.4",
-    "vite-plugin-istanbul": "6.0.0"
+    "vite-plugin-istanbul": "6.0.0",
+    "vitest": "1.5.0"
   },
   "packageManager": "yarn@4.2.1"
 }
