@@ -1,4 +1,5 @@
 import { Fragment, useCallback, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import { useInView } from 'react-intersection-observer';
 
 import { Alert, Box, Container, Divider, Skeleton, Stack } from '@mui/material';
@@ -59,6 +60,7 @@ import { isHidden, paginationContentFilter } from '@/utils/item';
 
 import NavigationIsland from '../navigationIsland/NavigationIsland';
 import SectionHeader from './SectionHeader';
+import usePageTitle from './usePageTitle';
 
 const {
   useEtherpad,
@@ -473,12 +475,20 @@ const Item = ({
 }: Props): JSX.Element | false => {
   const { t: translateMessage } = useMessagesTranslation();
   const { data: item, isInitialLoading: isLoadingItem, isError } = useItem(id);
-
+  const title = usePageTitle();
   if (item && item.type === ItemType.FOLDER) {
     if (isChildren) {
       return <ItemContentWrapper item={item} />;
     }
-    return <FolderContent item={item} showPinnedOnly={showPinnedOnly} />;
+
+    return (
+      <>
+        <Helmet>
+          <title>{title}</title>
+        </Helmet>
+        <FolderContent item={item} showPinnedOnly={showPinnedOnly} />
+      </>
+    );
   }
 
   if (isLoadingItem) {
