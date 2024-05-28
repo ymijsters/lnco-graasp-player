@@ -1,6 +1,7 @@
 import { Fragment, useCallback, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useInView } from 'react-intersection-observer';
+import { useSearchParams } from 'react-router-dom';
 
 import { Alert, Box, Container, Divider, Skeleton, Stack } from '@mui/material';
 
@@ -45,7 +46,7 @@ import {
 } from '@/config/constants';
 import { API_HOST, H5P_INTEGRATION_URL } from '@/config/env';
 import { useMessagesTranslation, usePlayerTranslation } from '@/config/i18n';
-import { buildMainPath } from '@/config/paths';
+import { buildContentPagePath } from '@/config/paths';
 import { axios, hooks, mutations } from '@/config/queryClient';
 import {
   buildAppId,
@@ -56,10 +57,12 @@ import {
   buildLinkItemId,
 } from '@/config/selectors';
 import { useCurrentMemberContext } from '@/contexts/CurrentMemberContext';
+import { useItemContext } from '@/contexts/ItemContext';
 import { PLAYER } from '@/langs/constants';
 import { paginationContentFilter } from '@/utils/item';
 
 import NavigationIsland from '../navigationIsland/NavigationIsland';
+import FromShortcutButton from './FromShortcutButton';
 import SectionHeader from './SectionHeader';
 import usePageTitle from './usePageTitle';
 
@@ -294,10 +297,18 @@ const ShortcutContent = ({ item }: { item: ShortcutItemType }): JSX.Element => {
 };
 
 const FolderButtonContent = ({ item }: { item: FolderItemType }) => {
+  const [searchParams] = useSearchParams();
+  const { rootItem } = useItemContext();
   const { data: thumbnail } = hooks.useItemThumbnailUrl({
     id: item.id,
     size: ThumbnailSize.Medium,
   });
+
+  const newSearchParams = new URLSearchParams(searchParams.toString());
+  newSearchParams.set('from', window.location.pathname);
+  if (rootItem) {
+    newSearchParams.set('fromName', rootItem.name);
+  }
   return (
     <FolderCard
       id={buildFolderButtonId(item.id)}
@@ -309,7 +320,10 @@ const FolderButtonContent = ({ item }: { item: FolderItemType }) => {
           <TextDisplay content={item.description ?? ''} />
         ) : undefined
       }
-      to={buildMainPath({ rootId: item.id })}
+      to={{
+        pathname: buildContentPagePath({ rootId: item.id, itemId: item.id }),
+        search: newSearchParams.toString(),
+      }}
     />
   );
 };
@@ -446,6 +460,7 @@ const FolderContent = ({
         </Stack>
         {showLoadMoreButton}
       </Stack>
+      <FromShortcutButton />
       <NavigationIsland />
     </>
   );
