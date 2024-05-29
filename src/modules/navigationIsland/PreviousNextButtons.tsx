@@ -10,7 +10,7 @@ import { hooks } from '@/config/queryClient';
 import { useCurrentMemberContext } from '@/contexts/CurrentMemberContext.tsx';
 import { combineUuids, shuffleAllButLastItemInArray } from '@/utils/shuffle.ts';
 
-import { NavigationButton } from './CustomButtons';
+import { LoadingButton, NavigationButton } from './CustomButtons';
 
 const usePreviousNextButtons = (): {
   previousButton: JSX.Element | false;
@@ -24,11 +24,26 @@ const usePreviousNextButtons = (): {
 
   const shuffle = Boolean(searchParams.get('shuffle') === 'true');
 
-  const { data: descendants, isLoading } = hooks.useDescendants({
+  const { data: descendants, isInitialLoading } = hooks.useDescendants({
     // not correct but enabled
     id: rootId ?? '',
     enabled: Boolean(rootId),
   });
+
+  if (isInitialLoading) {
+    return {
+      previousButton: (
+        <LoadingButton disabled>
+          <ChevronLeft />
+        </LoadingButton>
+      ),
+      nextButton: (
+        <LoadingButton disabled>
+          <ChevronRight />
+        </LoadingButton>
+      ),
+    };
+  }
 
   const prevRoot: DiscriminatedItem | null = rootItem || null;
   let prev: DiscriminatedItem | null = null;
@@ -36,10 +51,6 @@ const usePreviousNextButtons = (): {
 
   // if there are no descendants then there is no need to navigate
   if (!isArray(descendants)) {
-    return { previousButton: false, nextButton: false };
-  }
-
-  if (isLoading) {
     return { previousButton: false, nextButton: false };
   }
 
@@ -100,7 +111,6 @@ const usePreviousNextButtons = (): {
       <NavigationButton
         disabled={!prev}
         key="previousButton"
-        // variant="outlined"
         onClick={() => {
           if (prev?.id) {
             handleClickNavigationButton(prev.id);
@@ -115,9 +125,6 @@ const usePreviousNextButtons = (): {
       <NavigationButton
         disabled={!next}
         key="nextButton"
-        // variant="contained"
-        // endIcon={<ArrowForwardIcon />}
-        // sx={{ textTransform: 'unset' }}
         onClick={() => {
           if (next?.id) {
             handleClickNavigationButton(next.id);
