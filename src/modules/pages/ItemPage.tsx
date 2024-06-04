@@ -43,6 +43,7 @@ const ItemPage = (): JSX.Element | null => {
     ForbiddenContent,
     useItemLoginSchemaType,
   })(ItemScreenWrapper);
+
   return <Component />;
 };
 
