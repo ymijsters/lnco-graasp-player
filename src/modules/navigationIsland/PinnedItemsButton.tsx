@@ -17,21 +17,18 @@ import { ToolButton } from './CustomButtons';
 const usePinnedItemsButton = (): { pinnedButton: JSX.Element | false } => {
   const { t } = usePlayerTranslation();
   const { togglePinned, isPinnedOpen } = useLayoutContext();
-  const { rootId, itemId } = useParams();
+  const { itemId } = useParams();
   const { data: item } = hooks.useItem(itemId);
   const { data: children } = hooks.useChildren(itemId, undefined, {
     enabled: !!item,
   });
-  const { data: descendants } = hooks.useDescendants({ id: rootId });
+
   const childrenPinnedCount =
     children?.filter(({ settings: s, hidden }) => s.isPinned && !hidden)
       ?.length || 0;
-  const allPinnedCount =
-    descendants?.filter(({ settings: s, hidden }) => s.isPinned && !hidden)
-      ?.length || 0;
 
   // don't show the button if there are no items pinned in all descendants
-  if (allPinnedCount <= 0) {
+  if (childrenPinnedCount <= 0) {
     return { pinnedButton: false };
   }
 

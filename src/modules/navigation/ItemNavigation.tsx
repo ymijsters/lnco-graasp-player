@@ -33,10 +33,13 @@ const DrawerNavigation = (): JSX.Element | null => {
 
   const { t: translateMessage } = useMessagesTranslation();
 
-  let { data: descendants } = useDescendants({ id: rootId ?? '' });
-  const { isInitialLoading: isLoadingTree } = useDescendants({
-    id: rootId ?? '',
-  });
+  const { data: descendants, isInitialLoading: isLoadingTree } = useDescendants(
+    {
+      id: rootId ?? '',
+      // remove hidden
+      showHidden: false,
+    },
+  );
 
   const { data: rootItem, isLoading, isError, error } = useItem(rootId);
   const handleNavigationOnClick = (newItemId: string) => {
@@ -57,12 +60,13 @@ const DrawerNavigation = (): JSX.Element | null => {
     return <LoadingTree />;
   }
 
+  let shuffledDescendants = [...(descendants || [])];
   if (shuffle) {
     const baseId = rootId ?? '';
     const memberId = member?.id ?? '';
     const combinedUuids = combineUuids(baseId, memberId);
-    descendants = shuffleAllButLastItemInArray(
-      descendants || [],
+    shuffledDescendants = shuffleAllButLastItemInArray(
+      shuffledDescendants,
       combinedUuids,
     );
   }
@@ -74,7 +78,7 @@ const DrawerNavigation = (): JSX.Element | null => {
           <TreeView
             id={TREE_VIEW_ID}
             rootItems={[rootItem]}
-            items={[rootItem, ...descendants].filter((ele) => !ele.hidden)}
+            items={[rootItem, ...shuffledDescendants]}
             firstLevelStyle={{ fontWeight: 'bold' }}
             onTreeItemSelect={handleNavigationOnClick}
           />
