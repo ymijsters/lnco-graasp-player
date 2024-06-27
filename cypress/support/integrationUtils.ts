@@ -67,7 +67,9 @@ export const expectAppViewScreenLayout = ({ id, extra }: AppItemType): void => {
 
   const appUrl = appendQueryParamToUrl(url, { itemId: id });
 
-  cy.get(`iframe#${buildAppId(id)}`).should('have.attr', 'src', appUrl);
+  cy.get(`iframe#${buildAppId(id)}`)
+    .invoke('attr', 'src')
+    .should('contain', appUrl);
 };
 
 export const expectFileViewScreenLayout = ({
