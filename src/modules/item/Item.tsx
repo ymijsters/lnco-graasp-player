@@ -115,6 +115,7 @@ const EtherpadContent = ({ item }: EtherpadContentProps) => {
         showChat: false,
         noColors: true,
       }}
+      style={{ height: '80vh' }}
     />
   );
 };
