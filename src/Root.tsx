@@ -34,7 +34,7 @@ const globalStyles = (
     styles={{
       p: { fontSize: '1rem' },
       // required for fullscreen
-      '::backdrop': { backgroundColor: 'white' },
+      '::backdrop': { backgroundColor: '#fafaff' },
     }}
   />
 );
